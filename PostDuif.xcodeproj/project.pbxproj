@@ -13,6 +13,8 @@
 		212AE9151AA9CE4D000255E8 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 212AE9141AA9CE4D000255E8 /* Images.xcassets */; };
 		212AE9181AA9CE4D000255E8 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 212AE9161AA9CE4D000255E8 /* LaunchScreen.xib */; };
 		212AE9241AA9CE4D000255E8 /* PostDuifTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212AE9231AA9CE4D000255E8 /* PostDuifTests.swift */; };
+		212AE9491AA9CF44000255E8 /* iCarousel.m in Sources */ = {isa = PBXBuildFile; fileRef = 212AE9481AA9CF44000255E8 /* iCarousel.m */; };
+		214C55DA1AA9E71200555A56 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214C55D91AA9E71200555A56 /* ContentView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +38,10 @@
 		212AE91D1AA9CE4D000255E8 /* PostDuifTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PostDuifTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		212AE9221AA9CE4D000255E8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		212AE9231AA9CE4D000255E8 /* PostDuifTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDuifTests.swift; sourceTree = "<group>"; };
+		212AE9471AA9CF44000255E8 /* iCarousel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iCarousel.h; sourceTree = "<group>"; };
+		212AE9481AA9CF44000255E8 /* iCarousel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iCarousel.m; sourceTree = "<group>"; };
+		212AE94A1AA9CF63000255E8 /* PostDuif-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PostDuif-Bridging-Header.h"; sourceTree = "<group>"; };
+		214C55D91AA9E71200555A56 /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,6 +65,7 @@
 		212AE8FF1AA9CE4D000255E8 = {
 			isa = PBXGroup;
 			children = (
+				212AE9461AA9CF44000255E8 /* iCarousel */,
 				212AE90A1AA9CE4D000255E8 /* PostDuif */,
 				212AE9201AA9CE4D000255E8 /* PostDuifTests */,
 				212AE9091AA9CE4D000255E8 /* Products */,
@@ -83,6 +90,8 @@
 				212AE9141AA9CE4D000255E8 /* Images.xcassets */,
 				212AE9161AA9CE4D000255E8 /* LaunchScreen.xib */,
 				212AE90B1AA9CE4D000255E8 /* Supporting Files */,
+				212AE94A1AA9CF63000255E8 /* PostDuif-Bridging-Header.h */,
+				214C55D91AA9E71200555A56 /* ContentView.swift */,
 			);
 			path = PostDuif;
 			sourceTree = "<group>";
@@ -110,6 +119,15 @@
 				212AE9221AA9CE4D000255E8 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		212AE9461AA9CF44000255E8 /* iCarousel */ = {
+			isa = PBXGroup;
+			children = (
+				212AE9471AA9CF44000255E8 /* iCarousel.h */,
+				212AE9481AA9CF44000255E8 /* iCarousel.m */,
+			);
+			path = iCarousel;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -212,7 +230,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				212AE9491AA9CF44000255E8 /* iCarousel.m in Sources */,
 				212AE9101AA9CE4D000255E8 /* ViewController.swift in Sources */,
+				214C55DA1AA9E71200555A56 /* ContentView.swift in Sources */,
 				212AE90E1AA9CE4D000255E8 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -341,6 +361,7 @@
 				INFOPLIST_FILE = PostDuif/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "PostDuif/PostDuif-Bridging-Header.h";
 			};
 			name = Debug;
 		};
@@ -351,6 +372,7 @@
 				INFOPLIST_FILE = PostDuif/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "PostDuif/PostDuif-Bridging-Header.h";
 			};
 			name = Release;
 		};
@@ -407,6 +429,7 @@
 				212AE9291AA9CE4D000255E8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		212AE92A1AA9CE4D000255E8 /* Build configuration list for PBXNativeTarget "PostDuifTests" */ = {
 			isa = XCConfigurationList;
@@ -415,6 +438,7 @@
 				212AE92C1AA9CE4D000255E8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
