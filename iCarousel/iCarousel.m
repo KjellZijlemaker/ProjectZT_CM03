@@ -508,7 +508,13 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     {
         case iCarouselTypeCustom:
         {
-            return [_delegate carousel:self itemTransformForOffset:offset baseTransform:transform];
+            CGFloat distance = 300.0f; //number of pixels to move the items away from camera
+            CGFloat spacing = 2.6; //extra spacing for center item
+            
+            CGFloat clampedOffset = MIN(1.0, MAX(-1.0, offset));
+            CGFloat z = - fabs(clampedOffset) * distance;
+            offset += clampedOffset * spacing;
+            return CATransform3DTranslate(transform, offset * _itemWidth, 0.0f, z);
         }
         case iCarouselTypeLinear:
         {

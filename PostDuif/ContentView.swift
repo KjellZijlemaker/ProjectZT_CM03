@@ -13,8 +13,6 @@ class ContentView: UIViewController {
     var colorString:String!
     
     @IBOutlet weak var welcome: UILabel!
-
-
     @IBOutlet weak var BackButton: UIButton!
 
     @IBAction func Dismiss(sender: AnyObject) {

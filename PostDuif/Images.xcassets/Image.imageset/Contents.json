@@ -1,12 +1,8 @@
 {
   "images" : [
     {
-      "idiom" : "universal"
-    },
-    {
       "idiom" : "universal",
-      "scale" : "1x",
-      "filename" : "Devbeasts-small.png"
+      "scale" : "1x"
     },
     {
       "idiom" : "universal",

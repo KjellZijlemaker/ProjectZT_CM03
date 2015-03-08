@@ -28,9 +28,11 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
         super.viewDidLoad()
         
         // Setting inital settings for swipe gestures
+        
         carousel.userInteractionEnabled = true
         carousel.delegate = self
-        carousel.type = .CoverFlow2
+        carousel.type = .Custom
+        
         carousel.scrollEnabled = false
         
         //------------right  swipe gestures in view--------------//
@@ -128,6 +130,8 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
             vc.colorString = String(currentIndex)
         }
     }
+    
+
     
     
     /* For calling View programmaticlly
