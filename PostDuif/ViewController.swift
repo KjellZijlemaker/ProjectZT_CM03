@@ -10,17 +10,24 @@ import UIKit
 
 class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
 {
-    var items: [Int] = []
+    // Array for all the items to be loaded inside the carousel
+    var items: [String] = []
+    
+    // Current index to give with other ViewControllers
     var currentIndex: Int = 0
     @IBOutlet var carousel : iCarousel!
     
     override func awakeFromNib()
     {
         super.awakeFromNib()
-        for i in 0...99
-        {
-            items.append(i)
-        }
+        
+        // Appending new items (now string, but also could be objects)
+        items.append("Bericht 1")
+        items.append("Bericht 2")
+        items.append("Bericht 3")
+        items.append("Bericht 4")
+        items.append("Bericht 5")
+        items.append("Bericht 6")
     }
     
     override func viewDidLoad()
@@ -34,6 +41,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
         carousel.type = .Custom
         
         carousel.scrollEnabled = false
+        
         
         //------------right  swipe gestures in view--------------//
         let swipeRight = UISwipeGestureRecognizer(target: self, action: Selector("rightSwiped"))
@@ -83,18 +91,21 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
         //create new view if no view is available for recycling
         if (view == nil)
         {
+
             //don't do anything specific to the index within
             //this `if (view == nil) {...}` statement because the view will be
             //recycled and used with other index values later
             view = UIImageView(frame:CGRectMake(0, 0, 200, 200))
             (view as UIImageView!).image = UIImage(named: "page.png")
             view.contentMode = .Center
-
+        
             label = UILabel(frame:view.bounds)
+            label.frame.origin.y -= 250.0
             label.backgroundColor = UIColor.clearColor()
             label.textAlignment = .Center
             label.font = label.font.fontWithSize(50)
             label.tag = 1
+            
             view.addSubview(label)
         }
         else
@@ -103,6 +114,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
             label = view.viewWithTag(1) as UILabel!
         }
         
+
         //set item label
         //remember to always set any properties of your carousel item
         //views outside of the `if (view == nil) {...}` check otherwise
@@ -130,9 +142,6 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
             vc.colorString = String(currentIndex)
         }
     }
-    
-
-    
     
     /* For calling View programmaticlly
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
