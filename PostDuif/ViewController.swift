@@ -11,7 +11,7 @@ import UIKit
 class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
 {
     // Array for all the items to be loaded inside the carousel
-    var items: [String] = []
+    var items: [Test] = []
     
     // For passing on to the other ViewControllers
     var currentIndex: Int = 0
@@ -21,21 +21,15 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
     {
         super.awakeFromNib()
         
-        // Appending new items (now string, but also could be objects)
-        items.append("Bericht 1")
-        items.append("Bericht 2")
-        items.append("Bericht 3")
-        items.append("Bericht 4")
-        items.append("Bericht 5")
-        items.append("Bericht 6")
+
     }
     
     override func viewDidLoad()
     {
         super.viewDidLoad()
+       
         
         // Setting inital settings for swipe gestures
-        
         carousel.userInteractionEnabled = true
         carousel.delegate = self
         carousel.type = .Custom
@@ -56,7 +50,16 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
         let dubbleTap = UITapGestureRecognizer(target: self, action: ("dubbleTapped"))
         dubbleTap.numberOfTapsRequired = 2
         self.view.addGestureRecognizer(dubbleTap)
+        // URL for the JSON
+        var url = "https://itunes.apple.com/us/rss/topgrossingipadapplications/limit=25/json"
+        
+        // Getting the app data and fill it in the global array
+        getAppData(url)
     }
+    
+    
+   
+    
 
     //------------Swipe method to the right--------------//
     func rightSwiped(){
@@ -84,6 +87,8 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
         return items.count
     }
     
+   
+    
     func carousel(carousel: iCarousel!, viewForItemAtIndex index: Int, var reusingView view: UIView!) -> UIView!
     {
         var label: UILabel! = nil
@@ -100,11 +105,12 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
             view.contentMode = .Center
         
             label = UILabel(frame:view.bounds)
-            label.frame.origin.y -= 250.0
+            label.frame = CGRectMake(-120, -220, 500, 100);
             label.backgroundColor = UIColor.clearColor()
             label.textAlignment = .Center
             label.font = label.font.fontWithSize(50)
             label.tag = 1
+            
             
             view.addSubview(label)
         }
@@ -120,7 +126,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
         //views outside of the `if (view == nil) {...}` check otherwise
         //you'll get weird issues with carousel item content appearing
         //in the wrong place in the carousel
-        label.text = "\(items[index])"
+        label.text = "\(self.items[index].getName())"
         
         return view
     }
@@ -141,6 +147,24 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
             let vc = segue.destinationViewController as ContentView
             vc.colorString = String(currentIndex)
         }
+    }
+    
+    // Function for getting the app data and filling it into the array
+    func getAppData(url: String){
+        DataManager.getMainData(url){(test1) in
+            
+            // Transfering array to global array
+            self.items = test1
+            
+            // Iterate through all possible values
+            for r in 0...self.items.count-1{
+                self.carousel.insertItemAtIndex(r, animated: true)
+            }
+            
+            println(self.items)
+
+        }
+        
     }
     
     /* For calling View programmaticlly
