@@ -13,7 +13,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
     // Array for all the items to be loaded inside the carousel
     var items: [String] = []
     
-    // Current index to give with other ViewControllers
+    // For passing on to the other ViewControllers
     var currentIndex: Int = 0
     @IBOutlet var carousel : iCarousel!
     

@@ -161,9 +161,11 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     [_contentView addGestureRecognizer:panGesture];
     
     //add tap gesture recogniser
+    /* Not needed for our app
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTap:)];
     tapGesture.delegate = (id <UIGestureRecognizerDelegate>)self;
     [_contentView addGestureRecognizer:tapGesture];
+     */
     
     //set up accessibility
     self.accessibilityTraits = UIAccessibilityTraitAllowsDirectInteraction;
