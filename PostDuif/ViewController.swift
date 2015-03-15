@@ -209,7 +209,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
     
     // Setting the categorie names above the carousel
     func setCategories(index: Int){
-        switch(items[index].getName()){
+        switch(items[index].getCategory()){
             case "messages":
             categoryMessage.text = "Categorie: Berichten"
             
