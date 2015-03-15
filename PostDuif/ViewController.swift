@@ -18,6 +18,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
     // For passing on to the other ViewControllers
     var currentIndex: Int = 0
     @IBOutlet var carousel : iCarousel!
+    @IBOutlet weak var categoryMessage: UILabel!
     
     override func awakeFromNib()
     {
@@ -77,10 +78,10 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
         
         
         switch self.items[currentIndex].getCategory(){
-        case "family ":
+        case "message ":
             // For performing the seque inside the storyboard
             performSegueWithIdentifier("showMessageContent", sender: self)
-            println("family")
+            println("message")
         case "news":
             performSegueWithIdentifier("showNewsMessageContent", sender: self)
             println("news")
@@ -133,8 +134,15 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
             label = view.viewWithTag(1) as UILabel!
         }
         
+        // If the index is the same as the carousel, it will check in what kind of category the message/news is
+        if (index == self.carousel.currentItemIndex) {
+            setCategories(index)
+        }
+        
         // Setting the right images for each category
         setImages(index)
+        
+        
         
         //set item label
         //remember to always set any properties of your carousel item
@@ -186,7 +194,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
     func setImages(index: Int){
         
         switch(items[index].getCategory()){
-            case "family":
+            case "message":
             pictures.append(UIImage(named:"page.png"))
             
             case "news":
@@ -197,6 +205,27 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
             
         }
         
+    }
+    
+    // Setting the categorie names above the carousel
+    func setCategories(index: Int){
+        switch(items[index].getName()){
+            case "messages":
+            categoryMessage.text = "Categorie: Berichten"
+            
+            case "news":
+            categoryMessage.text = "Categorie: Mededelingen"
+            
+        default:
+            categoryMessage.text = "Geen categorie"
+
+            break
+            
+        }
+    }
+    
+    func carouselCurrentItemIndexDidChange(carousel: iCarousel!){
+        self.carousel.reloadData()
     }
     
     /* For calling View programmaticlly
