@@ -22,11 +22,6 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
     override func awakeFromNib()
     {
         super.awakeFromNib()
-        pictures.append(UIImage(named:"page.png"))
-        pictures.append(UIImage(named:"naamloos.png"))
-        
-        
-        
         
         // URL for the JSON
         var url = "https://itunes.apple.com/us/rss/topgrossingipadapplications/limit=2/json"
@@ -34,7 +29,6 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
         // Getting the app data and fill it in the global array
         getAppData(url)
         
-        println(self.items)
     }
     
     override func viewDidLoad()
@@ -139,13 +133,15 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
             label = view.viewWithTag(1) as UILabel!
         }
         
+        // Setting the right images for each category
+        setImages(index)
+        
         //set item label
         //remember to always set any properties of your carousel item
         //views outside of the `if (view == nil) {...}` check otherwise
         //you'll get weird issues with carousel item content appearing
         //in the wrong place in the carousel
         label.text = "\(self.items[index].getName())"
-        //imageViewObject.image = self.pictures[index]
         
         
         (view as UIImageView!).image = self.pictures[index]
@@ -182,6 +178,23 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
                 self.carousel.insertItemAtIndex(r, animated: true)
                 println(self.items[r].getName())
             }
+        }
+        
+    }
+    
+    // Function for setting the images per category
+    func setImages(index: Int){
+        
+        switch(items[index].getCategory()){
+            case "family":
+            pictures.append(UIImage(named:"page.png"))
+            
+            case "news":
+             pictures.append(UIImage(named:"naamloos.png"))
+            
+        default:
+             pictures.append(UIImage(named:"naamloos.png"))
+            
         }
         
     }
