@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ContentView: UIViewController {
+class MessageContentViewController: UIViewController {
     var toPass:String!
     var colorString:String!
     
@@ -26,6 +26,10 @@ class ContentView: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+//        self.yourUITextView.layer.borderWidth = 5.0f;
+//        self.yourUITextView.layer.borderColor = [[UIColor grayColor] CGColor];
+        
+        
         welcome.text = colorString
 
     }

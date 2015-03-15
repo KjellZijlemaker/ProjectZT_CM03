@@ -11,7 +11,7 @@ import Foundation
 class DataManager{
     
     
-    class func getMainData(apiEndPoint: String, completion: (response: [Test]) -> ()) {
+    class func getMainData(apiEndPoint: String, completionHandler: (response: [Message]) -> ()) {
         
         // Making GET request to the URL
         request(.GET, apiEndPoint).responseJSON { (request, response, json, error) in
@@ -27,33 +27,29 @@ class DataManager{
                 // Make new JSON array
                 if let appArray = jsonObj["feed"]["entry"].array {
                     
+                    var messageArray = [Message]()
                     
                     // Check for every app in the array
                     for appDict in appArray {
-                        
-                        var appsArray = [Test]()
-                        
+      
                         // Making new Object for putting in the array
-                        var test = Test(name: "", website: "")
+                        var newMessage = Message(name: "", website: "")
                         
                         // Set name inside the object
                         var appName: String = appDict["im:name"]["label"].stringValue
-                        test.setName(appName)
+                        newMessage.setName(appName)
                         
                         // Set the website for the object
                         var appURL: String = appDict["im:image"][0]["label"].stringValue
-                        test.setWebsite(appURL)
+                        newMessage.setWebsite(appURL)
                         
                         // Append the app names
-                         appsArray.append(test)
-                        
-                        // Give the array back to the main Thread
-                        completion(response: appsArray)
+                        messageArray.append(newMessage)
                         
                     }
                     
-                    
-                    
+                    // Give the array back to the main Thread
+                    completionHandler(response: messageArray)
                     
                     /* Code snippet for getting single item out of JSON array
                     if let appName = jsonObj["feed"]["entry"][1]["im:name"]["label"].string{

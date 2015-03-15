@@ -1,3 +1,4 @@
+
 //
 //  ViewController.swift
 //  PostDuif
@@ -11,7 +12,8 @@ import UIKit
 class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
 {
     // Array for all the items to be loaded inside the carousel
-    var items: [Test] = []
+    var items: [Message] = []
+    var pictures: [UIImage!] = []
     
     // For passing on to the other ViewControllers
     var currentIndex: Int = 0
@@ -20,20 +22,29 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
     override func awakeFromNib()
     {
         super.awakeFromNib()
+        pictures.append(UIImage(named:"page.png"))
+        pictures.append(UIImage(named:"naamloos.png"))
         
-
+        
+        
+        
+        // URL for the JSON
+        var url = "https://itunes.apple.com/us/rss/topgrossingipadapplications/limit=2/json"
+        
+        // Getting the app data and fill it in the global array
+        getAppData(url)
+        
+        println(self.items)
     }
     
     override func viewDidLoad()
     {
         super.viewDidLoad()
-       
         
         // Setting inital settings for swipe gestures
         carousel.userInteractionEnabled = true
         carousel.delegate = self
         carousel.type = .Custom
-        
         carousel.scrollEnabled = false
         
         
@@ -50,17 +61,9 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
         let dubbleTap = UITapGestureRecognizer(target: self, action: ("dubbleTapped"))
         dubbleTap.numberOfTapsRequired = 2
         self.view.addGestureRecognizer(dubbleTap)
-        // URL for the JSON
-        var url = "https://itunes.apple.com/us/rss/topgrossingipadapplications/limit=25/json"
         
-        // Getting the app data and fill it in the global array
-        getAppData(url)
     }
     
-    
-   
-    
-
     //------------Swipe method to the right--------------//
     func rightSwiped(){
         carousel.scrollByNumberOfItems(-1, duration: 0.25)
@@ -78,8 +81,21 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
         // Getting the current index of the carousel
         currentIndex = carousel.currentItemIndex
         
-        // For performing the seque inside the storyboard
-        performSegueWithIdentifier("showContent", sender: self)
+        
+        switch self.items[currentIndex].getCategory(){
+        case "family ":
+            // For performing the seque inside the storyboard
+            performSegueWithIdentifier("showMessageContent", sender: self)
+            println("family")
+        case "news":
+            performSegueWithIdentifier("showNewsMessageContent", sender: self)
+            println("news")
+        default:
+            // For performing the seque inside the storyboard
+            performSegueWithIdentifier("showMessageContent", sender: self)
+        }
+        
+        
     }
     
     func numberOfItemsInCarousel(carousel: iCarousel!) -> Int
@@ -87,31 +103,34 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
         return items.count
     }
     
-   
+    
     
     func carousel(carousel: iCarousel!, viewForItemAtIndex index: Int, var reusingView view: UIView!) -> UIView!
     {
         var label: UILabel! = nil
+        var imageViewObject :UIImageView! = nil
         
         //create new view if no view is available for recycling
         if (view == nil)
         {
-
+            
             //don't do anything specific to the index within
             //this `if (view == nil) {...}` statement because the view will be
             //recycled and used with other index values later
             view = UIImageView(frame:CGRectMake(0, 0, 200, 200))
-            (view as UIImageView!).image = UIImage(named: "page.png")
             view.contentMode = .Center
-        
+            
+            
+            
             label = UILabel(frame:view.bounds)
-            label.frame = CGRectMake(-120, -220, 500, 100);
+            label.frame = CGRectMake(-140, -150, 500, 100);
             label.backgroundColor = UIColor.clearColor()
             label.textAlignment = .Center
             label.font = label.font.fontWithSize(50)
             label.tag = 1
             
             
+            // view.addSubview(imageViewObject)
             view.addSubview(label)
         }
         else
@@ -120,14 +139,16 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
             label = view.viewWithTag(1) as UILabel!
         }
         
-
         //set item label
         //remember to always set any properties of your carousel item
         //views outside of the `if (view == nil) {...}` check otherwise
         //you'll get weird issues with carousel item content appearing
         //in the wrong place in the carousel
         label.text = "\(self.items[index].getName())"
+        //imageViewObject.image = self.pictures[index]
         
+        
+        (view as UIImageView!).image = self.pictures[index]
         return view
     }
     
@@ -141,42 +162,41 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
         return value
     }
     
-   // Preparing the seque and send data with it
+    // Preparing the seque and send data with it
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
-        if segue.identifier == "showContent"{
-            let vc = segue.destinationViewController as ContentView
+        if segue.identifier == "showMessages"{
+            let vc = segue.destinationViewController as MessageContentViewController
             vc.colorString = String(currentIndex)
         }
     }
     
     // Function for getting the app data and filling it into the array
     func getAppData(url: String){
-        DataManager.getMainData(url){(test1) in
+        DataManager.getMainData(url){(messages) in
             
             // Transfering array to global array
-            self.items = test1
+            self.items = messages
             
             // Iterate through all possible values
             for r in 0...self.items.count-1{
                 self.carousel.insertItemAtIndex(r, animated: true)
+                println(self.items[r].getName())
             }
-            
-            println(self.items)
-
         }
         
     }
     
     /* For calling View programmaticlly
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let vc = storyboard.instantiateViewControllerWithIdentifier("ContentView") as UIViewController
-        self.presentViewController(vc, animated: true, completion: nil)
+    let storyboard = UIStoryboard(name: "Main", bundle: nil)
+    let vc = storyboard.instantiateViewControllerWithIdentifier("ContentView") as UIViewController
+    self.presentViewController(vc, animated: true, completion: nil)
     */
     
     /* For making an Alert dialog with OK button
-            var alert = UIAlertController(title:  "The index", message: String(index), preferredStyle: UIAlertControllerStyle.Alert)
-            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
-            self.presentViewController(alert, animated: true, completion: nil)
+    var alert = UIAlertController(title:  "The index", message: String(index), preferredStyle: UIAlertControllerStyle.Alert)
+    alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
+    self.presentViewController(alert, animated: true, completion: nil)
     */
 }
+
 

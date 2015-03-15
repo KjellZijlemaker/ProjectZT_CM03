@@ -7,7 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		212936381AAD99370061BE6A /* TestObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212936371AAD99370061BE6A /* TestObject.swift */; };
+		210133871AB5C1E00065D186 /* NewsMessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 210133861AB5C1E00065D186 /* NewsMessageViewController.swift */; };
+		212936381AAD99370061BE6A /* Messages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212936371AAD99370061BE6A /* Messages.swift */; };
 		212AE90E1AA9CE4D000255E8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212AE90D1AA9CE4D000255E8 /* AppDelegate.swift */; };
 		212AE9101AA9CE4D000255E8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212AE90F1AA9CE4D000255E8 /* ViewController.swift */; };
 		212AE9131AA9CE4D000255E8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 212AE9111AA9CE4D000255E8 /* Main.storyboard */; };
@@ -15,7 +16,7 @@
 		212AE9181AA9CE4D000255E8 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 212AE9161AA9CE4D000255E8 /* LaunchScreen.xib */; };
 		212AE9241AA9CE4D000255E8 /* PostDuifTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212AE9231AA9CE4D000255E8 /* PostDuifTests.swift */; };
 		212AE9491AA9CF44000255E8 /* iCarousel.m in Sources */ = {isa = PBXBuildFile; fileRef = 212AE9481AA9CF44000255E8 /* iCarousel.m */; };
-		214C55DA1AA9E71200555A56 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214C55D91AA9E71200555A56 /* ContentView.swift */; };
+		214C55DA1AA9E71200555A56 /* MessageContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214C55D91AA9E71200555A56 /* MessageContentViewController.swift */; };
 		21CF744F1AADB8260047ABC3 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21CF744E1AADB8260047ABC3 /* DataManager.swift */; };
 		21DF2C001AADC0C5007921E4 /* Alamofire.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DF2BFC1AADC0C5007921E4 /* Alamofire.swift */; };
 		21DF2C011AADC0C5007921E4 /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DF2BFF1AADC0C5007921E4 /* SwiftyJSON.swift */; };
@@ -32,7 +33,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		212936371AAD99370061BE6A /* TestObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestObject.swift; sourceTree = "<group>"; };
+		210133861AB5C1E00065D186 /* NewsMessageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewsMessageViewController.swift; sourceTree = "<group>"; };
+		212936371AAD99370061BE6A /* Messages.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Messages.swift; sourceTree = "<group>"; };
 		212AE9081AA9CE4D000255E8 /* PostDuif.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PostDuif.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		212AE90C1AA9CE4D000255E8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		212AE90D1AA9CE4D000255E8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -46,7 +48,7 @@
 		212AE9471AA9CF44000255E8 /* iCarousel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iCarousel.h; sourceTree = "<group>"; };
 		212AE9481AA9CF44000255E8 /* iCarousel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iCarousel.m; sourceTree = "<group>"; };
 		212AE94A1AA9CF63000255E8 /* PostDuif-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PostDuif-Bridging-Header.h"; sourceTree = "<group>"; };
-		214C55D91AA9E71200555A56 /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		214C55D91AA9E71200555A56 /* MessageContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageContentViewController.swift; sourceTree = "<group>"; };
 		21CF744E1AADB8260047ABC3 /* DataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		21DF2BFB1AADC0C5007921E4 /* Alamofire.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Alamofire.h; sourceTree = "<group>"; };
 		21DF2BFC1AADC0C5007921E4 /* Alamofire.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Alamofire.swift; sourceTree = "<group>"; };
@@ -103,9 +105,10 @@
 				212AE9161AA9CE4D000255E8 /* LaunchScreen.xib */,
 				212AE90B1AA9CE4D000255E8 /* Supporting Files */,
 				212AE94A1AA9CF63000255E8 /* PostDuif-Bridging-Header.h */,
-				214C55D91AA9E71200555A56 /* ContentView.swift */,
-				212936371AAD99370061BE6A /* TestObject.swift */,
+				214C55D91AA9E71200555A56 /* MessageContentViewController.swift */,
+				212936371AAD99370061BE6A /* Messages.swift */,
 				21CF744E1AADB8260047ABC3 /* DataManager.swift */,
+				210133861AB5C1E00065D186 /* NewsMessageViewController.swift */,
 			);
 			path = PostDuif;
 			sourceTree = "<group>";
@@ -262,14 +265,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				212936381AAD99370061BE6A /* TestObject.swift in Sources */,
+				212936381AAD99370061BE6A /* Messages.swift in Sources */,
 				21CF744F1AADB8260047ABC3 /* DataManager.swift in Sources */,
 				212AE9491AA9CF44000255E8 /* iCarousel.m in Sources */,
 				21DF2C011AADC0C5007921E4 /* SwiftyJSON.swift in Sources */,
 				212AE9101AA9CE4D000255E8 /* ViewController.swift in Sources */,
-				214C55DA1AA9E71200555A56 /* ContentView.swift in Sources */,
+				214C55DA1AA9E71200555A56 /* MessageContentViewController.swift in Sources */,
 				212AE90E1AA9CE4D000255E8 /* AppDelegate.swift in Sources */,
 				21DF2C001AADC0C5007921E4 /* Alamofire.swift in Sources */,
+				210133871AB5C1E00065D186 /* NewsMessageViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
