@@ -40,6 +40,8 @@ class MessageContentViewController: UIViewController {
     }
     
 
+    
+    
     /*
     // MARK: - Navigation
 

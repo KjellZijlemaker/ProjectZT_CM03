@@ -115,8 +115,6 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
             view = UIImageView(frame:CGRectMake(0, 0, 200, 200))
             view.contentMode = .Center
             
-            
-            
             label = UILabel(frame:view.bounds)
             //label.frame = CGRectMake(-140, -150, 500, 100);
             label.frame = CGRectMake(-140, -200, 500, 100);
@@ -160,6 +158,26 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
         return view
     }
     
+//    override func viewWillDisappear(animated: Bool) {
+//        var oldItems: [Message] = self.items
+//        
+//        // URL for the JSON
+//        var url = "https://itunes.apple.com/us/rss/topgrossingipadapplications/limit=3/json"
+//        
+//        // Getting the app data and fill it in the global array
+//        getAppData(url)
+//        
+//        println(oldItems)
+//        println(items)
+//        
+//        for i in 0...items.count-1{
+//            if(oldItems[i].getName() != items[i].getName()){
+//                println("Dat is een nieuwe!")
+//            }
+//        }
+//
+//    }
+
     
     func carousel(carousel: iCarousel!, valueForOption option: iCarouselOption, withDefault value: CGFloat) -> CGFloat
     {

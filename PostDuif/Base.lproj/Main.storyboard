@@ -23,8 +23,8 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BbD-YH-2l2" customClass="iCarousel">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="Categorie" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xtq-pg-PMZ">
-                                        <rect key="frame" x="99" y="46" width="75" height="21"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Categorie" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xtq-pg-PMZ">
+                                        <rect key="frame" x="263" y="52" width="75" height="20.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -32,7 +32,9 @@
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstAttribute="centerX" secondItem="Xtq-pg-PMZ" secondAttribute="centerX" id="YWo-jS-wlZ"/>
+                                    <constraint firstItem="Xtq-pg-PMZ" firstAttribute="top" secondItem="BbD-YH-2l2" secondAttribute="top" constant="52" id="AK3-se-h0h"/>
+                                    <constraint firstItem="Xtq-pg-PMZ" firstAttribute="leading" secondItem="BbD-YH-2l2" secondAttribute="leading" constant="263" id="QId-RA-bUV"/>
+                                    <constraint firstAttribute="trailing" secondItem="Xtq-pg-PMZ" secondAttribute="trailing" constant="262" id="oog-lT-B0p"/>
                                 </constraints>
                                 <connections>
                                     <outlet property="dataSource" destination="vXZ-lx-hvc" id="81k-26-bEM"/>
