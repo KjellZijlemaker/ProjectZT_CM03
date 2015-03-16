@@ -139,9 +139,12 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
             setCategories(index)
         }
         
-        // Setting the right images for each category
-        setImages(index)
         
+        // Checking for every item
+        for i in 0...self.items.count-1{
+            // Setting the right images for each category
+            setImages(i)
+        }
         
         
         //set item label
@@ -193,11 +196,11 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
     // Function for setting the images per category
     func setImages(index: Int){
         
-        switch(items[index].getCategory()){
-            case "message":
+        switch(items[index].getName()){
+            case "Clash of Clans":
             pictures.append(UIImage(named:"page.png"))
             
-            case "news":
+            case "Game of War - Fire Age":
              pictures.append(UIImage(named:"naamloos.png"))
             
         default:
@@ -209,11 +212,11 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
     
     // Setting the categorie names above the carousel
     func setCategories(index: Int){
-        switch(items[index].getCategory()){
-            case "messages":
+        switch(items[index].getName()){
+            case "Game of War - Fire Age":
             categoryMessage.text = "Categorie: Berichten"
             
-            case "news":
+            case "Clash of Clans":
             categoryMessage.text = "Categorie: Mededelingen"
             
         default:
