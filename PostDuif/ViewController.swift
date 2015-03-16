@@ -141,6 +141,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
         }
         
         
+        
         // Checking for every item
         for i in 0...self.items.count-1{
             // Setting the right images for each category
