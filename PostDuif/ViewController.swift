@@ -122,7 +122,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
             label.textAlignment = .Center
             label.font = label.font.fontWithSize(50)
             label.tag = 1
-            
+            label.layoutIfNeeded()
             
             // view.addSubview(imageViewObject)
             view.addSubview(label)
@@ -157,6 +157,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
         (view as UIImageView!).image = self.pictures[index]
         return view
     }
+    
     
 //    override func viewWillDisappear(animated: Bool) {
 //        var oldItems: [Message] = self.items
@@ -234,13 +235,13 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
         switch(items[index].getName()){
             case "Game of War - Fire Age":
             categoryMessage.text = "Categorie: Berichten"
-            
+            categoryMessage.layoutIfNeeded()
             case "Clash of Clans":
             categoryMessage.text = "Categorie: Mededelingen"
-            
+            categoryMessage.layoutIfNeeded()
         default:
             categoryMessage.text = "Geen categorie"
-
+            categoryMessage.layoutIfNeeded()
             break
             
         }
