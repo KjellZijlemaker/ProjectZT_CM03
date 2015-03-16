@@ -150,6 +150,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="background" width="50" height="468"/>
+        <image name="background" width="476" height="476"/>
     </resources>
 </document>

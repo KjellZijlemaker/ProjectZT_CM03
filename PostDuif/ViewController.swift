@@ -103,7 +103,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
     func carousel(carousel: iCarousel!, viewForItemAtIndex index: Int, var reusingView view: UIView!) -> UIView!
     {
         var label: UILabel! = nil
-        var imageViewObject :UIImageView! = nil
+        
         
         //create new view if no view is available for recycling
         if (view == nil)
@@ -118,7 +118,8 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
             
             
             label = UILabel(frame:view.bounds)
-            label.frame = CGRectMake(-140, -150, 500, 100);
+            //label.frame = CGRectMake(-140, -150, 500, 100);
+            label.frame = CGRectMake(-140, -200, 500, 100);
             label.backgroundColor = UIColor.clearColor()
             label.textAlignment = .Center
             label.font = label.font.fontWithSize(50)
@@ -153,7 +154,6 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
         //you'll get weird issues with carousel item content appearing
         //in the wrong place in the carousel
         label.text = "\(self.items[index].getName())"
-        
         
         (view as UIImageView!).image = self.pictures[index]
         return view
@@ -198,10 +198,10 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
         
         switch(items[index].getName()){
             case "Clash of Clans":
-            pictures.append(UIImage(named:"page.png"))
+            pictures.append(UIImage(named:"message.jpg"))
             
             case "Game of War - Fire Age":
-             pictures.append(UIImage(named:"naamloos.png"))
+             pictures.append(UIImage(named:"news.jpg"))
             
         default:
              pictures.append(UIImage(named:"naamloos.png"))
