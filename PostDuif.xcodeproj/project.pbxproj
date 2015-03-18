@@ -16,6 +16,7 @@
 		212AE9181AA9CE4D000255E8 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 212AE9161AA9CE4D000255E8 /* LaunchScreen.xib */; };
 		212AE9241AA9CE4D000255E8 /* PostDuifTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212AE9231AA9CE4D000255E8 /* PostDuifTests.swift */; };
 		212AE9491AA9CF44000255E8 /* iCarousel.m in Sources */ = {isa = PBXBuildFile; fileRef = 212AE9481AA9CF44000255E8 /* iCarousel.m */; };
+		2131ECA51AB9801B005F844A /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2131ECA41AB9801B005F844A /* Settings.swift */; };
 		214C55DA1AA9E71200555A56 /* MessageContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214C55D91AA9E71200555A56 /* MessageContentViewController.swift */; };
 		21CF744F1AADB8260047ABC3 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21CF744E1AADB8260047ABC3 /* DataManager.swift */; };
 		21DF2C001AADC0C5007921E4 /* Alamofire.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DF2BFC1AADC0C5007921E4 /* Alamofire.swift */; };
@@ -48,6 +49,7 @@
 		212AE9471AA9CF44000255E8 /* iCarousel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iCarousel.h; sourceTree = "<group>"; };
 		212AE9481AA9CF44000255E8 /* iCarousel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iCarousel.m; sourceTree = "<group>"; };
 		212AE94A1AA9CF63000255E8 /* PostDuif-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PostDuif-Bridging-Header.h"; sourceTree = "<group>"; };
+		2131ECA41AB9801B005F844A /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		214C55D91AA9E71200555A56 /* MessageContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageContentViewController.swift; sourceTree = "<group>"; };
 		21CF744E1AADB8260047ABC3 /* DataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		21DF2BFB1AADC0C5007921E4 /* Alamofire.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Alamofire.h; sourceTree = "<group>"; };
@@ -109,6 +111,7 @@
 				212936371AAD99370061BE6A /* Messages.swift */,
 				21CF744E1AADB8260047ABC3 /* DataManager.swift */,
 				210133861AB5C1E00065D186 /* NewsMessageViewController.swift */,
+				2131ECA41AB9801B005F844A /* Settings.swift */,
 			);
 			path = PostDuif;
 			sourceTree = "<group>";
@@ -269,6 +272,7 @@
 				21CF744F1AADB8260047ABC3 /* DataManager.swift in Sources */,
 				212AE9491AA9CF44000255E8 /* iCarousel.m in Sources */,
 				21DF2C011AADC0C5007921E4 /* SwiftyJSON.swift in Sources */,
+				2131ECA51AB9801B005F844A /* Settings.swift in Sources */,
 				212AE9101AA9CE4D000255E8 /* ViewController.swift in Sources */,
 				214C55DA1AA9E71200555A56 /* MessageContentViewController.swift in Sources */,
 				212AE90E1AA9CE4D000255E8 /* AppDelegate.swift in Sources */,

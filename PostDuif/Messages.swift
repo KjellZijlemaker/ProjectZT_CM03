@@ -14,9 +14,9 @@ class Message{
     var website: String
     var category: String
 
-    init(name: String, website: String){
-        self.name = name
-        self.website = website
+    init(){
+        self.name = ""
+        self.website = ""
         self.category = ""
     }
     

@@ -8,12 +8,17 @@
 //
 
 import UIKit
+import AVFoundation
 
 class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
 {
     // Array for all the items to be loaded inside the carousel
     var items: [Message] = []
+    var userSettings: [Settings] = []
     var pictures: [UIImage!] = []
+    
+    // Setup new synthesizer
+    var speechSynthesizer: AVSpeechSynthesizer = AVSpeechSynthesizer()
     
     // For passing on to the other ViewControllers
     var currentIndex: Int = 0
@@ -25,10 +30,16 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
         super.awakeFromNib()
         
         // URL for the JSON
-        var url = "https://itunes.apple.com/us/rss/topgrossingipadapplications/limit=2/json"
+        //var url = "https://itunes.apple.com/us/rss/topgrossingipadapplications/limit=2/json"
+        
+        // Getting UserID
+        var userID = ""
+        
+        // Getting the settings by UserID
+        getUserSettings(userID)
         
         // Getting the app data and fill it in the global array
-        getAppData(url)
+        getAppData()
         
     }
     
@@ -89,8 +100,6 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
             // For performing the seque inside the storyboard
             performSegueWithIdentifier("showMessageContent", sender: self)
         }
-        
-        
     }
     
     func numberOfItemsInCarousel(carousel: iCarousel!) -> Int
@@ -98,12 +107,9 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
         return items.count
     }
     
-    
-    
     func carousel(carousel: iCarousel!, viewForItemAtIndex index: Int, var reusingView view: UIView!) -> UIView!
     {
         var label: UILabel! = nil
-        
         
         //create new view if no view is available for recycling
         if (view == nil)
@@ -133,9 +139,18 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
             label = view.viewWithTag(1) as UILabel!
         }
         
-        // If the index is the same as the carousel, it will check in what kind of category the message/news is
+        /*
+        Checking the index with the current index. If so, content will reload into the View and speech
+        will be indexed
+        */
         if (index == self.carousel.currentItemIndex) {
-            setCategories(index)
+            setCategory(index)
+            
+            //TODO: Check JSON if user has speech in his settings
+            speechView(speechSynthesizer, speech: "Begin bericht")
+            speechView(speechSynthesizer, speech: "Onderwerp: " + self.items[index].getName())
+            speechView(speechSynthesizer, speech: "Inhoud bericht: " + self.items[index].getWebsite())
+            speechView(speechSynthesizer, speech: "Einde bericht")
         }
         
         
@@ -155,6 +170,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
         label.text = "\(self.items[index].getName())"
         
         (view as UIImageView!).image = self.pictures[index]
+        
         return view
     }
     
@@ -197,9 +213,12 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
         }
     }
     
-    // Function for getting the app data and filling it into the array
-    func getAppData(url: String){
-        DataManager.getMainData(url){(messages) in
+    // Function for getting the main app data and filling it into the array
+    func getAppData(){
+        
+        var url = "http://84.107.107.169:8080/VisioWebApp/notificationTest"
+        
+        DataManager.getMessages(url){(messages) in
             
             // Transfering array to global array
             self.items = messages
@@ -209,6 +228,21 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
                 self.carousel.insertItemAtIndex(r, animated: true)
                 println(self.items[r].getName())
             }
+        }
+        
+    }
+    
+    
+    // Function for getting the main app data and filling it into the array
+    func getUserSettings(userID: String){
+        
+        var url = "http://84.107.107.169:8080/VisioWebApp/notificationTest"
+        
+        DataManager.getUserSettings(url){(settings) in
+            
+            // Transfering array to global array
+            self.userSettings = settings
+            
         }
         
     }
@@ -224,14 +258,14 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
              pictures.append(UIImage(named:"news.jpg"))
             
         default:
-             pictures.append(UIImage(named:"naamloos.png"))
+             pictures.append(UIImage(named:"message.jpg"))
             
         }
         
     }
     
     // Setting the categorie names above the carousel
-    func setCategories(index: Int){
+    func setCategory(index: Int){
         switch(items[index].getName()){
             case "Game of War - Fire Age":
             categoryMessage.text = "Categorie: Berichten"
@@ -247,9 +281,32 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
         }
     }
     
+    // Function for checking if the index from the carousel changed
     func carouselCurrentItemIndexDidChange(carousel: iCarousel!){
+        
+        // Stop the synthesizer, if there are any sentences and reload data
+        speechSynthesizer.stopSpeakingAtBoundary(AVSpeechBoundary.Immediate)
         self.carousel.reloadData()
     }
+    
+    func speechView(speechSynthesizer: AVSpeechSynthesizer, speech: String){
+        var mySpeechUtterance:AVSpeechUtterance = AVSpeechUtterance(string:speech)
+        
+        mySpeechUtterance.rate = 0.06 // Setting rate of the voice
+        mySpeechUtterance.voice = AVSpeechSynthesisVoice(language: "nl-NL")
+        println("\(mySpeechUtterance.speechString)")
+        
+        // First sentence will be called without delay
+        if(speech.rangeOfString("Begin bericht") == nil){
+            mySpeechUtterance.preUtteranceDelay = 0.3
+        }
+        
+        // Say the sentence
+        speechSynthesizer .speakUtterance(mySpeechUtterance)
+       
+        //speechSynthesizer.pauseSpeakingAtBoundary(mySpeechUtterance)
+    }
+
     
     /* For calling View programmaticlly
     let storyboard = UIStoryboard(name: "Main", bundle: nil)

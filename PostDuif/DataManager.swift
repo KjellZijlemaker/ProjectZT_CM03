@@ -11,7 +11,7 @@ import Foundation
 class DataManager{
     
     
-    class func getMainData(apiEndPoint: String, completionHandler: (response: [Message]) -> ()) {
+    class func getMessages(apiEndPoint: String, completionHandler: (response: [Message]) -> ()) {
         
         // Making GET request to the URL
         request(.GET, apiEndPoint).responseJSON { (request, response, json, error) in
@@ -33,14 +33,14 @@ class DataManager{
                     for appDict in appArray {
       
                         // Making new Object for putting in the array
-                        var newMessage = Message(name: "", website: "")
+                        var newMessage = Message()
                         
                         // Set name inside the object
-                        var appName: String = appDict["im:name"]["label"].stringValue
+                        var appName: String = appDict["subject"].stringValue
                         newMessage.setName(appName)
                         
                         // Set the website for the object
-                        var appURL: String = appDict["im:image"][0]["label"].stringValue
+                        var appURL: String = appDict["message"].stringValue
                         newMessage.setWebsite(appURL)
                         
                         // Append the app names
@@ -69,5 +69,61 @@ class DataManager{
         }
     }
     
+    
+    
+    class func getUserSettings(apiEndPoint: String, completionHandler: (response: [Settings]) -> ()) {
+        // Making GET request to the URL
+        request(.GET, apiEndPoint).responseJSON { (request, response, json, error) in
+            
+            // Making sure if the JSON is not empty
+            if (json != nil) {
+                
+                // Making the JSON object from the JSON
+                var jsonObj = JSON(json!)
+
+                // Make new JSON array
+                if let appArray = jsonObj["feed"]["entry"].array {
+                    
+                    var settingsArray = [Settings]()
+                    
+                    // Check for every app in the array
+                    for appDict in appArray {
+                        
+                        // Making new Object for putting in the array
+                        var newSettings = Settings()
+                        
+                        // Set name inside the object
+                        var accessibility: Int = appDict["subject"].intValue
+                        newSettings.setUserHasAccessibility(accessibility)
+                        
+                        // Set the website for the object
+                        var speech: Int = appDict["subject"].intValue
+                        newSettings.setUserHasSpeech(speech)
+                        
+                        // Append the app names
+                        settingsArray.append(newSettings)
+                        
+                    }
+                    
+                    // Give the array back to the main Thread
+                    completionHandler(response: settingsArray)
+                    
+                    /* Code snippet for getting single item out of JSON array
+                    if let appName = jsonObj["feed"]["entry"][1]["im:name"]["label"].string{
+                    let test1 = Test(age: 9, name: appName)
+                    //self.tableView.reloadData()
+                    completion(response: test1)
+                    }
+                    */
+                }
+                    
+                    
+                    // If there is an error.....
+                else if (error != nil){
+                    println("error!")
+                }
+            }
+        }
+    }
     
 }
