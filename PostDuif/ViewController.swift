@@ -10,6 +10,20 @@
 import UIKit
 import AVFoundation
 
+// For checking if the array is out of bound
+extension Array {
+    
+    // Safely lookup an index that might be out of bounds,
+    // returning nil if it does not exist
+    func getArrayIndex(index: Int) -> T? {
+        if 0 <= index && index < count {
+            return self[index]
+        } else {
+            return nil
+        }
+    }
+}
+
 class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
 {
     // Array for all the items to be loaded inside the carousel
@@ -47,6 +61,9 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
     {
         super.viewDidLoad()
         
+        var timer = NSTimer.scheduledTimerWithTimeInterval(10.0, target:self, selector: Selector("refreshInTime"), userInfo: nil, repeats: true)
+        
+        
         // Setting inital settings for swipe gestures
         carousel.userInteractionEnabled = true
         carousel.delegate = self
@@ -64,6 +81,11 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
         swipeLeft.direction = UISwipeGestureRecognizerDirection.Left
         self.view.addGestureRecognizer(swipeLeft)
         
+        //-----------up swipe gestures in view--------------//
+        let swipeUp = UISwipeGestureRecognizer(target: self, action: Selector("upSwiped"))
+        swipeUp.direction = UISwipeGestureRecognizerDirection.Up
+        self.view.addGestureRecognizer(swipeUp)
+        
         let dubbleTap = UITapGestureRecognizer(target: self, action: ("dubbleTapped"))
         dubbleTap.numberOfTapsRequired = 2
         self.view.addGestureRecognizer(dubbleTap)
@@ -80,6 +102,15 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
     func leftSwiped(){
         carousel.scrollByNumberOfItems(1, duration: 0.25)
     }
+    
+    
+    
+    //------------Swipe method to the left--------------//
+    func upSwiped(){
+       // carousel.scrollByNumberOfItems(1, duration: 0.25)
+        refreshInTime()
+    }
+    
     
     //------------Dubble tap method for opening new view--------------//
     func dubbleTapped(){
@@ -175,25 +206,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
     }
     
     
-//    override func viewWillDisappear(animated: Bool) {
-//        var oldItems: [Message] = self.items
-//        
-//        // URL for the JSON
-//        var url = "https://itunes.apple.com/us/rss/topgrossingipadapplications/limit=3/json"
-//        
-//        // Getting the app data and fill it in the global array
-//        getAppData(url)
-//        
-//        println(oldItems)
-//        println(items)
-//        
-//        for i in 0...items.count-1{
-//            if(oldItems[i].getName() != items[i].getName()){
-//                println("Dat is een nieuwe!")
-//            }
-//        }
-//
-//    }
+
 
     
     func carousel(carousel: iCarousel!, valueForOption option: iCarouselOption, withDefault value: CGFloat) -> CGFloat
@@ -232,6 +245,45 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
         
     }
     
+    // Function for getting the main app data and filling it into the array
+    func appendAppData(){
+        
+        var url = "http://84.107.107.169:8080/VisioWebApp/notificationTest"
+        
+        DataManager.getMessages(url){(messages) in
+            
+            // Iterate through all possible values
+            for r in 0...messages.count-1{
+                
+                // If the index is null, it means a new element inside the array has been added
+                // AKA, a new item has been added
+                if(self.items.getArrayIndex(r) == nil){
+                    
+                    self.items.append(messages[r])
+                    self.carousel.insertItemAtIndex(r, animated: true)
+                    println("Success")
+                    
+                    /*// Extra check to check if the item is really new in the array(Optional)
+                    for o in 0...self.items.count-1{
+                        
+                        // If the items do not match, the item is new and can be appended (Must be ID)
+                        if(self.items[o].getName() != messages[r].getName()){
+                            
+                            
+                            break
+                        }*/
+                    
+                    
+                }
+                    
+                    // Else, there are no more new items
+                }
+                
+            }
+        
+        
+    }
+
     
     // Function for getting the main app data and filling it into the array
     func getUserSettings(userID: String){
@@ -307,6 +359,61 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
         //speechSynthesizer.pauseSpeakingAtBoundary(mySpeechUtterance)
     }
 
+    func refreshInTime(){
+        
+        appendAppData()
+        
+        self.carousel.reloadData()
+        //self.carousel.scrollToItemAtIndex(items.count-1, animated: true)
+        }
+    
+    
+    
+    
+    
+        /* When getting appended data from the datamanager
+        func appendAppData(){
+    
+            var url = "http://84.107.107.169:8080/VisioWebApp/notificationTest"
+    
+            DataManager.appendMessages(url, items: self.items){(messages) in
+    
+                // Iterate through all possible values
+                for r in 0...messages.count{
+                    if(!messages.isEmpty){
+                        self.items.append(messages[0])
+                        self.carousel.insertItemAtIndex(r, animated: true)
+                        println("YAY")
+                    }
+    
+                }
+    
+                }
+    
+            }*/
+    
+    
+        /* Function for activating when view will dissapear
+        override func viewWillDisappear(animated: Bool) {
+            var oldItems: [Message] = self.items
+    
+            // URL for the JSON
+            var url = "https://itunes.apple.com/us/rss/topgrossingipadapplications/limit=3/json"
+    
+            // Getting the app data and fill it in the global array
+            getAppData(url)
+    
+            println(oldItems)
+            println(items)
+    
+            for i in 0...items.count-1{
+                if(oldItems[i].getName() != items[i].getName()){
+                    println("Dat is een nieuwe!")
+                }
+            }
+    
+        }*/
+    
     
     /* For calling View programmaticlly
     let storyboard = UIStoryboard(name: "Main", bundle: nil)
@@ -319,6 +426,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
     alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
     self.presentViewController(alert, animated: true, completion: nil)
     */
+
 }
 
 
