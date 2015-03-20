@@ -31,8 +31,18 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
     var userSettings: [Settings] = []
     var pictures: [UIImage!] = []
     
-    // Setup new synthesizer
+    // TextField for showing new items inside the carousel
+    var txtField: UITextField = UITextField(frame: CGRect(x: 890, y: 120, width: 10.00, height: 30.00));
+    var totalNewItems = 0 // For total of new items
+    
+    // Setup new synthesizer for speech
     var speechSynthesizer: AVSpeechSynthesizer = AVSpeechSynthesizer()
+    
+    // For checking if data is appending or not. Important for playing the speech or not inside the view,
+    // when reloading the carousel!
+    var isAppending = false
+    
+    var dots: RSDotsView!
     
     // For passing on to the other ViewControllers
     var currentIndex: Int = 0
@@ -63,6 +73,10 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
         
         var timer = NSTimer.scheduledTimerWithTimeInterval(10.0, target:self, selector: Selector("refreshInTime"), userInfo: nil, repeats: true)
         
+        self.txtField.hidden = true
+        self.txtField.borderStyle = UITextBorderStyle.Line
+        self.txtField.backgroundColor = UIColor.redColor()
+        self.view.addSubview(self.txtField)
         
         // Setting inital settings for swipe gestures
         carousel.userInteractionEnabled = true
@@ -87,7 +101,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
         self.view.addGestureRecognizer(swipeUp)
         
         let dubbleTap = UITapGestureRecognizer(target: self, action: ("dubbleTapped"))
-        dubbleTap.numberOfTapsRequired = 2
+        dubbleTap.numberOfTapsRequired = 1
         self.view.addGestureRecognizer(dubbleTap)
         
     }
@@ -95,12 +109,22 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
     //------------Swipe method to the right--------------//
     func rightSwiped(){
         carousel.scrollByNumberOfItems(-1, duration: 0.25)
-        
+        if(self.dots != nil){
+            dots.stopAnimating()
+            dots.removeFromSuperview()
+        }
+        isAppending = false // Not appending, but swiping
     }
     
     //------------Swipe method to the left--------------//
     func leftSwiped(){
         carousel.scrollByNumberOfItems(1, duration: 0.25)
+        if(self.dots != nil){
+            dots.stopAnimating()
+            dots.removeFromSuperview()
+        }
+        isAppending = false // Not appending, but swiping
+
     }
     
     
@@ -177,11 +201,24 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
         if (index == self.carousel.currentItemIndex) {
             setCategory(index)
             
-            //TODO: Check JSON if user has speech in his settings
-            speechView(speechSynthesizer, speech: "Begin bericht")
-            speechView(speechSynthesizer, speech: "Onderwerp: " + self.items[index].getName())
-            speechView(speechSynthesizer, speech: "Inhoud bericht: " + self.items[index].getWebsite())
-            speechView(speechSynthesizer, speech: "Einde bericht")
+            // Will execute, only when not appending
+            if(!isAppending){
+                //TODO: Check JSON if user has speech in his settings
+                speechView(speechSynthesizer, speech: "Begin bericht")
+                speechView(speechSynthesizer, speech: "Onderwerp: " + self.items[index].getName())
+                speechView(speechSynthesizer, speech: "Inhoud bericht: " + self.items[index].getWebsite())
+                speechView(speechSynthesizer, speech: "Einde bericht")
+            }
+            
+        }
+        
+        // Not working yet!
+        if(index == 48){
+            // Will execute, only when not appending
+            if(!isAppending){
+                speechView(speechSynthesizer, speech: "U heeft geen nieuwe berichten meer")
+                
+            }
         }
         
         
@@ -247,7 +284,6 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
     
     // Function for getting the main app data and filling it into the array
     func appendAppData(){
-        
         var url = "http://84.107.107.169:8080/VisioWebApp/notificationTest"
         
         DataManager.getMessages(url){(messages) in
@@ -259,8 +295,16 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
                 // AKA, a new item has been added
                 if(self.items.getArrayIndex(r) == nil){
                     
-                    self.items.append(messages[r])
-                    self.carousel.insertItemAtIndex(r, animated: true)
+                    self.txtField.hidden = false // New items, so unhide textView
+                    
+                    self.totalNewItems++ // Append the number of items
+                    self.items.append(messages[r]) // Append the new message to existing view
+                    self.carousel.insertItemAtIndex(r, animated: true) // Add new item at carousel
+                    
+                    self.txtField.text = String(self.totalNewItems) // Update the text
+                    
+                    
+                    
                     println("Success")
                     
                     /*// Extra check to check if the item is really new in the array(Optional)
@@ -283,7 +327,6 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
         
         
     }
-
     
     // Function for getting the main app data and filling it into the array
     func getUserSettings(userID: String){
@@ -361,9 +404,13 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
 
     func refreshInTime(){
         
-        appendAppData()
+        isAppending = true // Now appending data, so speech may not execute
         
-        self.carousel.reloadData()
+        // Append and reload data
+        appendAppData()
+        self.carousel.reloadItemAtIndex(self.items.count, animated: true)
+        
+        
         //self.carousel.scrollToItemAtIndex(items.count-1, animated: true)
         }
     
