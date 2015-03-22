@@ -72,7 +72,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
     {
         super.viewDidLoad()
         
-        var timer = NSTimer.scheduledTimerWithTimeInterval(10.0, target:self, selector: Selector("refreshInTime"), userInfo: nil, repeats: true)
+        var timer = NSTimer.scheduledTimerWithTimeInterval(10.0, target:self, selector: Selector("appendAppData"), userInfo: nil, repeats: true)
         
         // Making textfield for new items
         self.txtField = UITextField(frame: CGRect(x: 43, y: 130, width: 15.00, height: 30.00));
@@ -178,7 +178,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
     //------------Swipe method to the left--------------//
     func upSwiped(){
        // carousel.scrollByNumberOfItems(1, duration: 0.25)
-        refreshInTime()
+        appendAppData()
     }
     
     
@@ -335,10 +335,13 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
     
     // Function for getting the main app data and filling it into the array
     func appendAppData(){
+        isAppending = true // Now appending data, so speech may not execute
+        
         var url = "http://84.107.107.169:8080/VisioWebApp/notificationTest"
         
         DataManager.getMessages(url){(messages) in
-           
+            var newMessageSpeechString: String
+            
             // Iterate through all possible values
             for r in 0...messages.count-1{
                 
@@ -348,23 +351,29 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
                     self.totalNewItems++ // Append the number of items
                     self.txtField.hidden = false // New items, so unhide textView
                     self.txtField.text = String(self.totalNewItems) // Update the text
-                    
                     self.dots.hidden = false
+                    
+                    // If the anamation is not already active, start it
                     if(!self.dots.isAnimating()){
                         self.dots.startAnimating()
                     }
                     self.dots.addSubview(self.txtField)
 
-                   
                     self.items.append(messages[r]) // Append the new message to existing view
                     self.carousel.insertItemAtIndex(r, animated: true) // Add new item at carousel
                     
+                    // Small check for grammar
+                    if(self.totalNewItems == 1){
+                        newMessageSpeechString = "U heeft: " + String(self.totalNewItems) + " nieuw bericht"
+                    }
+                    else{
+                        newMessageSpeechString = "U heeft: " + String(self.totalNewItems) + " nieuwe berichten"
+                    }
                     
+                    self.speechView(self.speechSynthesizer, speech: newMessageSpeechString) // Say the speech
                     
-                    //dots.addSubview()
-                    
-                    
-                    println("Success")
+                    self.carousel.reloadItemAtIndex(self.items.count, animated: true) // Reload only the last item
+
                     
                     /*// Extra check to check if the item is really new in the array(Optional)
                     for o in 0...self.items.count-1{
@@ -383,7 +392,6 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
                 }
                 
             }
-        
         
     }
     
@@ -460,16 +468,6 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
        
         //speechSynthesizer.pauseSpeakingAtBoundary(mySpeechUtterance)
     }
-
-    func refreshInTime(){
-        
-        isAppending = true // Now appending data, so speech may not execute
-        
-        // Append and reload data
-        appendAppData()
-        self.carousel.reloadItemAtIndex(self.items.count, animated: true)
-        
-        }
     
     
     
