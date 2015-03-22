@@ -32,7 +32,8 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
     var pictures: [UIImage!] = []
     
     // TextField for showing new items inside the carousel
-    var txtField: UITextField = UITextField(frame: CGRect(x: 890, y: 120, width: 10.00, height: 30.00));
+    var txtField: UITextField!
+    var dots: RSDotsView!
     var totalNewItems = 0 // For total of new items
     
     // Setup new synthesizer for speech
@@ -42,7 +43,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
     // when reloading the carousel!
     var isAppending = false
     
-    var dots: RSDotsView!
+    
     
     // For passing on to the other ViewControllers
     var currentIndex: Int = 0
@@ -73,11 +74,21 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
         
         var timer = NSTimer.scheduledTimerWithTimeInterval(10.0, target:self, selector: Selector("refreshInTime"), userInfo: nil, repeats: true)
         
+        // Making textfield for new items
+        self.txtField = UITextField(frame: CGRect(x: 43, y: 130, width: 15.00, height: 30.00));
         self.txtField.hidden = true
         self.txtField.borderStyle = UITextBorderStyle.Line
-        self.txtField.backgroundColor = UIColor.redColor()
-        self.view.addSubview(self.txtField)
+        self.txtField.backgroundColor = UIColor.yellowColor()
+        self.txtField.userInteractionEnabled = false
+        self.txtField.borderStyle = UITextBorderStyle.None
         
+        // Making dot animation for new item
+        self.dots = RSDotsView(frame: CGRectMake(870, -30, 300, 300))
+        self.view.addSubview(dots)
+        self.dots.dotsColor = UIColor.yellowColor()
+        self.dots.hidden = true
+
+       
         // Setting inital settings for swipe gestures
         carousel.userInteractionEnabled = true
         carousel.delegate = self
@@ -104,26 +115,61 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
         dubbleTap.numberOfTapsRequired = 1
         self.view.addGestureRecognizer(dubbleTap)
         
+        //-----------up swipe gestures in view--------------//
+        let swipeDown = UISwipeGestureRecognizer(target: self, action: Selector("swipeDown"))
+        swipeDown.direction = UISwipeGestureRecognizerDirection.Down
+        self.view.addGestureRecognizer(swipeDown)
+        
+        
     }
     
     //------------Swipe method to the right--------------//
     func rightSwiped(){
-        carousel.scrollByNumberOfItems(-1, duration: 0.25)
+        self.carousel.scrollByNumberOfItems(-1, duration: 0.25)
         if(self.dots != nil){
-            dots.stopAnimating()
-            dots.removeFromSuperview()
+            
+            if(self.carousel.currentItemIndex == self.carousel.numberOfItems-1 - self.totalNewItems){
+                
+                self.totalNewItems--
+                self.txtField.text = String(self.totalNewItems)
+                
+                if(self.totalNewItems == 0){
+                    self.txtField.removeFromSuperview()
+                    self.dots.stopAnimating()
+                    
+                    // Hide it instead of removing view, otherwise txtView won't re appear
+                    self.dots.hidden = true
+                    
+                    // TODO: Add speech
+                }
+            }
         }
-        isAppending = false // Not appending, but swiping
+        self.isAppending = false // Not appending, but swiping
     }
     
     //------------Swipe method to the left--------------//
     func leftSwiped(){
-        carousel.scrollByNumberOfItems(1, duration: 0.25)
+        self.carousel.scrollByNumberOfItems(1, duration: 0.25)
         if(self.dots != nil){
-            dots.stopAnimating()
-            dots.removeFromSuperview()
+           
+            if(self.carousel.currentItemIndex == self.carousel.numberOfItems-1 - self.totalNewItems){
+                
+                self.totalNewItems--
+                self.txtField.text = String(self.totalNewItems)
+                
+                if(self.totalNewItems == 0){
+                    self.txtField.removeFromSuperview()
+                    self.dots.stopAnimating()
+                    
+                    // Hide it instead of removing view, otherwise txtView won't re appear
+                    self.dots.hidden = true
+                    
+                    // TODO: Add speech
+                }
+               
+            }
         }
-        isAppending = false // Not appending, but swiping
+        self.isAppending = false // Not appending, but swiping
 
     }
     
@@ -157,6 +203,10 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
         }
     }
     
+    func swipeDown(){
+        self.carousel.scrollToItemAtIndex(items.count-1, animated: true)
+    }
+    
     func numberOfItemsInCarousel(carousel: iCarousel!) -> Int
     {
         return items.count
@@ -178,10 +228,11 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
             
             label = UILabel(frame:view.bounds)
             //label.frame = CGRectMake(-140, -150, 500, 100);
-            label.frame = CGRectMake(-140, -200, 500, 100);
-            label.backgroundColor = UIColor.clearColor()
+            label.frame = CGRectMake(-206, -200, 612, 100);
+            label.backgroundColor = UIColor.whiteColor()
             label.textAlignment = .Center
             label.font = label.font.fontWithSize(50)
+            label.textColor = UIColor.blackColor()
             label.tag = 1
             label.layoutIfNeeded()
             
@@ -213,7 +264,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
         }
         
         // Not working yet!
-        if(index == 48){
+        if(index == self.carousel.numberOfItems && self.totalNewItems == 0){
             // Will execute, only when not appending
             if(!isAppending){
                 speechView(speechSynthesizer, speech: "U heeft geen nieuwe berichten meer")
@@ -287,22 +338,30 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
         var url = "http://84.107.107.169:8080/VisioWebApp/notificationTest"
         
         DataManager.getMessages(url){(messages) in
-            
+           
             // Iterate through all possible values
             for r in 0...messages.count-1{
                 
                 // If the index is null, it means a new element inside the array has been added
                 // AKA, a new item has been added
                 if(self.items.getArrayIndex(r) == nil){
-                    
-                    self.txtField.hidden = false // New items, so unhide textView
-                    
                     self.totalNewItems++ // Append the number of items
+                    self.txtField.hidden = false // New items, so unhide textView
+                    self.txtField.text = String(self.totalNewItems) // Update the text
+                    
+                    self.dots.hidden = false
+                    if(!self.dots.isAnimating()){
+                        self.dots.startAnimating()
+                    }
+                    self.dots.addSubview(self.txtField)
+
+                   
                     self.items.append(messages[r]) // Append the new message to existing view
                     self.carousel.insertItemAtIndex(r, animated: true) // Add new item at carousel
                     
-                    self.txtField.text = String(self.totalNewItems) // Update the text
                     
+                    
+                    //dots.addSubview()
                     
                     
                     println("Success")
@@ -410,8 +469,6 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
         appendAppData()
         self.carousel.reloadItemAtIndex(self.items.count, animated: true)
         
-        
-        //self.carousel.scrollToItemAtIndex(items.count-1, animated: true)
         }
     
     

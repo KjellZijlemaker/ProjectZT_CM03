@@ -24,7 +24,8 @@ private class RSDotView: UIView {
 
 
 class RSDotsView: UIView {
-   
+   var animating: Bool = false
+    
     var dotsColor:UIColor = UIColor.blackColor() {
         didSet {
             buildView()
@@ -50,7 +51,7 @@ class RSDotsView: UIView {
             subview.removeFromSuperview()
         }
         let numberDots = CGFloat(1)
-        let width = (self.bounds.size.width)/(numberDots+1)
+        let width = (self.bounds.size.width)/(numberDots)
         let margin = (self.bounds.size.width - (width * numberDots)) / 1.3
         let dotDiameter = width/3
         var frame = CGRectMake(margin, self.bounds.size.height/2 - dotDiameter/2, dotDiameter, dotDiameter);
@@ -61,16 +62,16 @@ class RSDotsView: UIView {
             dot.fillColor = self.dotsColor;
             dot.backgroundColor = UIColor.clearColor()
 
-            
             self.addSubview(dot)
             frame.origin.x += width
         }
     }
     
     func startAnimating() {
+        self.animating = true
         var i:Int = 0
         for dot in self.subviews as [RSDotView] {
-            dot.transform = CGAffineTransformMakeScale(0.01, 0.01);
+            dot.transform = CGAffineTransformMakeScale(0.5, 0.5);
             let delay = 0.1*Double(i)
             UIView.animateWithDuration(Double(0.5), delay:delay, options: UIViewAnimationOptions.CurveEaseInOut|UIViewAnimationOptions.Repeat|UIViewAnimationOptions.Autoreverse , animations: { () -> Void in
                 dot.transform = CGAffineTransformMakeScale(1, 1);
@@ -82,12 +83,16 @@ class RSDotsView: UIView {
     
     
     func stopAnimating() {
+        self.animating = false
         for dot in self.subviews as [RSDotView] {
             dot.transform = CGAffineTransformMakeScale(1, 1);
             dot.layer.removeAllAnimations()
         }
     }
     
+    func isAnimating() -> Bool{
+        return self.animating
+    }
 }
 
 // Copyright belongs to original author

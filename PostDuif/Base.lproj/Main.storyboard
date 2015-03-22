@@ -17,7 +17,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" image="background" translatesAutoresizingMaskIntoConstraints="NO" id="Ong-qD-mZa">
+                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ong-qD-mZa">
                                 <rect key="frame" x="0.0" y="-7" width="600" height="612"/>
                             </imageView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BbD-YH-2l2" customClass="iCarousel">
@@ -26,11 +26,11 @@
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Categorie" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xtq-pg-PMZ">
                                         <rect key="frame" x="263" y="52" width="75" height="20.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" red="0.0" green="0.00033075853692582781" blue="0.4797782512626263" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstItem="Xtq-pg-PMZ" firstAttribute="top" secondItem="BbD-YH-2l2" secondAttribute="top" constant="52" id="AK3-se-h0h"/>
                                     <constraint firstItem="Xtq-pg-PMZ" firstAttribute="leading" secondItem="BbD-YH-2l2" secondAttribute="leading" constant="263" id="QId-RA-bUV"/>
@@ -154,7 +154,4 @@
             <point key="canvasLocation" x="795" y="1241"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="background" width="476" height="476"/>
-    </resources>
 </document>
