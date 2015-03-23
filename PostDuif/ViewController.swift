@@ -37,7 +37,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
     var totalNewItems = 0 // For total of new items
     
     // Setup new synthesizer for speech
-    var speechSynthesizer: AVSpeechSynthesizer = AVSpeechSynthesizer()
+    let speechSynthesizer: AVSpeechSynthesizer! = AVSpeechSynthesizer()
     
     // For checking if data is appending or not. Important for playing the speech or not inside the view,
     // when reloading the carousel!
@@ -127,10 +127,13 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
     
     //------------Swipe method to the right--------------//
     func rightSwiped(){
+        if(speechSynthesizer.speaking){
+            speechSynthesizer.stopSpeakingAtBoundary(AVSpeechBoundary.Immediate)
+        }
+        
         self.carousel.scrollByNumberOfItems(-1, duration: 0.25)
+        println(self.carousel.numberOfItems)
         if(self.dots != nil){
-            
-            
             if(self.carousel.currentItemIndex == self.carousel.numberOfItems-1 - self.totalNewItems && self.totalNewItems > 0){
                 
                 self.totalNewItems--
@@ -152,6 +155,9 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
     
     //------------Swipe method to the left--------------//
     func leftSwiped(){
+        if(speechSynthesizer.speaking){
+            speechSynthesizer.stopSpeakingAtBoundary(AVSpeechBoundary.Immediate)
+        }
        self.carousel.scrollByNumberOfItems(1, duration: 0.25)
         println(self.carousel.numberOfItems)
         if(self.dots != nil){
@@ -258,11 +264,20 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
             
             // Will execute, only when not appending
             if(!isAppending){
+                
+                
+                if(!speechSynthesizer.speaking){
+                var textToSend:[String] = []
+                
+                textToSend.append("Begin bericht")
+                textToSend.append("Onderwerp: " + self.items[index].getName())
+                textToSend.append("Inhoud bericht: " + self.items[index].getWebsite())
+                textToSend.append("Einde bericht")
+
                 //TODO: Check JSON if user has speech in his settings
-                speechView(speechSynthesizer, speech: "Begin bericht")
-                speechView(speechSynthesizer, speech: "Onderwerp: " + self.items[index].getName())
-                speechView(speechSynthesizer, speech: "Inhoud bericht: " + self.items[index].getWebsite())
-                speechView(speechSynthesizer, speech: "Einde bericht")
+                speechArray(textToSend)
+                    
+                }
             }
             
         }
@@ -271,7 +286,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
         if(index == self.carousel.numberOfItems && self.totalNewItems == 0){
             // Will execute, only when not appending
             if(!isAppending){
-                speechView(speechSynthesizer, speech: "U heeft geen nieuwe berichten meer")
+                speechString("U heeft geen nieuwe berichten meer")
                 
             }
         }
@@ -376,7 +391,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
                         newMessageSpeechString = "U heeft: " + String(self.totalNewItems) + " nieuwe berichten"
                     }
                     
-                    self.speechView(self.speechSynthesizer, speech: newMessageSpeechString) // Say the speech
+                    self.speechString(newMessageSpeechString) // Say the speech
                     
                     self.carousel.reloadItemAtIndex(self.items.count, animated: true) // Reload only the last item
 
@@ -451,26 +466,50 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
     
     // Function for checking if the index from the carousel changed
     func carouselCurrentItemIndexDidChange(carousel: iCarousel!){
-        if(speechSynthesizer.speaking){
-            speechSynthesizer.stopSpeakingAtBoundary(AVSpeechBoundary.Immediate)
-        }
         self.carousel.reloadItemAtIndex(self.carousel.currentItemIndex, animated: false)
     }
     
-    func speechView(speechSynthesizer: AVSpeechSynthesizer, speech: String){
-        var mySpeechUtterance:AVSpeechUtterance = AVSpeechUtterance(string:speech)
+    
+    func speechArray(speech: [String]){
         
-        mySpeechUtterance.rate = 0.06 // Setting rate of the voice
-        mySpeechUtterance.voice = AVSpeechSynthesisVoice(language: "nl-NL")
-        println("\(mySpeechUtterance.speechString)")
-        
-        // First sentence will be called without delay
-        if(speech.rangeOfString("Begin bericht") == nil){
-            mySpeechUtterance.preUtteranceDelay = 0.3
+        for pieceText in speech{
+            let mySpeechUtterance = AVSpeechUtterance(string:pieceText)
+            
+            mySpeechUtterance.rate = 0.06 // Setting rate of the voice
+            mySpeechUtterance.voice = AVSpeechSynthesisVoice(language: "nl-NL")
+            println("\(mySpeechUtterance.speechString)")
+            
+            // First sentence will be called without delay
+            if(pieceText.rangeOfString("Begin bericht") == nil){
+                mySpeechUtterance.preUtteranceDelay = 0.3
+            }
+            
+            // Say the sentence
+            speechSynthesizer .speakUtterance(mySpeechUtterance)
+            
+            
         }
         
-        // Say the sentence
-        speechSynthesizer .speakUtterance(mySpeechUtterance)
+    }
+    
+    func speechString(speech: String){
+        
+        for pieceText in speech{
+            let mySpeechUtterance = AVSpeechUtterance(string:speech)
+            
+            mySpeechUtterance.rate = 0.06 // Setting rate of the voice
+            mySpeechUtterance.voice = AVSpeechSynthesisVoice(language: "nl-NL")
+            println("\(mySpeechUtterance.speechString)")
+            
+            // First sentence will be called without delay
+            if(speech.rangeOfString("Begin bericht") == nil){
+                mySpeechUtterance.preUtteranceDelay = 0.3
+            }
+            
+            // Say the sentence
+            speechSynthesizer .speakUtterance(mySpeechUtterance)
+        }
+        
     }
     
     

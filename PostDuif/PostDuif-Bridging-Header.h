@@ -7,4 +7,11 @@
 //
 
 #import "iCarousel.h"
+//#import "iSpeechSDK.h"
+//#import "ISSpeechRecognition.h"
+//#import "ISSpeechRecognitionLocales.h"
+//#import "ISSpeechRecognitionResult.h"
+//#import "ISSpeechSynthesis.h"
+//#import "ISSpeechSynthesisVoices.h"
+
 
