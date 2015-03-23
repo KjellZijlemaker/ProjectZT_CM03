@@ -88,8 +88,11 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
         self.view.addSubview(dots)
         self.dots.dotsColor = UIColor.yellowColor()
         self.dots.hidden = true
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector:"totalNewItemsToForeground", name:
+            UIApplicationWillEnterForegroundNotification, object: nil)
 
-       
+        
         // Setting inital settings for swipe gestures
         carousel.userInteractionEnabled = true
         carousel.delegate = self
@@ -125,6 +128,8 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
         
     }
     
+    
+    
     //------------Swipe method to the right--------------//
     func rightSwiped(){
         if(speechSynthesizer.speaking){
@@ -132,24 +137,6 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
         }
         
         self.carousel.scrollByNumberOfItems(-1, duration: 0.25)
-        println(self.carousel.numberOfItems)
-        if(self.dots != nil){
-            if(self.carousel.currentItemIndex == self.carousel.numberOfItems-1 - self.totalNewItems && self.totalNewItems > 0){
-                
-                self.totalNewItems--
-                self.txtField.text = String(self.totalNewItems)
-                
-                if(self.totalNewItems == 0){
-                    self.txtField.removeFromSuperview()
-                    self.dots.stopAnimating()
-                    
-                    // Hide it instead of removing view, otherwise txtView won't re appear
-                    self.dots.hidden = true
-                    
-                    // TODO: Add speech
-                }
-            }
-        }
         self.isAppending = false // Not appending, but swiping
     }
     
@@ -158,36 +145,17 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
         if(speechSynthesizer.speaking){
             speechSynthesizer.stopSpeakingAtBoundary(AVSpeechBoundary.Immediate)
         }
-       self.carousel.scrollByNumberOfItems(1, duration: 0.25)
-        println(self.carousel.numberOfItems)
-        if(self.dots != nil){
-           
-            if(self.carousel.currentItemIndex == self.carousel.numberOfItems-1 - self.totalNewItems && self.totalNewItems > 0){
-                
-                self.totalNewItems--
-                self.txtField.text = String(self.totalNewItems)
-                
-                if(self.totalNewItems == 0){
-                    self.txtField.removeFromSuperview()
-                    self.dots.stopAnimating()
-                    
-                    // Hide it instead of removing view, otherwise txtView won't re appear
-                    self.dots.hidden = true
-                    
-                    // TODO: Add speech
-                }
-               
-            }
-        }
-        self.isAppending = false // Not appending, but swiping
+        self.carousel.scrollByNumberOfItems(1, duration: 0.25)
 
+        self.isAppending = false // Not appending, but swiping
+        
     }
     
     
     
     //------------Swipe method to the left--------------//
     func upSwiped(){
-       // carousel.scrollByNumberOfItems(1, duration: 0.25)
+        // carousel.scrollByNumberOfItems(1, duration: 0.25)
         appendAppData()
     }
     
@@ -267,23 +235,46 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
                 
                 
                 if(!speechSynthesizer.speaking){
-                var textToSend:[String] = []
-                
-                textToSend.append("Begin bericht")
-                textToSend.append("Onderwerp: " + self.items[index].getName())
-                textToSend.append("Inhoud bericht: " + self.items[index].getWebsite())
-                textToSend.append("Einde bericht")
-
-                //TODO: Check JSON if user has speech in his settings
-                speechArray(textToSend)
+                    var textToSend:[String] = []
+                    
+                    textToSend.append("Begin bericht")
+                    textToSend.append("Onderwerp: " + self.items[index].getName())
+                    textToSend.append("Inhoud bericht: " + self.items[index].getWebsite())
+                    textToSend.append("Einde bericht")
+                    
+                    //TODO: Check JSON if user has speech in his settings
+                    speechArray(textToSend)
                     
                 }
             }
             
+            
         }
         
+        
+        if(self.dots != nil){
+            
+            if(self.carousel.currentItemIndex == self.carousel.numberOfItems - self.totalNewItems && self.totalNewItems > 0){
+                
+                self.totalNewItems--
+                self.txtField.text = String(self.totalNewItems)
+                
+                if(self.totalNewItems == 0){
+                    self.txtField.removeFromSuperview()
+                    self.dots.stopAnimating()
+                    
+                    // Hide it instead of removing view, otherwise txtView won't re appear
+                    self.dots.hidden = true
+                    
+                    // TODO: Add speech
+                }
+                
+            }
+        }
+
+        
         // Not working yet!
-        if(index == self.carousel.numberOfItems && self.totalNewItems == 0){
+        if(self.carousel.currentItemIndex == self.items.count-1 && self.totalNewItems == 0){
             // Will execute, only when not appending
             if(!isAppending){
                 speechString("U heeft geen nieuwe berichten meer")
@@ -313,8 +304,8 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
     }
     
     
-
-
+    
+    
     
     func carousel(carousel: iCarousel!, valueForOption option: iCarouselOption, withDefault value: CGFloat) -> CGFloat
     {
@@ -354,12 +345,12 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
     
     // Function for getting the main app data and filling it into the array
     func appendAppData(){
-        isAppending = true // Now appending data, so speech may not execute
         
-        var url = "http://84.107.107.169:8080/VisioWebApp/notificationTest"
+
+        isAppending = true // Now appending data, so speech may not execute
+        var url = "http://84.107.107.169:8080/VisioWebApp/notificationTest" // URL for JSON
         
         DataManager.getMessages(url){(messages) in
-            var newMessageSpeechString: String
             
             // Iterate through all possible values
             for r in 0...messages.count-1{
@@ -378,41 +369,31 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
                         self.dots.startAnimating()
                         self.dots.addSubview(self.txtField)
                     }
-                   
-
+                    
+                    
                     self.items.append(messages[r]) // Append the new message to existing view
                     self.carousel.insertItemAtIndex(r, animated: true) // Add new item at carousel
                     
-                    // Small check for grammar
-                    if(self.totalNewItems == 1){
-                        newMessageSpeechString = "U heeft: " + String(self.totalNewItems) + " nieuw bericht"
-                    }
-                    else{
-                        newMessageSpeechString = "U heeft: " + String(self.totalNewItems) + " nieuwe berichten"
-                    }
-                    
-                    self.speechString(newMessageSpeechString) // Say the speech
-                    
-                    self.carousel.reloadItemAtIndex(self.items.count, animated: true) // Reload only the last item
-
+                    // tell the total of new items
+                    self.totalNewItemsToSpeech()
                     
                     /*// Extra check to check if the item is really new in the array(Optional)
                     for o in 0...self.items.count-1{
-                        
-                        // If the items do not match, the item is new and can be appended (Must be ID)
-                        if(self.items[o].getName() != messages[r].getName()){
-                            
-                            
-                            break
-                        }*/
+                    
+                    // If the items do not match, the item is new and can be appended (Must be ID)
+                    if(self.items[o].getName() != messages[r].getName()){
                     
                     
-                }
+                    break
+                    }*/
                     
-                    // Else, there are no more new items
+                    
                 }
                 
+                // Else, there are no more new items
             }
+            
+        }
         
     }
     
@@ -434,14 +415,14 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
     func setImages(index: Int){
         
         switch(items[index].getName()){
-            case "Clash of Clans":
+        case "Clash of Clans":
             pictures.append(UIImage(named:"message.jpg"))
             
-            case "Game of War - Fire Age":
-             pictures.append(UIImage(named:"news.jpg"))
+        case "Game of War - Fire Age":
+            pictures.append(UIImage(named:"news.jpg"))
             
         default:
-             pictures.append(UIImage(named:"message.jpg"))
+            pictures.append(UIImage(named:"message.jpg"))
             
         }
         
@@ -450,10 +431,10 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
     // Setting the categorie names above the carousel
     func setCategory(index: Int){
         switch(items[index].getName()){
-            case "Game of War - Fire Age":
+        case "Game of War - Fire Age":
             categoryMessage.text = "Categorie: Berichten"
             categoryMessage.layoutIfNeeded()
-            case "Clash of Clans":
+        case "Clash of Clans":
             categoryMessage.text = "Categorie: Mededelingen"
             categoryMessage.layoutIfNeeded()
         default:
@@ -469,6 +450,24 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
         self.carousel.reloadItemAtIndex(self.carousel.currentItemIndex, animated: false)
     }
     
+    
+    
+    // UIBackground / Foreground methods
+    //=================================================================================================
+    func totalNewItemsToForeground(){
+        if(speechSynthesizer.speaking){
+            speechSynthesizer.stopSpeakingAtBoundary(AVSpeechBoundary.Immediate)
+        }
+        if(totalNewItems >= 0){
+            self.totalNewItemsToSpeech()
+            self.carousel.scrollToItemAtIndex(self.items.count-1-self.totalNewItems, animated: true) // Scroll to the section of last items
+        }
+        
+    }
+    
+    
+    // Speech methods
+    //=================================================================================================
     
     func speechArray(speech: [String]){
         
@@ -494,70 +493,85 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
     
     func speechString(speech: String){
         
-        for pieceText in speech{
-            let mySpeechUtterance = AVSpeechUtterance(string:speech)
-            
-            mySpeechUtterance.rate = 0.06 // Setting rate of the voice
-            mySpeechUtterance.voice = AVSpeechSynthesisVoice(language: "nl-NL")
-            println("\(mySpeechUtterance.speechString)")
-            
-            // First sentence will be called without delay
-            if(speech.rangeOfString("Begin bericht") == nil){
-                mySpeechUtterance.preUtteranceDelay = 0.3
-            }
-            
-            // Say the sentence
-            speechSynthesizer .speakUtterance(mySpeechUtterance)
+        let mySpeechUtterance = AVSpeechUtterance(string:speech)
+        
+        mySpeechUtterance.rate = 0.06 // Setting rate of the voice
+        mySpeechUtterance.voice = AVSpeechSynthesisVoice(language: "nl-NL")
+        println("\(mySpeechUtterance.speechString)")
+        
+        // First sentence will be called without delay
+        if(speech.rangeOfString("Begin bericht") == nil){
+            mySpeechUtterance.preUtteranceDelay = 0.3
         }
         
+        // Say the sentence
+        speechSynthesizer .speakUtterance(mySpeechUtterance)
+        
+        
+    }
+    
+    func totalNewItemsToSpeech(){
+        var newMessageSpeechString = ""
+        
+        // Small check for grammar
+        if(self.totalNewItems == 1){
+            newMessageSpeechString = "U heeft: " + String(self.totalNewItems) + " nieuw bericht"
+        }
+        else{
+            newMessageSpeechString = "U heeft: " + String(self.totalNewItems) + " nieuwe berichten"
+        }
+        
+        self.speechString(newMessageSpeechString) // Say the speech
+        
+        self.carousel.reloadItemAtIndex(self.items.count, animated: true) // Reload only the last item
+
     }
     
     
     
     
+    /* When getting appended data from the datamanager
+    func appendAppData(){
     
-        /* When getting appended data from the datamanager
-        func appendAppData(){
+    var url = "http://84.107.107.169:8080/VisioWebApp/notificationTest"
     
-            var url = "http://84.107.107.169:8080/VisioWebApp/notificationTest"
+    DataManager.appendMessages(url, items: self.items){(messages) in
     
-            DataManager.appendMessages(url, items: self.items){(messages) in
+    // Iterate through all possible values
+    for r in 0...messages.count{
+    if(!messages.isEmpty){
+    self.items.append(messages[0])
+    self.carousel.insertItemAtIndex(r, animated: true)
+    println("YAY")
+    }
     
-                // Iterate through all possible values
-                for r in 0...messages.count{
-                    if(!messages.isEmpty){
-                        self.items.append(messages[0])
-                        self.carousel.insertItemAtIndex(r, animated: true)
-                        println("YAY")
-                    }
+    }
     
-                }
+    }
     
-                }
-    
-            }*/
+    }*/
     
     
-        /* Function for activating when view will dissapear
-        override func viewWillDisappear(animated: Bool) {
-            var oldItems: [Message] = self.items
+    /* Function for activating when view will dissapear
+    override func viewWillDisappear(animated: Bool) {
+    var oldItems: [Message] = self.items
     
-            // URL for the JSON
-            var url = "https://itunes.apple.com/us/rss/topgrossingipadapplications/limit=3/json"
+    // URL for the JSON
+    var url = "https://itunes.apple.com/us/rss/topgrossingipadapplications/limit=3/json"
     
-            // Getting the app data and fill it in the global array
-            getAppData(url)
+    // Getting the app data and fill it in the global array
+    getAppData(url)
     
-            println(oldItems)
-            println(items)
+    println(oldItems)
+    println(items)
     
-            for i in 0...items.count-1{
-                if(oldItems[i].getName() != items[i].getName()){
-                    println("Dat is een nieuwe!")
-                }
-            }
+    for i in 0...items.count-1{
+    if(oldItems[i].getName() != items[i].getName()){
+    println("Dat is een nieuwe!")
+    }
+    }
     
-        }*/
+    }*/
     
     
     /* For calling View programmaticlly
@@ -571,7 +585,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
     alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
     self.presentViewController(alert, animated: true, completion: nil)
     */
-
+    
 }
 
 

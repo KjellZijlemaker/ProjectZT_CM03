@@ -16,6 +16,7 @@
 		212AE9181AA9CE4D000255E8 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 212AE9161AA9CE4D000255E8 /* LaunchScreen.xib */; };
 		212AE9241AA9CE4D000255E8 /* PostDuifTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212AE9231AA9CE4D000255E8 /* PostDuifTests.swift */; };
 		212AE9491AA9CF44000255E8 /* iCarousel.m in Sources */ = {isa = PBXBuildFile; fileRef = 212AE9481AA9CF44000255E8 /* iCarousel.m */; };
+		21317D991AC0403F00101992 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21317D981AC0403F00101992 /* LoginViewController.swift */; };
 		2131ECA51AB9801B005F844A /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2131ECA41AB9801B005F844A /* Settings.swift */; };
 		214C55DA1AA9E71200555A56 /* MessageContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214C55D91AA9E71200555A56 /* MessageContentViewController.swift */; };
 		219F66DA1ABC288900EC3194 /* RSDotsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 219F66D91ABC288900EC3194 /* RSDotsView.swift */; };
@@ -50,6 +51,7 @@
 		212AE9471AA9CF44000255E8 /* iCarousel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iCarousel.h; sourceTree = "<group>"; };
 		212AE9481AA9CF44000255E8 /* iCarousel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iCarousel.m; sourceTree = "<group>"; };
 		212AE94A1AA9CF63000255E8 /* PostDuif-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PostDuif-Bridging-Header.h"; sourceTree = "<group>"; };
+		21317D981AC0403F00101992 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		2131ECA41AB9801B005F844A /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		214C55D91AA9E71200555A56 /* MessageContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageContentViewController.swift; sourceTree = "<group>"; };
 		219F66D91ABC288900EC3194 /* RSDotsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RSDotsView.swift; sourceTree = "<group>"; };
@@ -115,6 +117,7 @@
 				21CF744E1AADB8260047ABC3 /* DataManager.swift */,
 				210133861AB5C1E00065D186 /* NewsMessageViewController.swift */,
 				2131ECA41AB9801B005F844A /* Settings.swift */,
+				21317D981AC0403F00101992 /* LoginViewController.swift */,
 			);
 			path = PostDuif;
 			sourceTree = "<group>";
@@ -279,6 +282,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				21317D991AC0403F00101992 /* LoginViewController.swift in Sources */,
 				212936381AAD99370061BE6A /* Messages.swift in Sources */,
 				21CF744F1AADB8260047ABC3 /* DataManager.swift in Sources */,
 				212AE9491AA9CF44000255E8 /* iCarousel.m in Sources */,
@@ -419,7 +423,6 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				FRAMEWORK_SEARCH_PATHS = "";
-				"FRAMEWORK_SEARCH_PATHS[arch=*]" = "";
 				INFOPLIST_FILE = PostDuif/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -438,7 +441,6 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				FRAMEWORK_SEARCH_PATHS = "";
-				"FRAMEWORK_SEARCH_PATHS[arch=*]" = "";
 				INFOPLIST_FILE = PostDuif/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
