@@ -81,6 +81,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
         self.txtField.backgroundColor = UIColor.yellowColor()
         self.txtField.userInteractionEnabled = false
         self.txtField.borderStyle = UITextBorderStyle.None
+        self.txtField.text = String(totalNewItems)
         
         // Making dot animation for new item
         self.dots = RSDotsView(frame: CGRectMake(870, -30, 300, 300))
@@ -94,6 +95,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
         carousel.delegate = self
         carousel.type = .Custom
         carousel.scrollEnabled = false
+        carousel.numberOfVisibleItems
         
         
         //------------right  swipe gestures in view--------------//
@@ -128,7 +130,8 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
         self.carousel.scrollByNumberOfItems(-1, duration: 0.25)
         if(self.dots != nil){
             
-            if(self.carousel.currentItemIndex == self.carousel.numberOfItems-1 - self.totalNewItems){
+            
+            if(self.carousel.currentItemIndex == self.carousel.numberOfItems-1 - self.totalNewItems && self.totalNewItems > 0){
                 
                 self.totalNewItems--
                 self.txtField.text = String(self.totalNewItems)
@@ -149,10 +152,11 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
     
     //------------Swipe method to the left--------------//
     func leftSwiped(){
-        self.carousel.scrollByNumberOfItems(1, duration: 0.25)
+       self.carousel.scrollByNumberOfItems(1, duration: 0.25)
+        println(self.carousel.numberOfItems)
         if(self.dots != nil){
            
-            if(self.carousel.currentItemIndex == self.carousel.numberOfItems-1 - self.totalNewItems){
+            if(self.carousel.currentItemIndex == self.carousel.numberOfItems-1 - self.totalNewItems && self.totalNewItems > 0){
                 
                 self.totalNewItems--
                 self.txtField.text = String(self.totalNewItems)
@@ -349,6 +353,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
                 // AKA, a new item has been added
                 if(self.items.getArrayIndex(r) == nil){
                     self.totalNewItems++ // Append the number of items
+                    println(self.totalNewItems)
                     self.txtField.hidden = false // New items, so unhide textView
                     self.txtField.text = String(self.totalNewItems) // Update the text
                     self.dots.hidden = false
@@ -356,8 +361,9 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
                     // If the anamation is not already active, start it
                     if(!self.dots.isAnimating()){
                         self.dots.startAnimating()
+                        self.dots.addSubview(self.txtField)
                     }
-                    self.dots.addSubview(self.txtField)
+                   
 
                     self.items.append(messages[r]) // Append the new message to existing view
                     self.carousel.insertItemAtIndex(r, animated: true) // Add new item at carousel
@@ -445,10 +451,10 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
     
     // Function for checking if the index from the carousel changed
     func carouselCurrentItemIndexDidChange(carousel: iCarousel!){
-        
-        // Stop the synthesizer, if there are any sentences and reload data
-        speechSynthesizer.stopSpeakingAtBoundary(AVSpeechBoundary.Immediate)
-        self.carousel.reloadData()
+        if(speechSynthesizer.speaking){
+            speechSynthesizer.stopSpeakingAtBoundary(AVSpeechBoundary.Immediate)
+        }
+        self.carousel.reloadItemAtIndex(self.carousel.currentItemIndex, animated: false)
     }
     
     func speechView(speechSynthesizer: AVSpeechSynthesizer, speech: String){
@@ -465,8 +471,6 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
         
         // Say the sentence
         speechSynthesizer .speakUtterance(mySpeechUtterance)
-       
-        //speechSynthesizer.pauseSpeakingAtBoundary(mySpeechUtterance)
     }
     
     
