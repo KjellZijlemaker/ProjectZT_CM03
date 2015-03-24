@@ -42,8 +42,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
     // For checking if data is appending or not. Important for playing the speech or not inside the view,
     // when reloading the carousel!
     var isAppending = false
-    
-    
+
     
     // For passing on to the other ViewControllers
     var currentIndex: Int = 0
@@ -72,6 +71,10 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
     {
         super.viewDidLoad()
         
+        let mySpeechUtterance = AVSpeechUtterance(string:"")
+        mySpeechUtterance.rate = AVSpeechUtteranceMaximumSpeechRate
+        self.speechSynthesizer.speakUtterance(mySpeechUtterance)
+        
         var timer = NSTimer.scheduledTimerWithTimeInterval(10.0, target:self, selector: Selector("appendAppData"), userInfo: nil, repeats: true)
         
         // Making textfield for new items
@@ -91,15 +94,14 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector:"totalNewItemsToForeground", name:
             UIApplicationWillEnterForegroundNotification, object: nil)
-
+        
         
         // Setting inital settings for swipe gestures
-        carousel.userInteractionEnabled = true
+        carousel.userInteractionEnabled = false
         carousel.delegate = self
         carousel.type = .Custom
         carousel.scrollEnabled = false
-        carousel.numberOfVisibleItems
-        
+        carousel.centerItemWhenSelected = false
         
         //------------right  swipe gestures in view--------------//
         let swipeRight = UISwipeGestureRecognizer(target: self, action: Selector("rightSwiped"))
@@ -116,9 +118,6 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
         swipeUp.direction = UISwipeGestureRecognizerDirection.Up
         self.view.addGestureRecognizer(swipeUp)
         
-        let dubbleTap = UITapGestureRecognizer(target: self, action: ("dubbleTapped"))
-        dubbleTap.numberOfTapsRequired = 1
-        self.view.addGestureRecognizer(dubbleTap)
         
         //-----------up swipe gestures in view--------------//
         let swipeDown = UISwipeGestureRecognizer(target: self, action: Selector("swipeDown"))
@@ -132,21 +131,16 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
     
     //------------Swipe method to the right--------------//
     func rightSwiped(){
-        if(speechSynthesizer.speaking){
-            speechSynthesizer.stopSpeakingAtBoundary(AVSpeechBoundary.Immediate)
-        }
-        
+        stopSpeech()
         self.carousel.scrollByNumberOfItems(-1, duration: 0.25)
         self.isAppending = false // Not appending, but swiping
     }
     
     //------------Swipe method to the left--------------//
     func leftSwiped(){
-        if(speechSynthesizer.speaking){
-            speechSynthesizer.stopSpeakingAtBoundary(AVSpeechBoundary.Immediate)
-        }
+        stopSpeech()
         self.carousel.scrollByNumberOfItems(1, duration: 0.25)
-
+        
         self.isAppending = false // Not appending, but swiping
         
     }
@@ -157,6 +151,137 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
     func upSwiped(){
         // carousel.scrollByNumberOfItems(1, duration: 0.25)
         appendAppData()
+    }
+    
+    
+  
+    
+    func swipeDown(){
+        self.carousel.scrollToItemAtIndex(items.count-1, animated: true)
+        self.carousel.reloadItemAtIndex(items.count-1, animated: false)
+    }
+    
+    func numberOfItemsInCarousel(carousel: iCarousel!) -> Int
+    {
+        return items.count
+    }
+    
+    func carousel(carousel: iCarousel!, viewForItemAtIndex index: Int, var reusingView view: UIView!) -> UIView!
+    {
+        var label: UILabel! = nil
+        let dubbleTap = UITapGestureRecognizer(target: self, action:Selector("dubbleTapped"))
+        dubbleTap.numberOfTapsRequired = 1
+        
+        //create new view if no view is available for recycling
+        if (view == nil)
+        {
+            
+            //don't do anything specific to the index within
+            //this `if (view == nil) {...}` statement because the view will be
+            //recycled and used with other index values later
+            view = UIImageView(frame:CGRectMake(0, 0, 200, 200))
+            view.contentMode = .Center
+            
+            label = UILabel(frame:view.bounds)
+            //label.frame = CGRectMake(-140, -150, 500, 100);
+            label.frame = CGRectMake(-206, -200, 612, 100);
+            label.backgroundColor = UIColor.whiteColor()
+            label.textAlignment = .Center
+            label.font = label.font.fontWithSize(50)
+            label.textColor = UIColor.blackColor()
+            label.tag = 1
+            label.layoutIfNeeded()
+            
+            
+            // view.addSubview(imageViewObject)
+            view.addSubview(label)
+            
+            // Setting the right images for each category
+            setImages(index)
+            
+        }
+        else
+        {
+            //get a reference to the label in the recycled view
+            label = view.viewWithTag(1) as UILabel!
+        }
+        
+        
+        
+        
+        /*
+        Checking the index with the current index. If so, content will reload into the View and speech
+        will be indexed
+        */
+        if (index == self.carousel.currentItemIndex) {
+
+            // Setting category per item inside the array
+            setCategory(index)
+            
+            // Will execute, only when not appending
+            if(!isAppending){
+                
+                if(!speechSynthesizer.speaking){
+                    var textToSend:[String] = []
+                    
+                    textToSend.append(String(index+1) + "e " + " Ongelezen bericht")
+                    textToSend.append("Onderwerp: " + self.items[index].getName())
+                    textToSend.append("Inhoud bericht: " + self.items[index].getWebsite())
+                    textToSend.append("Einde bericht")
+                    
+                    //TODO: Check JSON if user has speech in his settings
+                    speechArray(textToSend)
+                    
+                }
+            }
+            
+            
+        }
+        
+        
+        
+        if(self.dots != nil){
+            
+            if(self.carousel.currentItemIndex == self.carousel.numberOfItems - self.totalNewItems && self.totalNewItems > 0){
+                
+                self.totalNewItems--
+                self.txtField.text = String(self.totalNewItems)
+                
+                if(self.totalNewItems == 0){
+                    self.txtField.removeFromSuperview()
+                    self.dots.stopAnimating()
+                    
+                    // Hide it instead of removing view, otherwise txtView won't re appear
+                    self.dots.hidden = true
+                    
+                    // TODO: Add speech
+                }
+                
+            }
+        }
+        
+        
+        // Not working yet!
+        if(self.carousel.currentItemIndex == self.items.count-1 && self.totalNewItems == 0){
+            // Will execute, only when not appending
+            if(!isAppending){
+                speechString("U heeft geen ongelezen berichten meer")
+                
+            }
+        }
+        
+        
+        
+        //set item label
+        //remember to always set any properties of your carousel item
+        //views outside of the `if (view == nil) {...}` check otherwise
+        //you'll get weird issues with carousel item content appearing
+        //in the wrong place in the carousel
+        label.text = "\(self.items[index].getName())"
+         (view as UIImageView!).addGestureRecognizer(dubbleTap)
+        (view as UIImageView!).image = self.pictures[index]
+        
+        return view
     }
     
     
@@ -180,131 +305,6 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
             performSegueWithIdentifier("showMessageContent", sender: self)
         }
     }
-    
-    func swipeDown(){
-        self.carousel.scrollToItemAtIndex(items.count-1, animated: true)
-    }
-    
-    func numberOfItemsInCarousel(carousel: iCarousel!) -> Int
-    {
-        return items.count
-    }
-    
-    func carousel(carousel: iCarousel!, viewForItemAtIndex index: Int, var reusingView view: UIView!) -> UIView!
-    {
-        var label: UILabel! = nil
-        
-        //create new view if no view is available for recycling
-        if (view == nil)
-        {
-            
-            //don't do anything specific to the index within
-            //this `if (view == nil) {...}` statement because the view will be
-            //recycled and used with other index values later
-            view = UIImageView(frame:CGRectMake(0, 0, 200, 200))
-            view.contentMode = .Center
-            
-            label = UILabel(frame:view.bounds)
-            //label.frame = CGRectMake(-140, -150, 500, 100);
-            label.frame = CGRectMake(-206, -200, 612, 100);
-            label.backgroundColor = UIColor.whiteColor()
-            label.textAlignment = .Center
-            label.font = label.font.fontWithSize(50)
-            label.textColor = UIColor.blackColor()
-            label.tag = 1
-            label.layoutIfNeeded()
-            
-            // view.addSubview(imageViewObject)
-            view.addSubview(label)
-        }
-        else
-        {
-            //get a reference to the label in the recycled view
-            label = view.viewWithTag(1) as UILabel!
-        }
-        
-        /*
-        Checking the index with the current index. If so, content will reload into the View and speech
-        will be indexed
-        */
-        if (index == self.carousel.currentItemIndex) {
-            setCategory(index)
-            
-            // Will execute, only when not appending
-            if(!isAppending){
-                
-                
-                if(!speechSynthesizer.speaking){
-                    var textToSend:[String] = []
-                    
-                    textToSend.append("Begin bericht")
-                    textToSend.append("Onderwerp: " + self.items[index].getName())
-                    textToSend.append("Inhoud bericht: " + self.items[index].getWebsite())
-                    textToSend.append("Einde bericht")
-                    
-                    //TODO: Check JSON if user has speech in his settings
-                    speechArray(textToSend)
-                    
-                }
-            }
-            
-            
-        }
-        
-        
-        if(self.dots != nil){
-            
-            if(self.carousel.currentItemIndex == self.carousel.numberOfItems - self.totalNewItems && self.totalNewItems > 0){
-                
-                self.totalNewItems--
-                self.txtField.text = String(self.totalNewItems)
-                
-                if(self.totalNewItems == 0){
-                    self.txtField.removeFromSuperview()
-                    self.dots.stopAnimating()
-                    
-                    // Hide it instead of removing view, otherwise txtView won't re appear
-                    self.dots.hidden = true
-                    
-                    // TODO: Add speech
-                }
-                
-            }
-        }
-
-        
-        // Not working yet!
-        if(self.carousel.currentItemIndex == self.items.count-1 && self.totalNewItems == 0){
-            // Will execute, only when not appending
-            if(!isAppending){
-                speechString("U heeft geen nieuwe berichten meer")
-                
-            }
-        }
-        
-        
-        
-        // Checking for every item
-        for i in 0...self.items.count-1{
-            // Setting the right images for each category
-            setImages(i)
-        }
-        
-        
-        //set item label
-        //remember to always set any properties of your carousel item
-        //views outside of the `if (view == nil) {...}` check otherwise
-        //you'll get weird issues with carousel item content appearing
-        //in the wrong place in the carousel
-        label.text = "\(self.items[index].getName())"
-        
-        (view as UIImageView!).image = self.pictures[index]
-        
-        return view
-    }
-    
-    
-    
     
     
     func carousel(carousel: iCarousel!, valueForOption option: iCarouselOption, withDefault value: CGFloat) -> CGFloat
@@ -346,7 +346,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
     // Function for getting the main app data and filling it into the array
     func appendAppData(){
         
-
+        
         isAppending = true // Now appending data, so speech may not execute
         var url = "http://84.107.107.169:8080/VisioWebApp/notificationTest" // URL for JSON
         
@@ -431,10 +431,10 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
     // Setting the categorie names above the carousel
     func setCategory(index: Int){
         switch(items[index].getName()){
-        case "Game of War - Fire Age":
+        case "fesees":
             categoryMessage.text = "Categorie: Berichten"
             categoryMessage.layoutIfNeeded()
-        case "Clash of Clans":
+        case "lol":
             categoryMessage.text = "Categorie: Mededelingen"
             categoryMessage.layoutIfNeeded()
         default:
@@ -447,7 +447,9 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
     
     // Function for checking if the index from the carousel changed
     func carouselCurrentItemIndexDidChange(carousel: iCarousel!){
+        stopSpeech()
         self.carousel.reloadItemAtIndex(self.carousel.currentItemIndex, animated: false)
+        
     }
     
     
@@ -479,7 +481,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
             println("\(mySpeechUtterance.speechString)")
             
             // First sentence will be called without delay
-            if(pieceText.rangeOfString("Begin bericht") == nil){
+            if(pieceText.rangeOfString("Ongelezen bericht") == nil){
                 mySpeechUtterance.preUtteranceDelay = 0.3
             }
             
@@ -488,6 +490,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
             
             
         }
+        
         
     }
     
@@ -524,10 +527,21 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
         self.speechString(newMessageSpeechString) // Say the speech
         
         self.carousel.reloadItemAtIndex(self.items.count, animated: true) // Reload only the last item
-
+        
     }
     
-    
+  
+    func stopSpeech(){
+        if(self.speechSynthesizer.speaking){
+            self.speechSynthesizer.stopSpeakingAtBoundary(AVSpeechBoundary.Immediate)
+            let mySpeechUtterance = AVSpeechUtterance(string:"")
+            self.speechSynthesizer.speakUtterance(mySpeechUtterance)
+            self.speechSynthesizer.stopSpeakingAtBoundary(AVSpeechBoundary.Immediate)
+
+
+        }
+        
+    }
     
     
     /* When getting appended data from the datamanager
