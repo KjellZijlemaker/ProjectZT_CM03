@@ -71,10 +71,6 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
     {
         super.viewDidLoad()
         
-        let mySpeechUtterance = AVSpeechUtterance(string:"")
-        mySpeechUtterance.rate = AVSpeechUtteranceMaximumSpeechRate
-        self.speechSynthesizer.speakUtterance(mySpeechUtterance)
-        
         var timer = NSTimer.scheduledTimerWithTimeInterval(10.0, target:self, selector: Selector("appendAppData"), userInfo: nil, repeats: true)
         
         // Making textfield for new items
@@ -474,16 +470,27 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
     func speechArray(speech: [String]){
         
         for pieceText in speech{
+            
+            //Setting empty String for bug ios 8
+            var bug = " "
+            let beforeUtterance = AVSpeechUtterance(string: bug)
+            beforeUtterance.rate = AVSpeechUtteranceMaximumSpeechRate
+            speechSynthesizer.speakUtterance(beforeUtterance)
+            
+            
             let mySpeechUtterance = AVSpeechUtterance(string:pieceText)
             
-            mySpeechUtterance.rate = 0.06 // Setting rate of the voice
+            // Setting rate of the voice, bug IOS 8
+            if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_7_1)
+            {
+                mySpeechUtterance.rate = AVSpeechUtteranceMinimumSpeechRate;
+            }else{
+                mySpeechUtterance.rate = 0.06;
+            }
+            
+            //mySpeechUtterance.rate = 0.06 // Setting rate of the voice
             mySpeechUtterance.voice = AVSpeechSynthesisVoice(language: "nl-NL")
             println("\(mySpeechUtterance.speechString)")
-            
-            // First sentence will be called without delay
-            if(pieceText.rangeOfString("Ongelezen bericht") == nil){
-                mySpeechUtterance.preUtteranceDelay = 0.3
-            }
             
             // Say the sentence
             speechSynthesizer .speakUtterance(mySpeechUtterance)
@@ -495,17 +502,24 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
     }
     
     func speechString(speech: String){
+        //Setting empty String for bug ios 8
+        var bug = " "
+        let beforeUtterance = AVSpeechUtterance(string: bug)
+        beforeUtterance.rate = AVSpeechUtteranceMaximumSpeechRate
+        speechSynthesizer.speakUtterance(beforeUtterance)
         
         let mySpeechUtterance = AVSpeechUtterance(string:speech)
         
-        mySpeechUtterance.rate = 0.06 // Setting rate of the voice
+        // Setting rate of the voice, bug IOS 8
+        if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_7_1)
+        {
+            mySpeechUtterance.rate = AVSpeechUtteranceMinimumSpeechRate;
+        }else{
+            mySpeechUtterance.rate = 0.06;
+        }
+        
         mySpeechUtterance.voice = AVSpeechSynthesisVoice(language: "nl-NL")
         println("\(mySpeechUtterance.speechString)")
-        
-        // First sentence will be called without delay
-        if(speech.rangeOfString("Begin bericht") == nil){
-            mySpeechUtterance.preUtteranceDelay = 0.3
-        }
         
         // Say the sentence
         speechSynthesizer .speakUtterance(mySpeechUtterance)
