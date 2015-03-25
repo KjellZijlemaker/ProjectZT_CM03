@@ -9,47 +9,51 @@
 import UIKit
 
 class MessageContentViewController: UIViewController {
-    var toPass:String!
-    var colorString:String!
+    var messageContent:String!
+    var speech:SpeechManager = SpeechManager()
     
     @IBOutlet weak var welcome: UILabel!
     @IBOutlet weak var BackButton: UIButton!
-
-    @IBAction func Dismiss(sender: AnyObject) {
-        self.presentingViewController?.dismissViewControllerAnimated(true, completion: {
-            let secondPresentingVC = self.presentingViewController?.presentingViewController;
-            secondPresentingVC?.dismissViewControllerAnimated(true, completion: {});
-        });
-    }
-    
-    
+    @IBOutlet weak var messageText: UITextView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        self.yourUITextView.layer.borderWidth = 5.0f;
-//        self.yourUITextView.layer.borderColor = [[UIColor grayColor] CGColor];
+
+        //------------right  swipe gestures in view--------------//
+        let swipeRight = UISwipeGestureRecognizer(target: self, action: Selector("rightSwiped"))
+        swipeRight.direction = UISwipeGestureRecognizerDirection.Right
+        self.view.addGestureRecognizer(swipeRight)
         
         
-        welcome.text = colorString
+        self.messageText.text = self.messageContent //Putting back the message inside the controller
+        
+        // Making new sentence array for speech
+        var sentenceArray: [String] = []
+        sentenceArray.append("Inhoud bericht: ")
+        sentenceArray.append(self.messageContent)
+        sentenceArray.append("Einde bericht")
+        sentenceArray.append("Veeg naar rechts om het bericht te sluiten")
+        
+        self.speech.speechArray(sentenceArray) //Execute speech
 
     }
 
+    //------------Swipe method to the right--------------//
+    func rightSwiped(){
+        self.speech.stopSpeech() //Stop speech
+        
+        // Dismiss the controller
+        self.presentingViewController?.dismissViewControllerAnimated(true, completion: {
+            let secondPresentingVC = self.presentingViewController?.presentingViewController;
+            secondPresentingVC?.dismissViewControllerAnimated(true, completion: {});
+            self.speech.speechString("U heeft het bericht gelezen") //Little speech for user
+        });
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
 
-    
-    
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }

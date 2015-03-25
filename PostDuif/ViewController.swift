@@ -36,8 +36,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
     var dots: RSDotsView!
     var totalNewItems = 0 // For total of new items
     
-    // Setup new synthesizer for speech
-    let speechSynthesizer: AVSpeechSynthesizer! = AVSpeechSynthesizer()
+    var speech = SpeechManager()
     
     // For checking if data is appending or not. Important for playing the speech or not inside the view,
     // when reloading the carousel!
@@ -93,11 +92,10 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
         
         
         // Setting inital settings for swipe gestures
-        carousel.userInteractionEnabled = false
+        carousel.userInteractionEnabled = true
         carousel.delegate = self
         carousel.type = .Custom
         carousel.scrollEnabled = false
-        carousel.centerItemWhenSelected = false
         
         //------------right  swipe gestures in view--------------//
         let swipeRight = UISwipeGestureRecognizer(target: self, action: Selector("rightSwiped"))
@@ -120,28 +118,47 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
         swipeDown.direction = UISwipeGestureRecognizerDirection.Down
         self.view.addGestureRecognizer(swipeDown)
         
-        
+        let singleTap = UITapGestureRecognizer(target: self, action:Selector("singleTapped"))
+        singleTap.numberOfTapsRequired = 1
+        self.view.addGestureRecognizer(singleTap)
     }
     
-    
+    //------------Dubble tap method for opening new view--------------//
+    func singleTapped(){
+        self.speech.stopSpeech()
+        
+        // Getting the current index of the carousel
+        currentIndex = carousel.currentItemIndex
+        
+        
+        switch self.items[currentIndex].getCategory(){
+        case "message ":
+            // For performing the seque inside the storyboard
+            performSegueWithIdentifier("showMessageContent", sender: self)
+            println("message")
+        case "news":
+            performSegueWithIdentifier("showNewsMessageContent", sender: self)
+            println("news")
+        default:
+            // For performing the seque inside the storyboard
+            performSegueWithIdentifier("showMessageContent", sender: self)
+        }
+    }
     
     //------------Swipe method to the right--------------//
     func rightSwiped(){
-        stopSpeech()
+        self.speech.stopSpeech()
         self.carousel.scrollByNumberOfItems(-1, duration: 0.25)
         self.isAppending = false // Not appending, but swiping
     }
     
     //------------Swipe method to the left--------------//
     func leftSwiped(){
-        stopSpeech()
+        self.speech.stopSpeech()
         self.carousel.scrollByNumberOfItems(1, duration: 0.25)
-        
         self.isAppending = false // Not appending, but swiping
         
     }
-    
-    
     
     //------------Swipe method to the left--------------//
     func upSwiped(){
@@ -149,8 +166,6 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
         appendAppData()
     }
     
-    
-  
     
     func swipeDown(){
         self.carousel.scrollToItemAtIndex(items.count-1, animated: true)
@@ -165,8 +180,6 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
     func carousel(carousel: iCarousel!, viewForItemAtIndex index: Int, var reusingView view: UIView!) -> UIView!
     {
         var label: UILabel! = nil
-        let dubbleTap = UITapGestureRecognizer(target: self, action:Selector("dubbleTapped"))
-        dubbleTap.numberOfTapsRequired = 1
         
         //create new view if no view is available for recycling
         if (view == nil)
@@ -217,16 +230,16 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
             // Will execute, only when not appending
             if(!isAppending){
                 
-                if(!speechSynthesizer.speaking){
+                if(!self.speech.isSpeaking()){
                     var textToSend:[String] = []
                     
                     textToSend.append(String(index+1) + "e " + " Ongelezen bericht")
                     textToSend.append("Onderwerp: " + self.items[index].getName())
-                    textToSend.append("Inhoud bericht: " + self.items[index].getWebsite())
-                    textToSend.append("Einde bericht")
+                    textToSend.append("Tik op het scherm om het bericht te openen")
+
                     
                     //TODO: Check JSON if user has speech in his settings
-                    speechArray(textToSend)
+                    self.speech.speechArray(textToSend)
                     
                 }
             }
@@ -261,7 +274,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
         if(self.carousel.currentItemIndex == self.items.count-1 && self.totalNewItems == 0){
             // Will execute, only when not appending
             if(!isAppending){
-                speechString("U heeft geen ongelezen berichten meer")
+                self.speech.speechString("U heeft geen ongelezen berichten meer")
                 
             }
         }
@@ -274,34 +287,11 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
         //you'll get weird issues with carousel item content appearing
         //in the wrong place in the carousel
         label.text = "\(self.items[index].getName())"
-         (view as UIImageView!).addGestureRecognizer(dubbleTap)
         (view as UIImageView!).image = self.pictures[index]
         
         return view
     }
-    
-    
-    //------------Dubble tap method for opening new view--------------//
-    func dubbleTapped(){
-        
-        // Getting the current index of the carousel
-        currentIndex = carousel.currentItemIndex
-        
-        
-        switch self.items[currentIndex].getCategory(){
-        case "message ":
-            // For performing the seque inside the storyboard
-            performSegueWithIdentifier("showMessageContent", sender: self)
-            println("message")
-        case "news":
-            performSegueWithIdentifier("showNewsMessageContent", sender: self)
-            println("news")
-        default:
-            // For performing the seque inside the storyboard
-            performSegueWithIdentifier("showMessageContent", sender: self)
-        }
-    }
-    
+
     
     func carousel(carousel: iCarousel!, valueForOption option: iCarouselOption, withDefault value: CGFloat) -> CGFloat
     {
@@ -310,14 +300,6 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
             return value * 1.9
         }
         return value
-    }
-    
-    // Preparing the seque and send data with it
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
-        if segue.identifier == "showMessages"{
-            let vc = segue.destinationViewController as MessageContentViewController
-            vc.colorString = String(currentIndex)
-        }
     }
     
     // Function for getting the main app data and filling it into the array
@@ -443,7 +425,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
     
     // Function for checking if the index from the carousel changed
     func carouselCurrentItemIndexDidChange(carousel: iCarousel!){
-        stopSpeech()
+        self.speech.stopSpeech()
         self.carousel.reloadItemAtIndex(self.carousel.currentItemIndex, animated: false)
         
     }
@@ -453,9 +435,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
     // UIBackground / Foreground methods
     //=================================================================================================
     func totalNewItemsToForeground(){
-        if(speechSynthesizer.speaking){
-            speechSynthesizer.stopSpeakingAtBoundary(AVSpeechBoundary.Immediate)
-        }
+        self.speech.stopSpeech()
         if(totalNewItems >= 0){
             self.totalNewItemsToSpeech()
             self.carousel.scrollToItemAtIndex(self.items.count-1-self.totalNewItems, animated: true) // Scroll to the section of last items
@@ -463,69 +443,6 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
         
     }
     
-    
-    // Speech methods
-    //=================================================================================================
-    
-    func speechArray(speech: [String]){
-        
-        for pieceText in speech{
-            
-            //Setting empty String for bug ios 8
-            var bug = " "
-            let beforeUtterance = AVSpeechUtterance(string: bug)
-            beforeUtterance.rate = AVSpeechUtteranceMaximumSpeechRate
-            speechSynthesizer.speakUtterance(beforeUtterance)
-            
-            
-            let mySpeechUtterance = AVSpeechUtterance(string:pieceText)
-            
-            // Setting rate of the voice, bug IOS 8
-            if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_7_1)
-            {
-                mySpeechUtterance.rate = AVSpeechUtteranceMinimumSpeechRate;
-            }else{
-                mySpeechUtterance.rate = 0.06;
-            }
-            
-            //mySpeechUtterance.rate = 0.06 // Setting rate of the voice
-            mySpeechUtterance.voice = AVSpeechSynthesisVoice(language: "nl-NL")
-            println("\(mySpeechUtterance.speechString)")
-            
-            // Say the sentence
-            speechSynthesizer .speakUtterance(mySpeechUtterance)
-            
-            
-        }
-        
-        
-    }
-    
-    func speechString(speech: String){
-        //Setting empty String for bug ios 8
-        var bug = " "
-        let beforeUtterance = AVSpeechUtterance(string: bug)
-        beforeUtterance.rate = AVSpeechUtteranceMaximumSpeechRate
-        speechSynthesizer.speakUtterance(beforeUtterance)
-        
-        let mySpeechUtterance = AVSpeechUtterance(string:speech)
-        
-        // Setting rate of the voice, bug IOS 8
-        if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_7_1)
-        {
-            mySpeechUtterance.rate = AVSpeechUtteranceMinimumSpeechRate;
-        }else{
-            mySpeechUtterance.rate = 0.06;
-        }
-        
-        mySpeechUtterance.voice = AVSpeechSynthesisVoice(language: "nl-NL")
-        println("\(mySpeechUtterance.speechString)")
-        
-        // Say the sentence
-        speechSynthesizer .speakUtterance(mySpeechUtterance)
-        
-        
-    }
     
     func totalNewItemsToSpeech(){
         var newMessageSpeechString = ""
@@ -538,24 +455,25 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
             newMessageSpeechString = "U heeft: " + String(self.totalNewItems) + " nieuwe berichten"
         }
         
-        self.speechString(newMessageSpeechString) // Say the speech
+        self.speech.speechString(newMessageSpeechString) // Say the speech
         
         self.carousel.reloadItemAtIndex(self.items.count, animated: true) // Reload only the last item
         
     }
     
-  
-    func stopSpeech(){
-        if(self.speechSynthesizer.speaking){
-            self.speechSynthesizer.stopSpeakingAtBoundary(AVSpeechBoundary.Immediate)
-            let mySpeechUtterance = AVSpeechUtterance(string:"")
-            self.speechSynthesizer.speakUtterance(mySpeechUtterance)
-            self.speechSynthesizer.stopSpeakingAtBoundary(AVSpeechBoundary.Immediate)
-
-
+    
+    
+    // Seque methods
+    //=================================================================================================
+    // Preparing the seque and send data with it
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
+        if segue.identifier == "showMessageContent"{
+            let vc = segue.destinationViewController as MessageContentViewController
+            vc.messageContent = self.items[self.carousel.currentItemIndex].getWebsite()
+            self.speech.stopSpeech()
         }
-        
     }
+    
     
     
     /* When getting appended data from the datamanager
