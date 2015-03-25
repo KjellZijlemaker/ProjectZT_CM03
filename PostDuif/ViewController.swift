@@ -24,7 +24,7 @@ extension Array {
     }
 }
 
-class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
+class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, deleteMessageNewsItem
 {
     // Array for all the items to be loaded inside the carousel
     var messages: [Message] = []
@@ -41,10 +41,10 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
     // For checking if data is appending or not. Important for playing the speech or not inside the view,
     // when reloading the carousel!
     var isAppending = false
-
     
     // For passing on to the other ViewControllers
     var currentIndex: Int = 0
+    
     @IBOutlet var carousel : iCarousel!
     @IBOutlet weak var categoryMessage: UILabel!
     
@@ -141,7 +141,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
             println("news")
         default:
             // For performing the seque inside the storyboard
-            performSegueWithIdentifier("showMessageContent", sender: self)
+            performSegueWithIdentifier("showNewsMessageContent", sender: self)
         }
     }
     
@@ -435,13 +435,14 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
     // UIBackground / Foreground methods
     //=================================================================================================
     func totalNewItemsToForeground(){
-        self.speech.stopSpeech()
         if(totalNewItems >= 0){
             self.totalNewItemsToSpeech()
             self.carousel.scrollToItemAtIndex(self.messages.count-1-self.totalNewItems, animated: true) // Scroll to the section of last items
         }
         
     }
+    
+    //TODO: Make background stop speech
     
     
     func totalNewItemsToSpeech(){
@@ -464,17 +465,30 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
     
     // Seque methods
     //=================================================================================================
-    // Preparing the seque and send data with it
+    // Preparing the seque and send data with MessageContentViewController
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
         if segue.identifier == "showMessageContent"{
             let vc = segue.destinationViewController as MessageContentViewController
             vc.messageContent = self.messages[self.carousel.currentItemIndex].getContent()
-            println("YES" + vc.messageContent)
+            self.speech.stopSpeech()
+        }
+        if segue.identifier == "showNewsMessageContent"{
+            let vc = segue.destinationViewController as NewsMessageViewController
+            vc.delegate = self
+            vc.newsMessageContent = self.messages[self.carousel.currentItemIndex].getContent()
             self.speech.stopSpeech()
         }
     }
+
+    // Timer for deleting message. Is delaged from second viewcontroller
+    func executeDeletionTimer() {
+        var timer = NSTimer.scheduledTimerWithTimeInterval(5.0, target:self, selector: Selector("deleteNewsMessage"), userInfo: nil, repeats: false)
+    }
     
-    
+    // Selector for deleting message
+    func deleteNewsMessage(){
+        self.carousel.removeItemAtIndex(self.carousel.currentItemIndex, animated: true)
+    }
     
     /* When getting appended data from the datamanager
     func appendAppData(){

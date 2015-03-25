@@ -9,27 +9,50 @@
 import UIKit
 
 class NewsMessageViewController: UIViewController {
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
+    var newsMessageContent:String!
+    var speech:SpeechManager = SpeechManager()
+    var delegate: deleteMessageNewsItem!
     
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    @IBOutlet weak var newsMessageText: UITextView!
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        //------------right  swipe gestures in view--------------//
+        let swipeRight = UISwipeGestureRecognizer(target: self, action: Selector("rightSwiped"))
+        swipeRight.direction = UISwipeGestureRecognizerDirection.Right
+        self.view.addGestureRecognizer(swipeRight)
+        
+        
+        self.newsMessageText.text = self.newsMessageContent //Putting back the message inside the controller
+        
+        // Making new sentence array for speech
+        var sentenceArray: [String] = []
+        sentenceArray.append("Inhoud nieuwsbericht: ")
+        sentenceArray.append(self.newsMessageContent)
+        sentenceArray.append("Einde nieuwsbericht")
+        sentenceArray.append("Veeg naar rechts om het nieuwsbericht te sluiten")
+        
+        self.speech.speechArray(sentenceArray) //Execute speech
+        
+        println("Execute")
+        delegate.executeDeletionTimer()
     }
-    */
+    
+    //------------Swipe method to the right--------------//
+    func rightSwiped(){
+        self.speech.stopSpeech() //Stop speech
+        
+        
+        
+        // Dismiss the controller
+        self.presentingViewController?.dismissViewControllerAnimated(true, completion: {
+            let secondPresentingVC = self.presentingViewController?.presentingViewController;
+            secondPresentingVC?.dismissViewControllerAnimated(true, completion: {});
+            self.speech.speechString("U heeft het nieuwsbericht gelezen") //Little speech for user
+        });
+    }
+    
 
 }
