@@ -36,12 +36,12 @@ class DataManager{
                         var newMessage = Message()
                         
                         // Set name inside the object
-                        var appName: String = appDict["subject"].stringValue
-                        newMessage.setName(appName)
+                        var messageName: String = appDict["subject"].stringValue
+                        newMessage.setSubject(messageName)
                         
                         // Set the website for the object
-                        var appURL: String = appDict["message"].stringValue
-                        newMessage.setWebsite(appURL)
+                        var messageContent: String = appDict["message"].stringValue
+                        newMessage.setContent(messageContent)
                         
                         // Append the app names
                         messageArray.append(newMessage)

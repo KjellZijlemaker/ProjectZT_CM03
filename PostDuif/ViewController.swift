@@ -27,7 +27,7 @@ extension Array {
 class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
 {
     // Array for all the items to be loaded inside the carousel
-    var items: [Message] = []
+    var messages: [Message] = []
     var userSettings: [Settings] = []
     var pictures: [UIImage!] = []
     
@@ -131,7 +131,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
         currentIndex = carousel.currentItemIndex
         
         
-        switch self.items[currentIndex].getCategory(){
+        switch self.messages[currentIndex].getCategory(){
         case "message ":
             // For performing the seque inside the storyboard
             performSegueWithIdentifier("showMessageContent", sender: self)
@@ -168,13 +168,13 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
     
     
     func swipeDown(){
-        self.carousel.scrollToItemAtIndex(items.count-1, animated: true)
-        self.carousel.reloadItemAtIndex(items.count-1, animated: false)
+        self.carousel.scrollToItemAtIndex(self.messages.count-1, animated: true)
+        self.carousel.reloadItemAtIndex(self.messages.count-1, animated: false)
     }
     
     func numberOfItemsInCarousel(carousel: iCarousel!) -> Int
     {
-        return items.count
+        return self.messages.count
     }
     
     func carousel(carousel: iCarousel!, viewForItemAtIndex index: Int, var reusingView view: UIView!) -> UIView!
@@ -234,7 +234,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
                     var textToSend:[String] = []
                     
                     textToSend.append(String(index+1) + "e " + " Ongelezen bericht")
-                    textToSend.append("Onderwerp: " + self.items[index].getName())
+                    textToSend.append("Onderwerp: " + self.messages[index].getSubject())
                     textToSend.append("Tik op het scherm om het bericht te openen")
 
                     
@@ -271,7 +271,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
         
         
         // Not working yet!
-        if(self.carousel.currentItemIndex == self.items.count-1 && self.totalNewItems == 0){
+        if(self.carousel.currentItemIndex == self.messages.count-1 && self.totalNewItems == 0){
             // Will execute, only when not appending
             if(!isAppending){
                 self.speech.speechString("U heeft geen ongelezen berichten meer")
@@ -286,7 +286,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
         //views outside of the `if (view == nil) {...}` check otherwise
         //you'll get weird issues with carousel item content appearing
         //in the wrong place in the carousel
-        label.text = "\(self.items[index].getName())"
+        label.text = "\(self.messages[index].getSubject())"
         (view as UIImageView!).image = self.pictures[index]
         
         return view
@@ -310,12 +310,12 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
         DataManager.getMessages(url){(messages) in
             
             // Transfering array to global array
-            self.items = messages
+            self.messages = messages
             
             // Iterate through all possible values
-            for r in 0...self.items.count-1{
+            for r in 0...self.messages.count-1{
                 self.carousel.insertItemAtIndex(r, animated: true)
-                println(self.items[r].getName())
+                println(self.messages[r].getSubject())
             }
         }
         
@@ -335,7 +335,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
                 
                 // If the index is null, it means a new element inside the array has been added
                 // AKA, a new item has been added
-                if(self.items.getArrayIndex(r) == nil){
+                if(self.messages.getArrayIndex(r) == nil){
                     self.totalNewItems++ // Append the number of items
                     println(self.totalNewItems)
                     self.txtField.hidden = false // New items, so unhide textView
@@ -349,7 +349,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
                     }
                     
                     
-                    self.items.append(messages[r]) // Append the new message to existing view
+                    self.messages.append(messages[r]) // Append the new message to existing view
                     self.carousel.insertItemAtIndex(r, animated: true) // Add new item at carousel
                     
                     // tell the total of new items
@@ -392,7 +392,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
     // Function for setting the images per category
     func setImages(index: Int){
         
-        switch(items[index].getName()){
+        switch(self.messages[index].getSubject()){
         case "Clash of Clans":
             pictures.append(UIImage(named:"message.jpg"))
             
@@ -408,7 +408,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
     
     // Setting the categorie names above the carousel
     func setCategory(index: Int){
-        switch(items[index].getName()){
+        switch(self.messages[index].getSubject()){
         case "fesees":
             categoryMessage.text = "Categorie: Berichten"
             categoryMessage.layoutIfNeeded()
@@ -438,7 +438,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
         self.speech.stopSpeech()
         if(totalNewItems >= 0){
             self.totalNewItemsToSpeech()
-            self.carousel.scrollToItemAtIndex(self.items.count-1-self.totalNewItems, animated: true) // Scroll to the section of last items
+            self.carousel.scrollToItemAtIndex(self.messages.count-1-self.totalNewItems, animated: true) // Scroll to the section of last items
         }
         
     }
@@ -457,10 +457,9 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
         
         self.speech.speechString(newMessageSpeechString) // Say the speech
         
-        self.carousel.reloadItemAtIndex(self.items.count, animated: true) // Reload only the last item
+        self.carousel.reloadItemAtIndex(self.messages.count, animated: true) // Reload only the last item
         
     }
-    
     
     
     // Seque methods
@@ -469,7 +468,8 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
         if segue.identifier == "showMessageContent"{
             let vc = segue.destinationViewController as MessageContentViewController
-            vc.messageContent = self.items[self.carousel.currentItemIndex].getWebsite()
+            vc.messageContent = self.messages[self.carousel.currentItemIndex].getContent()
+            println("YES" + vc.messageContent)
             self.speech.stopSpeech()
         }
     }

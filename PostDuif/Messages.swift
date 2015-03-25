@@ -10,30 +10,30 @@ import Foundation
 
 class Message{
     
-    var name: String
-    var website: String
+    var subject: String
+    var content: String
     var category: String
 
     init(){
-        self.name = ""
-        self.website = ""
+        self.subject = ""
+        self.content = ""
         self.category = ""
     }
     
-    func setName(name: String){
-        self.name = name
+    func setSubject(subject: String){
+        self.subject = subject
     }
     
-    func setWebsite(website: String){
-        self.website = website
+    func setContent(content: String){
+        self.content = content
     }
     
-    func getName() -> String{
-        return self.name
+    func getSubject() -> String{
+        return self.subject
     }
     
-    func getWebsite() -> String{
-        return self.website
+    func getContent() -> String{
+        return self.content
     }
     
     func setCategory(category: String){
