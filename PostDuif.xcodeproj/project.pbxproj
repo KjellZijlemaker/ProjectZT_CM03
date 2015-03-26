@@ -19,6 +19,7 @@
 		212AE9491AA9CF44000255E8 /* iCarousel.m in Sources */ = {isa = PBXBuildFile; fileRef = 212AE9481AA9CF44000255E8 /* iCarousel.m */; };
 		21317D991AC0403F00101992 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21317D981AC0403F00101992 /* LoginViewController.swift */; };
 		2131ECA51AB9801B005F844A /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2131ECA41AB9801B005F844A /* Settings.swift */; };
+		21370BCD1AC494DA0063777D /* Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21370BCC1AC494DA0063777D /* Token.swift */; };
 		214C55DA1AA9E71200555A56 /* MessageContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214C55D91AA9E71200555A56 /* MessageContentViewController.swift */; };
 		2163769B1AC34A77004056AC /* Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2163769A1AC34A77004056AC /* Protocol.swift */; };
 		2186417E1AC31A430084AE46 /* SpeechManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2186417D1AC31A430084AE46 /* SpeechManager.swift */; };
@@ -57,6 +58,7 @@
 		212AE94A1AA9CF63000255E8 /* PostDuif-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PostDuif-Bridging-Header.h"; sourceTree = "<group>"; };
 		21317D981AC0403F00101992 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		2131ECA41AB9801B005F844A /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
+		21370BCC1AC494DA0063777D /* Token.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Token.swift; sourceTree = "<group>"; };
 		214C55D91AA9E71200555A56 /* MessageContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageContentViewController.swift; sourceTree = "<group>"; };
 		2163769A1AC34A77004056AC /* Protocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Protocol.swift; sourceTree = "<group>"; };
 		2186417D1AC31A430084AE46 /* SpeechManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpeechManager.swift; sourceTree = "<group>"; };
@@ -175,6 +177,7 @@
 			children = (
 				212936371AAD99370061BE6A /* Messages.swift */,
 				2131ECA41AB9801B005F844A /* Settings.swift */,
+				21370BCC1AC494DA0063777D /* Token.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -319,6 +322,7 @@
 				212936381AAD99370061BE6A /* Messages.swift in Sources */,
 				21CF744F1AADB8260047ABC3 /* DataManager.swift in Sources */,
 				211E24591AC4325E00ADF518 /* UserManager.swift in Sources */,
+				21370BCD1AC494DA0063777D /* Token.swift in Sources */,
 				212AE9491AA9CF44000255E8 /* iCarousel.m in Sources */,
 				21DF2C011AADC0C5007921E4 /* SwiftyJSON.swift in Sources */,
 				2131ECA51AB9801B005F844A /* Settings.swift in Sources */,

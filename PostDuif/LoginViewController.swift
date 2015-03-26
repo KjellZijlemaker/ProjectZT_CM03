@@ -16,11 +16,12 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var loginPincode1: UITextField!
     @IBOutlet weak var loginPincode2: UITextField!
     @IBOutlet weak var loginPincode3: UITextField!
-    var code = ""
+    var token: Token!
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        // For putting the view up when having keyboard
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("keyboardWillShow:"), name:UIKeyboardWillShowNotification, object: nil);
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("keyboardWillHide:"), name:UIKeyboardWillHideNotification, object: nil);
         
@@ -35,6 +36,7 @@ class LoginViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    // Functions for putting view to top
     func keyboardWillShow(sender: NSNotification) {
         self.view.frame.origin.y -= 200
     }
@@ -44,28 +46,36 @@ class LoginViewController: UIViewController {
     
     func rightSwiped(){
         
+        // Making pincode
         var pincode = self.loginPincode1.text + "-" + self.loginPincode2.text + "-" + self.loginPincode3.text
         
+        // Making URL
         var url = "http://84.107.107.169:8080/VisioWebApp/API/authentication?email=" + self.loginEmail.text + "&pincode=" + pincode
-
-        println(pincode)
         
-        UserManager.loginUser(url){(code) in
+        // Sending URL and logging in
+        UserManager.loginUser(url){(token) in
             
-            // Transfering array to global array
-            self.code = code
+            self.token = token // Set token inside global token
             
+            // Check if token has been made and fire segue
+            if(token.getReturnCode() == "200"){
+                if(token.getStatus() == "success"){
+                    // For performing the seque inside the storyboard
+                    self.performSegueWithIdentifier("loginSucceed", sender: self)
+                }
+                
+            }
         }
     }
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    // Segue methods
+    //=================================================================================================
+    // Preparing the seque and send data with ViewController
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
+        if segue.identifier == "loginSucceed"{
+            let vc = segue.destinationViewController as ViewController
+            vc.token = self.token // Sending token
+        }
     }
-    */
 
 }

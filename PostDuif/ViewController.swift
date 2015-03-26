@@ -36,16 +36,17 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
     var dots: RSDotsView!
     var totalNewItems = 0 // For total of new items
     
-    var speech = SpeechManager()
+    var speech = SpeechManager() // For speech
     
     // For checking if data is appending or not. Important for playing the speech or not inside the view,
     // when reloading the carousel!
     var isAppending = false
-    var noNewData = false
-    
     
     // For passing on to the other ViewControllers
     var currentIndex: Int = 0
+    
+    var token: Token! // For checking token
+    
     
     @IBOutlet var carousel : iCarousel!
     @IBOutlet weak var categoryMessage: UILabel!
@@ -54,8 +55,6 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
     {
         super.awakeFromNib()
         
-        // URL for the JSON
-        //var url = "https://itunes.apple.com/us/rss/topgrossingipadapplications/limit=2/json"
         
         // Getting UserID
         var userID = ""
