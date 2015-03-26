@@ -10,14 +10,24 @@ import Foundation
 
 class Message{
     
+    var id: String
     var subject: String
     var content: String
     var category: String
 
     init(){
+        self.id = ""
         self.subject = ""
         self.content = ""
         self.category = ""
+    }
+    
+    func setID(id: String){
+        self.id = id
+    }
+    
+    func getID() -> String{
+        return self.id
     }
     
     func setSubject(subject: String){

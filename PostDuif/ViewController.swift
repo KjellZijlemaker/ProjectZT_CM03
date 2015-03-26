@@ -495,17 +495,28 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
         }
     }
 
-    // Timer for deleting message. Is delaged from second viewcontroller
+    // Timer for deleting message. Is delaged from NewsViewController
     func executeDeletionTimer() {
         var timer = NSTimer.scheduledTimerWithTimeInterval(5.0, target:self, selector: Selector("deleteNewsMessage"), userInfo: nil, repeats: false)
     }
     
     // Selector for deleting message
     func deleteNewsMessage(){
-        self.messages.removeAtIndex(self.carousel.currentItemIndex)
-        self.carousel.removeItemAtIndex(self.carousel.currentItemIndex, animated: true)
-        self.carousel.reloadData()
-
+        var url = "http://84.107.107.169:8080/VisioWebApp/API/chat/confirm?messageId=" + self.messages[self.carousel.currentItemIndex].getID()
+        
+        DataManager.checkMessageRead(url){(codeFromJSON) in
+            
+            println(codeFromJSON)
+            
+            if(codeFromJSON == "200"){
+                self.messages.removeAtIndex(self.carousel.currentItemIndex)
+                self.carousel.removeItemAtIndex(self.carousel.currentItemIndex, animated: true)
+                self.carousel.reloadData()
+            }
+        }
+        
+        
+        
     }
     
     /* When getting appended data from the datamanager

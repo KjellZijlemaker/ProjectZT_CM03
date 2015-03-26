@@ -31,21 +31,28 @@ class DataManager{
                     
                     // Check for every app in the array
                     for appDict in appArray {
-      
+                        
                         // Making new Object for putting in the array
                         var newMessage = Message()
                         
-                        // Set name inside the object
-                        var messageName: String = appDict["subject"].stringValue
-                        newMessage.setSubject(messageName)
-                        
-                        // Set the website for the object
-                        var messageContent: String = appDict["message"].stringValue
-                        newMessage.setContent(messageContent)
-                        
-                        // Append the app names
-                        messageArray.append(newMessage)
-                        
+                        var hasRead: String = appDict["hasRead"].stringValue
+                        if(hasRead != "true"){
+                            
+                            // Setting the message ID
+                            var messageID: String = appDict["messageId"].stringValue
+                            newMessage.setID(messageID)
+                            
+                            // Set name inside the object
+                            var messageName: String = appDict["subject"].stringValue
+                            newMessage.setSubject(messageName)
+                            
+                            // Set the website for the object
+                            var messageContent: String = appDict["message"].stringValue
+                            newMessage.setContent(messageContent)
+                            
+                            // Append the app names
+                            messageArray.append(newMessage)
+                        }
                     }
                     
                     // Give the array back to the main Thread
@@ -78,7 +85,7 @@ class DataManager{
                 
                 // Making the JSON object from the JSON
                 var jsonObj = JSON(json!)
-
+                
                 // Make new JSON array
                 if let appArray = jsonObj["feed"]["entry"].array {
                     
@@ -119,6 +126,22 @@ class DataManager{
                     // If there is an error.....
                 else if (error != nil){
                     println("error!")
+                }
+            }
+        }
+    }
+    
+    class func checkMessageRead(apiEndPoint: String, completionHandler: (response: String) -> ()) {
+        
+        // Making GET request to the URL
+        request(.GET, apiEndPoint).responseJSON { (request, response, json, error) in
+            if (json != nil) {
+                
+                // Making the JSON object from the JSON
+                var jsonObj = JSON(json!)
+                
+                if let code = jsonObj["code"].string{
+                    completionHandler(response: code)
                 }
             }
         }
