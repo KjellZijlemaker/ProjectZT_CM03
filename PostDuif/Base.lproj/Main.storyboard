@@ -20,29 +20,27 @@
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="V14-6y-CMs">
                                 <rect key="frame" x="105" y="93" width="815" height="569"/>
                                 <subviews>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="kjell.zijlemaker@live.nl" borderStyle="bezel" minimumFontSize="32" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="hyv-2W-3NG">
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="bezel" minimumFontSize="32" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="hyv-2W-3NG">
                                         <rect key="frame" x="108" y="140" width="598" height="94"/>
+                                        <accessibility key="accessibilityConfiguration" label="Typ uw email adres in"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="60"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Uw email adres" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oZ9-zQ-5oW">
-                                        <rect key="frame" x="139" y="37" width="524" height="95"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="74"/>
-                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="bezel" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="uz1-FU-xQk">
                                         <rect key="frame" x="65" y="430" width="172" height="70"/>
+                                        <accessibility key="accessibilityConfiguration" label="Typ de eerste drie cijfers van uw pincode in"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="67"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="bezel" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="lwe-kb-3T7">
                                         <rect key="frame" x="315" y="430" width="172" height="70"/>
+                                        <accessibility key="accessibilityConfiguration" label="Typ de tweede rij van uw pincode in"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="67"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="bezel" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="hfK-Gh-hSZ">
                                         <rect key="frame" x="565" y="430" width="172" height="70"/>
+                                        <accessibility key="accessibilityConfiguration" label="Typ de derde rij van uw pincode in"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="67"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
@@ -61,6 +59,12 @@
                                             <segue destination="vXZ-lx-hvc" kind="show" identifier="loginSucceed" id="9om-Da-VaR"/>
                                         </connections>
                                     </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Uw email adres" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oZ9-zQ-5oW">
+                                        <rect key="frame" x="139" y="37" width="524" height="95"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="74"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
@@ -175,7 +179,7 @@
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Vliegende_postduif" translatesAutoresizingMaskIntoConstraints="NO" id="Qft-oo-eNB">
-                                <rect key="frame" x="817" y="49" width="145" height="165"/>
+                                <rect key="frame" x="811" y="49" width="145" height="165"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.50196081399917603" alpha="1" colorSpace="calibratedRGB"/>

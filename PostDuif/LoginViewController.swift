@@ -21,6 +21,9 @@ class LoginViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("keyboardWillShow:"), name:UIKeyboardWillShowNotification, object: nil);
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("keyboardWillHide:"), name:UIKeyboardWillHideNotification, object: nil);
+        
         //------------right  swipe gestures in view--------------//
         let swipeRight = UISwipeGestureRecognizer(target: self, action: Selector("rightSwiped"))
         swipeRight.direction = UISwipeGestureRecognizerDirection.Right
@@ -30,6 +33,13 @@ class LoginViewController: UIViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func keyboardWillShow(sender: NSNotification) {
+        self.view.frame.origin.y -= 200
+    }
+    func keyboardWillHide(sender: NSNotification) {
+        self.view.frame.origin.y += 200
     }
     
     func rightSwiped(){
