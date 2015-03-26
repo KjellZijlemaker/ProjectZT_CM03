@@ -501,17 +501,17 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
         var timer = NSTimer.scheduledTimerWithTimeInterval(10.0, target:self, selector: Selector("deleteMessage"), userInfo: nil, repeats: false)
     }
     
-    // Selector for deleting message
+    // Selector for making message read and deleting it from carousel
     func deleteMessage(){
-        var url = "http://84.107.107.169:8080/VisioWebApp/API/chat/confirm?messageId=" + self.messages[self.carousel.currentItemIndex].getID()
+        var currentItem = self.carousel.currentItemIndex
+        var url = "http://84.107.107.169:8080/VisioWebApp/API/chat/confirm?messageId=" + self.messages[currentItem].getID()
         
         DataManager.checkMessageRead(url){(codeFromJSON) in
             
-            println(codeFromJSON)
-            
             if(codeFromJSON == "200"){
-                self.messages.removeAtIndex(self.carousel.currentItemIndex)
-                self.carousel.removeItemAtIndex(self.carousel.currentItemIndex, animated: true)
+                self.messages.removeAtIndex(currentItem)
+                self.carousel.removeItemAtIndex(currentItem, animated: true)
+                self.carousel.scrollToItemAtIndex(self.carousel.numberOfItems, animated: true)
                 self.carousel.reloadData()
             }
         }
