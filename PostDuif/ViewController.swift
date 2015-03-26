@@ -484,6 +484,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
         if segue.identifier == "showMessageContent"{
             let vc = segue.destinationViewController as MessageContentViewController
+            vc.delegate = self
             vc.message = self.messages[self.carousel.currentItemIndex]
             self.speech.stopSpeech()
         }
