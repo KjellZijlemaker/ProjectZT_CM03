@@ -8,6 +8,6 @@
 
 import Foundation
 
-protocol deleteMessageNewsItem {
+protocol deleteMessageItem {
     func executeDeletionTimer()
 }

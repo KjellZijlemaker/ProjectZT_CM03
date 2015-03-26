@@ -11,11 +11,10 @@ import UIKit
 class NewsMessageViewController: UIViewController {
     var newsMessageContent:String!
     var speech:SpeechManager = SpeechManager()
-    var delegate: deleteMessageNewsItem!
+    var delegate: deleteMessageItem!
     
 
-    @IBOutlet weak var newsMessageTitle: UITextView!
-
+    @IBOutlet weak var newsMessageTitleText: UITextView!
     @IBOutlet weak var newsMessageText: UITextView!
     
     override func viewDidLoad() {
@@ -26,8 +25,7 @@ class NewsMessageViewController: UIViewController {
         swipeRight.direction = UISwipeGestureRecognizerDirection.Right
         self.view.addGestureRecognizer(swipeRight)
         
-        self.newsMessageTitle.layer.cornerRadius = 8
-        
+        self.newsMessageTitleText.layer.cornerRadius = 8
         self.newsMessageText.layer.cornerRadius = 8
         self.newsMessageText.text = self.newsMessageContent //Putting back the message inside the controller
 

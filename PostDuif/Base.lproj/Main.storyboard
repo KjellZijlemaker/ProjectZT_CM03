@@ -184,6 +184,7 @@
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="iPad"/>
                     <connections>
                         <outlet property="messageText" destination="bf0-d9-MCN" id="KzD-Ce-thn"/>
+                        <outlet property="messageTitleText" destination="uiD-eP-3ce" id="b54-5c-HoE"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8w3-GO-ya5" userLabel="First Responder" sceneMemberID="firstResponder"/>

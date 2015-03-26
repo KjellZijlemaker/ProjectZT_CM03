@@ -24,7 +24,7 @@ extension Array {
     }
 }
 
-class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, deleteMessageNewsItem
+class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, deleteMessageItem
 {
     // Array for all the items to be loaded inside the carousel
     var messages: [Message] = []
@@ -149,7 +149,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
             println("news")
         default:
             // For performing the seque inside the storyboard
-            performSegueWithIdentifier("showNewsMessageContent", sender: self)
+            performSegueWithIdentifier("showMessageContent", sender: self)
         }
     }
     
@@ -484,7 +484,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
         if segue.identifier == "showMessageContent"{
             let vc = segue.destinationViewController as MessageContentViewController
-            vc.messageContent = self.messages[self.carousel.currentItemIndex].getContent()
+            vc.message = self.messages[self.carousel.currentItemIndex]
             self.speech.stopSpeech()
         }
         if segue.identifier == "showNewsMessageContent"{
@@ -495,13 +495,13 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
         }
     }
 
-    // Timer for deleting message. Is delaged from NewsViewController
+    // Timer for deleting message. Is delegaded from NewsViewController
     func executeDeletionTimer() {
-        var timer = NSTimer.scheduledTimerWithTimeInterval(5.0, target:self, selector: Selector("deleteNewsMessage"), userInfo: nil, repeats: false)
+        var timer = NSTimer.scheduledTimerWithTimeInterval(10.0, target:self, selector: Selector("deleteMessage"), userInfo: nil, repeats: false)
     }
     
     // Selector for deleting message
-    func deleteNewsMessage(){
+    func deleteMessage(){
         var url = "http://84.107.107.169:8080/VisioWebApp/API/chat/confirm?messageId=" + self.messages[self.carousel.currentItemIndex].getID()
         
         DataManager.checkMessageRead(url){(codeFromJSON) in
@@ -514,10 +514,8 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                 self.carousel.reloadData()
             }
         }
-        
-        
-        
     }
+    
     
     /* When getting appended data from the datamanager
     func appendAppData(){

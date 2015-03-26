@@ -9,9 +9,11 @@
 import UIKit
 
 class MessageContentViewController: UIViewController {
-    var messageContent:String!
+    var message:Message!
     var speech:SpeechManager = SpeechManager()
+    var delegate: deleteMessageItem!
     
+    @IBOutlet weak var messageTitleText: UITextView!
     @IBOutlet weak var messageText: UITextView!
     
     override func viewDidLoad() {
@@ -22,13 +24,16 @@ class MessageContentViewController: UIViewController {
         swipeRight.direction = UISwipeGestureRecognizerDirection.Right
         self.view.addGestureRecognizer(swipeRight)
         
-        
-        self.messageText.text = self.messageContent //Putting back the message inside the controller
+        self.messageTitleText.layer.cornerRadius = 8
+        self.messageTitleText.text = self.message.getSubject()
+        self.messageText.layer.cornerRadius = 8
+        self.messageText.text = self.message.getContent() //Putting back the message inside the controller
         
         // Making new sentence array for speech
         var sentenceArray: [String] = []
+        sentenceArray.append("Onderwerp bericht: " + self.message.getSubject())
         sentenceArray.append("Inhoud bericht: ")
-        sentenceArray.append(self.messageContent)
+        sentenceArray.append(self.messageText.text)
         sentenceArray.append("Einde bericht")
         sentenceArray.append("Veeg naar rechts om het bericht te sluiten")
         
@@ -45,6 +50,7 @@ class MessageContentViewController: UIViewController {
             let secondPresentingVC = self.presentingViewController?.presentingViewController;
             secondPresentingVC?.dismissViewControllerAnimated(true, completion: {});
             self.speech.speechString("U heeft het bericht gelezen") //Little speech for user
+            self.delegate.executeDeletionTimer()
         });
     }
     
