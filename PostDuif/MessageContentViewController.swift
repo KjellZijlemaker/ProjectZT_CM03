@@ -12,8 +12,6 @@ class MessageContentViewController: UIViewController {
     var messageContent:String!
     var speech:SpeechManager = SpeechManager()
     
-    @IBOutlet weak var welcome: UILabel!
-    @IBOutlet weak var BackButton: UIButton!
     @IBOutlet weak var messageText: UITextView!
     
     override func viewDidLoad() {

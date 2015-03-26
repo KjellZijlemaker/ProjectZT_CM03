@@ -41,6 +41,8 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
     // For checking if data is appending or not. Important for playing the speech or not inside the view,
     // when reloading the carousel!
     var isAppending = false
+    var noNewData = false
+    
     
     // For passing on to the other ViewControllers
     var currentIndex: Int = 0
@@ -121,6 +123,12 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
         let singleTap = UITapGestureRecognizer(target: self, action:Selector("singleTapped"))
         singleTap.numberOfTapsRequired = 1
         self.view.addGestureRecognizer(singleTap)
+    
+        
+        let tapNewMessage = UITapGestureRecognizer(target: self, action:Selector("newMessageTapped"))
+        singleTap.numberOfTapsRequired = 1
+        //self.dots.addGestureRecognizer(tapNewMessage)
+        self.txtField.addGestureRecognizer(tapNewMessage)
     }
     
     //------------Dubble tap method for opening new view--------------//
@@ -166,6 +174,10 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
         appendAppData()
     }
     
+    //------------Swipe method to the left--------------//
+    func newMessageTapped(){
+        self.carousel.scrollToItemAtIndex(self.messages.count-self.totalNewItems, animated: true)
+    }
     
     func swipeDown(){
         self.carousel.scrollToItemAtIndex(self.messages.count-1, animated: true)
@@ -184,6 +196,9 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
         //create new view if no view is available for recycling
         if (view == nil)
         {
+            
+            //self.speech.stopSpeech()
+
             
             //don't do anything specific to the index within
             //this `if (view == nil) {...}` statement because the view will be
@@ -274,7 +289,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
         if(self.carousel.currentItemIndex == self.messages.count-1 && self.totalNewItems == 0){
             // Will execute, only when not appending
             if(!isAppending){
-                self.speech.speechString("U heeft geen ongelezen berichten meer")
+                self.speech.speechString("U heeft geen nieuwe berichten meer")
                 
             }
         }
@@ -425,9 +440,9 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
     
     // Function for checking if the index from the carousel changed
     func carouselCurrentItemIndexDidChange(carousel: iCarousel!){
-        self.speech.stopSpeech()
-        self.carousel.reloadItemAtIndex(self.carousel.currentItemIndex, animated: false)
-        
+        println(self.carousel.currentItemIndex)
+            speech.stopSpeech()
+            self.carousel.reloadItemAtIndex(self.carousel.currentItemIndex, animated: false)
     }
     
     
@@ -487,7 +502,10 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
     
     // Selector for deleting message
     func deleteNewsMessage(){
+        self.messages.removeAtIndex(self.carousel.currentItemIndex)
         self.carousel.removeItemAtIndex(self.carousel.currentItemIndex, animated: true)
+        self.carousel.reloadData()
+
     }
     
     /* When getting appended data from the datamanager

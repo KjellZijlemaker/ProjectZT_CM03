@@ -14,6 +14,8 @@ class NewsMessageViewController: UIViewController {
     var delegate: deleteMessageNewsItem!
     
 
+    @IBOutlet weak var newsMessageTitle: UITextView!
+
     @IBOutlet weak var newsMessageText: UITextView!
     
     override func viewDidLoad() {
@@ -24,8 +26,14 @@ class NewsMessageViewController: UIViewController {
         swipeRight.direction = UISwipeGestureRecognizerDirection.Right
         self.view.addGestureRecognizer(swipeRight)
         
+        self.newsMessageTitle.layer.cornerRadius = 8
         
+        self.newsMessageText.layer.cornerRadius = 8
         self.newsMessageText.text = self.newsMessageContent //Putting back the message inside the controller
+
+        
+        
+       // self.newsMessageText.font = UIFont.systemFontOfSize(26.0)
         
         // Making new sentence array for speech
         var sentenceArray: [String] = []
@@ -36,8 +44,6 @@ class NewsMessageViewController: UIViewController {
         
         self.speech.speechArray(sentenceArray) //Execute speech
         
-        println("Execute")
-        delegate.executeDeletionTimer()
     }
     
     //------------Swipe method to the right--------------//
@@ -51,6 +57,7 @@ class NewsMessageViewController: UIViewController {
             let secondPresentingVC = self.presentingViewController?.presentingViewController;
             secondPresentingVC?.dismissViewControllerAnimated(true, completion: {});
             self.speech.speechString("U heeft het nieuwsbericht gelezen") //Little speech for user
+            self.delegate.executeDeletionTimer()
         });
     }
     

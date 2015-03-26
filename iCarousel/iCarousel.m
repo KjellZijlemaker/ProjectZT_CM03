@@ -1377,7 +1377,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 {
     if (_numberOfItems == 0)
     {
-        return -1;
+        return 0;
     }
     else if (_wrapEnabled)
     {
