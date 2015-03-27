@@ -9,5 +9,5 @@
 import Foundation
 
 protocol deleteMessageItem {
-    func executeDeletionTimer()
+    func executeDeletionTimer(String)
 }

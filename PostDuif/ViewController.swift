@@ -28,6 +28,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
 {
     // Array for all the items to be loaded inside the carousel
     var messages: [Message] = []
+    var appendedMessages: [Message] = []
     var userSettings: [Settings] = []
     var pictures: [UIImage!] = []
     
@@ -47,6 +48,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
     
     var token: Token! // For checking token
     
+    var deleteditemIndexes:[String] = []
     
     @IBOutlet var carousel : iCarousel!
     @IBOutlet weak var categoryMessage: UILabel!
@@ -128,6 +130,10 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
         singleTap.numberOfTapsRequired = 1
         //self.dots.addGestureRecognizer(tapNewMessage)
         self.txtField.addGestureRecognizer(tapNewMessage)
+    }
+    
+    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return UIStatusBarStyle.LightContent
     }
     
     //------------Dubble tap method for opening new view--------------//
@@ -360,23 +366,22 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                 // AKA, a new item has been added
                 if(self.messages.getArrayIndex(r) == nil){
                     self.totalNewItems++ // Append the number of items
-                    println(self.totalNewItems)
                     self.txtField.hidden = false // New items, so unhide textView
                     self.txtField.text = String(self.totalNewItems) // Update the text
                     self.dots.hidden = false
                     
-                    // If the anamation is not already active, start it
+                    // If the animation is not already active, start it
                     if(!self.dots.isAnimating()){
                         self.dots.startAnimating()
                         self.dots.addSubview(self.txtField)
                     }
-                    
                     
                     self.messages.append(messages[r]) // Append the new message to existing view
                     self.carousel.insertItemAtIndex(r, animated: true) // Add new item at carousel
                     
                     // tell the total of new items
                     self.totalNewItemsToSpeech()
+                    
                     
                     /*// Extra check to check if the item is really new in the array(Optional)
                     for o in 0...self.items.count-1{
@@ -494,6 +499,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
             let vc = segue.destinationViewController as MessageContentViewController
             vc.delegate = self
             vc.message = self.messages[self.carousel.currentItemIndex]
+            vc.carouselID = String(self.carousel.currentItemIndex)
             self.speech.stopSpeech()
         }
         if segue.identifier == "showNewsMessageContent"{
@@ -505,22 +511,30 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
     }
 
     // Timer for deleting message. Is delegaded from NewsViewController
-    func executeDeletionTimer() {
+    func executeDeletionTimer(carouselMessageNumber: String) {
+        
+        // Appending the carouselMessageNumber to the deleteditemIndex
+        self.deleteditemIndexes.append(carouselMessageNumber)
         var timer = NSTimer.scheduledTimerWithTimeInterval(10.0, target:self, selector: Selector("deleteMessage"), userInfo: nil, repeats: false)
+        
     }
     
     // Selector for making message read and deleting it from carousel
     func deleteMessage(){
-        var currentItem = self.carousel.currentItemIndex
-        var url = "http://84.107.107.169:8080/VisioWebApp/API/chat/confirm?messageId=" + self.messages[currentItem].getID()
+
+        var carouselItemIndex = self.deleteditemIndexes.first?.toInt() // Getting first item from the array
+        self.deleteditemIndexes.removeAtIndex(0) // Delete it
+        var messageID = self.messages[carouselItemIndex!].getID() // Get the messageID for JSON array
+    
+        var url = "http://84.107.107.169:8080/VisioWebApp/API/chat/confirm?messageId=" + String(messageID)
         
         DataManager.checkMessageRead(url){(codeFromJSON) in
             
             if(codeFromJSON == "200"){
-                self.messages.removeAtIndex(currentItem)
-                self.carousel.removeItemAtIndex(currentItem, animated: true)
-                self.carousel.scrollToItemAtIndex(self.carousel.numberOfItems, animated: true)
-                self.carousel.reloadData()
+                self.messages.removeAtIndex(carouselItemIndex!)
+                self.carousel.removeItemAtIndex(carouselItemIndex!, animated: true)
+//                self.carousel.scrollToItemAtIndex(self.carousel.numberOfItems, animated: true)
+//                self.carousel.reloadData()
             }
         }
     }

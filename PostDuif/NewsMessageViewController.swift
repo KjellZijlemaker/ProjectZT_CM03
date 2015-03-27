@@ -44,6 +44,10 @@ class NewsMessageViewController: UIViewController {
         
     }
     
+    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return UIStatusBarStyle.LightContent
+    }
+    
     //------------Swipe method to the right--------------//
     func rightSwiped(){
         self.speech.stopSpeech() //Stop speech
@@ -55,7 +59,7 @@ class NewsMessageViewController: UIViewController {
             let secondPresentingVC = self.presentingViewController?.presentingViewController;
             secondPresentingVC?.dismissViewControllerAnimated(true, completion: {});
             self.speech.speechString("U heeft het nieuwsbericht gelezen") //Little speech for user
-            self.delegate.executeDeletionTimer()
+            self.delegate.executeDeletionTimer("0")
         });
     }
     

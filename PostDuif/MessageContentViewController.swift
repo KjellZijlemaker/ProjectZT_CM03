@@ -12,6 +12,7 @@ class MessageContentViewController: UIViewController {
     var message:Message!
     var speech:SpeechManager = SpeechManager()
     var delegate: deleteMessageItem!
+    var carouselID: String!
     
     @IBOutlet weak var messageTitleText: UITextView!
     @IBOutlet weak var messageText: UITextView!
@@ -40,6 +41,10 @@ class MessageContentViewController: UIViewController {
         self.speech.speechArray(sentenceArray) //Execute speech
 
     }
+    
+    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return UIStatusBarStyle.LightContent
+    }
 
     //------------Swipe method to the right--------------//
     func rightSwiped(){
@@ -50,7 +55,7 @@ class MessageContentViewController: UIViewController {
             let secondPresentingVC = self.presentingViewController?.presentingViewController;
             secondPresentingVC?.dismissViewControllerAnimated(true, completion: {});
             self.speech.speechString("U heeft het bericht gelezen") //Little speech for user
-            self.delegate.executeDeletionTimer()
+            self.delegate.executeDeletionTimer(self.carouselID)
         });
     }
     
