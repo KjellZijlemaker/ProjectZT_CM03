@@ -327,12 +327,12 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
         
         var url = "http://84.107.107.169:8080/VisioWebApp/notificationTest"
         
+        // Notification for getting messages
+        let loadingNotification = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+        loadingNotification.mode = MBProgressHUDMode.Indeterminate
+        loadingNotification.labelText = "Berichten en nieuws ophalen"
+        
         DataManager.getMessages(url){(messages) in
-            
-            // Notification for getting messages
-            let loadingNotification = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
-            loadingNotification.mode = MBProgressHUDMode.Indeterminate
-            loadingNotification.labelText = "Berichten en nieuws ophalen"
             
             // Transfering array to global array
             self.messages = messages

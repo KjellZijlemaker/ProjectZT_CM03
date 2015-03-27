@@ -56,19 +56,15 @@ class LoginViewController: UIViewController {
         // Making URL
         var url = "http://84.107.107.169:8080/VisioWebApp/API/authentication?email=" + self.loginEmail.text + "&pincode=" + pincode
         
-        
+        let loadingNotification = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+        loadingNotification.mode = MBProgressHUDMode.Indeterminate
+        loadingNotification.labelText = "Bezig met inloggen"
         
         
         // Sending URL and logging in
         UserManager.loginUser(url){(token) in
             
             self.token = token // Set token inside global token
-            
-            let loadingNotification = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
-            loadingNotification.mode = MBProgressHUDMode.Indeterminate
-            loadingNotification.labelText = "Bezig met inloggen"
-            
-            
             
             // Check if token has been made and fire segue
             if(token.getReturnCode() == "200"){
