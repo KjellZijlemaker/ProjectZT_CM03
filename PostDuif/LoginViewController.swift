@@ -52,22 +52,44 @@ class LoginViewController: UIViewController {
         // Making URL
         var url = "http://84.107.107.169:8080/VisioWebApp/API/authentication?email=" + self.loginEmail.text + "&pincode=" + pincode
         
+        
+        
+        
         // Sending URL and logging in
         UserManager.loginUser(url){(token) in
             
             self.token = token // Set token inside global token
             
+            let loadingNotification = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+            loadingNotification.mode = MBProgressHUDMode.Indeterminate
+            loadingNotification.labelText = "Bezig met inloggen"
+            
+            
+            
             // Check if token has been made and fire segue
             if(token.getReturnCode() == "200"){
                 if(token.getStatus() == "success"){
+                    MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
+                    
                     // For performing the seque inside the storyboard
                     self.performSegueWithIdentifier("loginSucceed", sender: self)
                 }
                 
             }
+            else{
+                var alert:SIAlertView  = SIAlertView(title: "Fout", andMessage: "Inloggen mislukt. Probeer het alstublieft opnieuw!")
+                alert.titleFont = UIFont(name: "Verdana", size: 30)
+                alert.messageFont = UIFont(name: "Verdana", size: 26)
+                alert.addButtonWithTitle("OK", type: SIAlertViewButtonType.Default, handler: nil)
+                alert.buttonFont = UIFont(name: "Verdana", size: 30)
+                alert.transitionStyle = SIAlertViewTransitionStyle.Bounce
+                
+                alert.show()
+                MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
+            }
         }
     }
-
+    
     // Segue methods
     //=================================================================================================
     // Preparing the seque and send data with ViewController
