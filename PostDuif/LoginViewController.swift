@@ -77,7 +77,7 @@ class LoginViewController: UIViewController {
                 
             }
             else{
-                var alert:SIAlertView  = SIAlertView(title: "Fout", andMessage: "Inloggen mislukt. Probeer het alstublieft opnieuw!")
+                var alert:SIAlertView  = SIAlertView(title: "Fout", andMessage: token.getMessage())
                 alert.titleFont = UIFont(name: "Verdana", size: 30)
                 alert.messageFont = UIFont(name: "Verdana", size: 26)
                 alert.addButtonWithTitle("OK", type: SIAlertViewButtonType.Default, handler: nil)

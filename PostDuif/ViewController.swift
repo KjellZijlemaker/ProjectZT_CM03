@@ -323,6 +323,11 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
         
         DataManager.getMessages(url){(messages) in
             
+            // Notification for getting messages
+            let loadingNotification = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+            loadingNotification.mode = MBProgressHUDMode.Indeterminate
+            loadingNotification.labelText = "Berichten en nieuws ophalen"
+            
             // Transfering array to global array
             self.messages = messages
             
@@ -330,6 +335,10 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
             for r in 0...self.messages.count-1{
                 self.carousel.insertItemAtIndex(r, animated: true)
                 println(self.messages[r].getSubject())
+                
+                if(r == self.messages.count-1){
+                    MBProgressHUD.hideAllHUDsForView(self.view, animated: true) // Close notification
+                }
             }
         }
         

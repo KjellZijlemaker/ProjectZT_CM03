@@ -30,7 +30,10 @@ class UserManager{
                     
                     if let status = jsonObj["status"].string{
                         token.setStatus(status)
-
+                    }
+                    
+                    if let message = jsonObj["message"].string{
+                        token.setMessage(message)
                     }
                     
                     // Make new JSON array

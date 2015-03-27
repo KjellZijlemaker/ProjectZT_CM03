@@ -14,6 +14,7 @@ class Token{
     var refreshToken: String
     var token: String
     var status: String
+    var message: String
     
     init(){
         self.returnCode = ""
@@ -21,6 +22,7 @@ class Token{
         self.refreshToken = ""
         self.token = ""
         self.status = ""
+        self.message = ""
     }
     
     func setReturnCode(returnCode: String){
@@ -52,6 +54,12 @@ class Token{
     }
     func getStatus() -> String{
         return self.status
+    }
+    func setMessage(message: String){
+        self.message = message
+    }
+    func getMessage() -> String{
+        return self.message
     }
     
 }
