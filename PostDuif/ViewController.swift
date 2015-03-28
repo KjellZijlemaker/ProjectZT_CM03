@@ -48,7 +48,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
     
     var token: Token! // For checking token
     
-    var deleteditemIndexes:[String] = []
+    var deleteditemIndexes:[String] = [] // Carousel indexes for deleting (user read)
     
     @IBOutlet var carousel : iCarousel!
     @IBOutlet weak var categoryMessage: UILabel!
@@ -100,6 +100,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
         carousel.type = .Custom
         carousel.scrollEnabled = false
         
+        if(!self.messages.isEmpty){
         //------------right  swipe gestures in view--------------//
         let swipeRight = UISwipeGestureRecognizer(target: self, action: Selector("rightSwiped"))
         swipeRight.direction = UISwipeGestureRecognizerDirection.Right
@@ -129,7 +130,11 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
         let tapNewMessage = UITapGestureRecognizer(target: self, action:Selector("newMessageTapped"))
         singleTap.numberOfTapsRequired = 1
         //self.dots.addGestureRecognizer(tapNewMessage)
+        self.dots.addGestureRecognizer(tapNewMessage)
         self.txtField.addGestureRecognizer(tapNewMessage)
+            
+        }
+
     }
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
@@ -181,6 +186,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
     
     //------------Swipe method to the left--------------//
     func newMessageTapped(){
+        println("hello")
         self.carousel.scrollToItemAtIndex(self.messages.count-self.totalNewItems, animated: true)
     }
     
@@ -322,6 +328,10 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
         return value
     }
     
+    func getToken(){
+        
+    }
+    
     // Function for getting the main app data and filling it into the array
     func getAppData(){
         
@@ -337,15 +347,22 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
             // Transfering array to global array
             self.messages = messages
             
-            // Iterate through all possible values
-            for r in 0...self.messages.count-1{
-                self.carousel.insertItemAtIndex(r, animated: true)
-                println(self.messages[r].getSubject())
-                
-                if(r == self.messages.count-1){
-                    MBProgressHUD.hideAllHUDsForView(self.view, animated: true) // Close notification
+            if(!messages.isEmpty){
+                // Iterate through all possible values
+                for r in 0...self.messages.count-1{
+                    self.carousel.insertItemAtIndex(r, animated: true)
+                    println(self.messages[r].getSubject())
+                    
+                    if(r == self.messages.count-1){
+                        MBProgressHUD.hideAllHUDsForView(self.view, animated: true) // Close notification
+                    }
                 }
             }
+            else{
+                self.speech.speechString("Er zijn geen berichten op dit moment")
+                MBProgressHUD.hideAllHUDsForView(self.view, animated: true) // Close notification
+            }
+            
         }
         
     }
@@ -358,6 +375,9 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
         var url = "http://84.107.107.169:8080/VisioWebApp/notificationTest" // URL for JSON
         
         DataManager.getMessages(url){(messages) in
+            
+            if(!messages.isEmpty){
+                
             
             // Iterate through all possible values
             for r in 0...messages.count-1{
@@ -395,6 +415,8 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                     
                     
                 }
+                }
+                
                 
                 // Else, there are no more new items
             }
