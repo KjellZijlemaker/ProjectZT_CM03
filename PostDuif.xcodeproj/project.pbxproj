@@ -25,7 +25,6 @@
 		21317D991AC0403F00101992 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21317D981AC0403F00101992 /* LoginViewController.swift */; };
 		2131ECA51AB9801B005F844A /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2131ECA41AB9801B005F844A /* Settings.swift */; };
 		21370BCD1AC494DA0063777D /* Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21370BCC1AC494DA0063777D /* Token.swift */; };
-		213CD1411AC815E200B27EA1 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 213CD13E1AC815E200B27EA1 /* Info.plist */; };
 		213CD1421AC815E200B27EA1 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213CD13F1AC815E200B27EA1 /* Keychain.swift */; };
 		214C55DA1AA9E71200555A56 /* MessageContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214C55D91AA9E71200555A56 /* MessageContentViewController.swift */; };
 		2163769B1AC34A77004056AC /* Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2163769A1AC34A77004056AC /* Protocol.swift */; };
@@ -74,7 +73,6 @@
 		21317D981AC0403F00101992 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		2131ECA41AB9801B005F844A /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		21370BCC1AC494DA0063777D /* Token.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Token.swift; sourceTree = "<group>"; };
-		213CD13E1AC815E200B27EA1 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		213CD13F1AC815E200B27EA1 /* Keychain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
 		213CD1401AC815E200B27EA1 /* KeychainAccess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeychainAccess.h; sourceTree = "<group>"; };
 		214C55D91AA9E71200555A56 /* MessageContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageContentViewController.swift; sourceTree = "<group>"; };
@@ -206,7 +204,6 @@
 		213CD13D1AC815E200B27EA1 /* KeychainAccess */ = {
 			isa = PBXGroup;
 			children = (
-				213CD13E1AC815E200B27EA1 /* Info.plist */,
 				213CD13F1AC815E200B27EA1 /* Keychain.swift */,
 				213CD1401AC815E200B27EA1 /* KeychainAccess.h */,
 			);
@@ -354,7 +351,6 @@
 				212AE9131AA9CE4D000255E8 /* Main.storyboard in Resources */,
 				211A74181AC5856C004517E8 /* SIAlertView.bundle in Resources */,
 				212AE9181AA9CE4D000255E8 /* LaunchScreen.xib in Resources */,
-				213CD1411AC815E200B27EA1 /* Info.plist in Resources */,
 				212AE9151AA9CE4D000255E8 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -526,11 +522,7 @@
 				INFOPLIST_FILE = PostDuif/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/iSpeechSDK-1.0.9",
-					"$(PROJECT_DIR)/iSpeechSDK",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "PostDuif/PostDuif-Bridging-Header.h";
 			};
@@ -544,11 +536,7 @@
 				INFOPLIST_FILE = PostDuif/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/iSpeechSDK-1.0.9",
-					"$(PROJECT_DIR)/iSpeechSDK",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "PostDuif/PostDuif-Bridging-Header.h";
 			};
