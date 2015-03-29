@@ -17,10 +17,11 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var loginPincode2: UITextField!
     @IBOutlet weak var loginPincode3: UITextField!
     var token: Token!
+    var keychain = Keychain(service: "com.visio.postduif")
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // For putting the view up when having keyboard
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("keyboardWillShow:"), name:UIKeyboardWillShowNotification, object: nil);
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("keyboardWillHide:"), name:UIKeyboardWillHideNotification, object: nil);
@@ -71,6 +72,10 @@ class LoginViewController: UIViewController {
                 if(token.getStatus() == "success"){
                     MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
                     
+                    self.keychain.set(self.token.getToken(), key: "token")
+                    self.keychain.set(self.token.getRefreshToken(), key: "refreshToken")
+
+                    println(self.keychain.get("token"))
                     // For performing the seque inside the storyboard
                     self.performSegueWithIdentifier("loginSucceed", sender: self)
                 }
@@ -96,7 +101,7 @@ class LoginViewController: UIViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
         if segue.identifier == "loginSucceed"{
             let vc = segue.destinationViewController as ViewController
-            vc.token = self.token // Sending token
+            //vc.keychain = self.keychain // Sending keyChain
         }
     }
 

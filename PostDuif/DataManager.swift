@@ -24,39 +24,54 @@ class DataManager{
                 
                 
                 
-                // Make new JSON array
-                if let appArray = jsonObj["feed"]["entry"].array {
+                
+                
+                var messageArray = [Message]()
+                
+                
+                
+                // Making new array
+                if let dataArray = jsonObj["data"]["entry"].array{
                     
-                    var messageArray = [Message]()
                     
-                    // Check for every app in the array
-                    for appDict in appArray {
-                        
-                        // Making new Object for putting in the array
-                        var newMessage = Message()
-                        
-                        var hasRead: String = appDict["hasRead"].stringValue
+                    for messages in dataArray{
+                        var hasRead: String = messages["hasRead"].stringValue
                         if(hasRead != "true"){
                             
+                            // Making new Message object
+                            var newMessage = Message()
+                            
                             // Setting the message ID
-                            var messageID: String = appDict["messageId"].stringValue
+                            var messageID: String = messages["messageId"].stringValue
                             newMessage.setID(messageID)
                             
+                            // Setting the name of the user that send the message
+                            var fromUser: String = messages["fromUser"].stringValue
+                            newMessage.setFromUser(fromUser)
+                            
                             // Set name inside the object
-                            var messageName: String = appDict["subject"].stringValue
+                            var messageName: String = messages["subject"].stringValue
                             newMessage.setSubject(messageName)
                             
                             // Set the website for the object
-                            var messageContent: String = appDict["message"].stringValue
+                            var messageContent: String = messages["message"].stringValue
                             newMessage.setContent(messageContent)
                             
                             // Append the app names
                             messageArray.append(newMessage)
                         }
                     }
+                    if let returnCode = jsonObj["code"].string{
+                        messageArray[0].setReturnCode(returnCode)
+                    }
                     
-                    // Give the array back to the main Thread
-                    completionHandler(response: messageArray)
+                    
+                }
+
+                // Give the array back to the main Thread
+                completionHandler(response: messageArray)
+                
+                
                     
                     /* Code snippet for getting single item out of JSON array
                     if let appName = jsonObj["feed"]["entry"][1]["im:name"]["label"].string{
@@ -73,7 +88,7 @@ class DataManager{
                     println("error!")
                 }
             }
-        }
+        
     }
     
     class func getUserSettings(apiEndPoint: String, completionHandler: (response: [Settings]) -> ()) {

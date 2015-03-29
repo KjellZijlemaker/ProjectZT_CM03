@@ -51,100 +51,67 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
     var messageIsOpenend: Bool = false // Checking if message has openend, so not the same item will be removed
     
     //# MARK: - User variables
-    var token: Token! // For checking token
+    var keychain = Keychain(service: "com.visio.postduif")
+    var token: String!
+    var refreshToken: String!
     var userSettings: [Settings] = [] // For getting all the settings from user
     
     // For passing on to the other ViewControllers
     var currentIndex: Int = 0
+    var passToLogin: Bool = false
+    
     
     //# MARK: - Outlets for displaying labels / carousel
     @IBOutlet var carousel : iCarousel!
     @IBOutlet weak var categoryMessage: UILabel!
     
-    override func awakeFromNib()
-    {
-        super.awakeFromNib()
-        
-        
-        // Getting UserID
-        var userID = ""
-        
-        // Getting the settings by UserID
-        getUserSettings(userID)
-        
-        // Getting the app data and fill it in the global array
-        getAppData()
-        
-    }
     
     override func viewDidLoad()
     {
         super.viewDidLoad()
         
-        var timer = NSTimer.scheduledTimerWithTimeInterval(10.0, target:self, selector: Selector("appendAppData"), userInfo: nil, repeats: true)
-        
-        // Making textfield for new items
-        self.txtField = UITextField(frame: CGRect(x: 43, y: 130, width: 15.00, height: 30.00));
-        self.txtField.hidden = true
-        self.txtField.borderStyle = UITextBorderStyle.Line
-        self.txtField.backgroundColor = UIColor.yellowColor()
-        self.txtField.userInteractionEnabled = false
-        self.txtField.borderStyle = UITextBorderStyle.None
-        self.txtField.text = String(totalNewItems)
-        
-        // Making dot animation for new item
-        self.dots = RSDotsView(frame: CGRectMake(870, -30, 300, 300))
-        self.view.addSubview(dots)
-        self.dots.dotsColor = UIColor.yellowColor()
-        self.dots.hidden = true
-        
-        NSNotificationCenter.defaultCenter().addObserver(self, selector:"totalNewItemsToForeground", name:
-            UIApplicationWillEnterForegroundNotification, object: nil)
-        
-        
         // Setting inital settings for swipe gestures
-        carousel.userInteractionEnabled = true
-        carousel.delegate = self
-        carousel.type = .Custom
-        carousel.scrollEnabled = false
+        self.carousel.userInteractionEnabled = true
+        self.carousel.delegate = self
+        self.carousel.type = .Custom
+        self.carousel.scrollEnabled = false
         
+        // Getting the tokens
+        self.token = keychain.get("token")
+        self.refreshToken = keychain.get("refreshToken")
         
-        //# MARK: - Gesture methods
-        //=================================================================================================
+        // If both tokens are empty, user has to login
+        if(token == nil || refreshToken == nil){
+            self.passToLogin = true
+            
+        }
+        else{
+            // Getting UserID
+            var userID = ""
+            
+            // Getting the settings by UserID
+            getUserSettings(userID)
+            
+            // Getting the app data and fill it in the global array
+            getAppData(token!)
+    
+        }
         
-        //------------right  swipe gestures in view--------------//
-        let swipeRight = UISwipeGestureRecognizer(target: self, action: Selector("rightSwiped"))
-        swipeRight.direction = UISwipeGestureRecognizerDirection.Right
-        self.view.addGestureRecognizer(swipeRight)
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(false)
         
-        //-----------left swipe gestures in view--------------//
-        let swipeLeft = UISwipeGestureRecognizer(target: self, action: Selector("leftSwiped"))
-        swipeLeft.direction = UISwipeGestureRecognizerDirection.Left
-        self.view.addGestureRecognizer(swipeLeft)
-        
-        //-----------up swipe gestures in view--------------//
-        let swipeUp = UISwipeGestureRecognizer(target: self, action: Selector("upSwiped"))
-        swipeUp.direction = UISwipeGestureRecognizerDirection.Up
-        self.view.addGestureRecognizer(swipeUp)
-        
-        
-        //-----------up swipe gestures in view--------------//
-        let swipeDown = UISwipeGestureRecognizer(target: self, action: Selector("swipeDown"))
-        swipeDown.direction = UISwipeGestureRecognizerDirection.Down
-        self.view.addGestureRecognizer(swipeDown)
-        
-        let singleTap = UITapGestureRecognizer(target: self, action:Selector("singleTapped"))
-        singleTap.numberOfTapsRequired = 1
-        self.view.addGestureRecognizer(singleTap)
-        
-        
-        let tapNewMessage = UITapGestureRecognizer(target: self, action:Selector("newMessageTapped"))
-        tapNewMessage.numberOfTapsRequired = 2
-        //self.dots.addGestureRecognizer(tapNewMessage)
-        self.dots.addGestureRecognizer(tapNewMessage)
-        self.txtField.addGestureRecognizer(tapNewMessage)
-        
-        
+        if(passToLogin){
+            self.performSegueWithIdentifier("showLogin", sender: self)
+
+        // Dismiss the controller
+        self.presentingViewController?.dismissViewControllerAnimated(true, completion: {
+            let secondPresentingVC = self.presentingViewController?.presentingViewController;
+            secondPresentingVC?.dismissViewControllerAnimated(true, completion: {});
+            
+        });
+        }
     }
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
@@ -202,7 +169,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
     func upSwiped(){
         if(!self.messages.isEmpty){
             // carousel.scrollByNumberOfItems(1, duration: 0.25)
-            appendAppData()
+            //appendAppData()
         }
     }
     
@@ -221,7 +188,70 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
         }
     }
     
-
+    
+    //# MARK: - View inits
+    //=================================================================================================
+    func setupViewController(){
+        var timer = NSTimer.scheduledTimerWithTimeInterval(10.0, target:self, selector: Selector("appendAppData"), userInfo: nil, repeats: true)
+        
+        // Making textfield for new items
+        self.txtField = UITextField(frame: CGRect(x: 43, y: 130, width: 15.00, height: 30.00));
+        self.txtField.hidden = true
+        self.txtField.borderStyle = UITextBorderStyle.Line
+        self.txtField.backgroundColor = UIColor.yellowColor()
+        self.txtField.userInteractionEnabled = false
+        self.txtField.borderStyle = UITextBorderStyle.None
+        self.txtField.text = String(self.totalNewItems)
+        
+        // Making dot animation for new item
+        self.dots = RSDotsView(frame: CGRectMake(870, -30, 300, 300))
+        self.view.addSubview(self.dots)
+        self.dots.dotsColor = UIColor.yellowColor()
+        self.dots.hidden = true
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector:"totalNewItemsToForeground", name:
+            UIApplicationWillEnterForegroundNotification, object: nil)
+        
+        
+        
+        //# MARK: - Gesture methods
+        //=================================================================================================
+        
+        //------------right  swipe gestures in view--------------//
+        let swipeRight = UISwipeGestureRecognizer(target: self, action: Selector("rightSwiped"))
+        swipeRight.direction = UISwipeGestureRecognizerDirection.Right
+        self.view.addGestureRecognizer(swipeRight)
+        
+        //-----------left swipe gestures in view--------------//
+        let swipeLeft = UISwipeGestureRecognizer(target: self, action: Selector("leftSwiped"))
+        swipeLeft.direction = UISwipeGestureRecognizerDirection.Left
+        self.view.addGestureRecognizer(swipeLeft)
+        
+        //-----------up swipe gestures in view--------------//
+        let swipeUp = UISwipeGestureRecognizer(target: self, action: Selector("upSwiped"))
+        swipeUp.direction = UISwipeGestureRecognizerDirection.Up
+        self.view.addGestureRecognizer(swipeUp)
+        
+        
+        //-----------up swipe gestures in view--------------//
+        let swipeDown = UISwipeGestureRecognizer(target: self, action: Selector("swipeDown"))
+        swipeDown.direction = UISwipeGestureRecognizerDirection.Down
+        self.view.addGestureRecognizer(swipeDown)
+        
+        let singleTap = UITapGestureRecognizer(target: self, action:Selector("singleTapped"))
+        singleTap.numberOfTapsRequired = 1
+        self.view.addGestureRecognizer(singleTap)
+        
+        
+        let tapNewMessage = UITapGestureRecognizer(target: self, action:Selector("newMessageTapped"))
+        tapNewMessage.numberOfTapsRequired = 2
+        //self.dots.addGestureRecognizer(tapNewMessage)
+        self.dots.addGestureRecognizer(tapNewMessage)
+        self.txtField.addGestureRecognizer(tapNewMessage)
+    }
+    
+    
+    
     //# MARK: - Carousel methods
     //=================================================================================================
     func carousel(carousel: iCarousel!, viewForItemAtIndex index: Int, var reusingView view: UIView!) -> UIView!
@@ -234,6 +264,10 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
             
             //self.speech.stopSpeech()
             
+            // BUG: carousel sometimes will begin at -1?? No item is displayed then. This is workaround
+            if(index == 0){
+                self.carousel.scrollToItemAtIndex(0, animated: true)
+            }
             
             //don't do anything specific to the index within
             //this `if (view == nil) {...}` statement because the view will be
@@ -273,6 +307,8 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
         will be indexed
         */
         if (index == self.carousel.currentItemIndex) {
+            
+            
             
             // Setting category per item inside the array
             setCategory(index)
@@ -396,12 +432,12 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
         speech.stopSpeech()
         self.carousel.reloadItemAtIndex(self.carousel.currentItemIndex, animated: false)
     }
-
+    
     
     
     //# MARK: - User data methods
     //=================================================================================================
-
+    
     // Function for getting the main app data and filling it into the array
     func getUserSettings(userID: String){
         
@@ -416,18 +452,15 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
         
     }
     
-    func getToken(){
-        
-    }
-    
     
     //# MARK: - Messages and news data methods
     //=================================================================================================
-
+    
     // Function for getting the main app data and filling it into the array
-    func getAppData(){
+    func getAppData(tokenKey: String){
         
-        var url = "http://84.107.107.169:8080/VisioWebApp/notificationTest"
+        var viewMayLoad: Bool = false
+        var url = "http://84.107.107.169:8080/VisioWebApp/API/allMessages?tokenKey=" + tokenKey
         
         // Notification for getting messages
         let loadingNotification = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
@@ -441,14 +474,36 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
             
             // If not empty, enable getting initial data
             if(!messages.isEmpty){
-                // Iterate through all possible values
-                for r in 0...self.messages.count-1{
-                    self.carousel.insertItemAtIndex(r, animated: true)
-                    println(self.messages[r].getSubject())
+                println(messages[0].getReturnCode())
+                // If first message has returncode of 200, the token is correct and messages are fetched
+                if(messages[0].getReturnCode() == "200"){
                     
-                    if(r == self.messages.count-1){
-                        MBProgressHUD.hideAllHUDsForView(self.view, animated: true) // Close notification
+                    
+                    // Iterate through all possible values
+                    for r in 0...messages.count-1{
+                        self.carousel.insertItemAtIndex(r, animated: true)
+                        println(self.messages[r].getSubject())
+                        
+                        if(r == messages.count-1){
+                            MBProgressHUD.hideAllHUDsForView(self.view, animated: true) // Close notification
+                        }
                     }
+                    viewMayLoad = true
+                }
+                    
+                    // If the code is something else, the token is incorrect. Login again
+                else{
+                    println("NOT correct")
+                    
+                    MBProgressHUD.hideAllHUDsForView(self.view, animated: true) // Close notification
+                    
+                    self.performSegueWithIdentifier("showLogin", sender: self)
+
+                    // Dismiss the controller
+                    self.presentingViewController?.dismissViewControllerAnimated(true, completion: {
+                        let secondPresentingVC = self.presentingViewController?.presentingViewController;
+                        secondPresentingVC?.dismissViewControllerAnimated(true, completion: {});
+                    });
                 }
             }
             else{
@@ -456,8 +511,12 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                 MBProgressHUD.hideAllHUDsForView(self.view, animated: true) // Close notification
             }
             
+            if(viewMayLoad){
+                
+                // Setup the viewController with Carousel
+               self.setupViewController()
+            }
         }
-        
     }
     
     // Function for getting the main app data and filling it into the array
@@ -465,7 +524,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
         
         
         isAppending = true // Now appending data, so speech may not execute
-        var url = "http://84.107.107.169:8080/VisioWebApp/notificationTest" // URL for JSON
+        var url = "http://84.107.107.169:8080/VisioWebApp/API/allMessages?tokenKey=" + self.token // URL for JSON
         
         DataManager.getMessages(url){(messages) in
             
@@ -519,7 +578,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
         
     }
     
-
+    
     //# MARK: - UIBackground / Foreground methods
     //=================================================================================================
     func totalNewItemsToForeground(){
@@ -553,7 +612,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
     
     // //# MARK: - Seque methods
     //=================================================================================================
-   
+    
     // Preparing the seque and send data with MessageContentViewController
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
         if segue.identifier == "showMessageContent"{
@@ -571,12 +630,16 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
             self.speech.stopSpeech()
             self.messageIsOpenend = true
         }
+        if segue.identifier == "showLogin"{
+            let vc = segue.destinationViewController as LoginViewController
+        }
+        
     }
     
     
     //# MARK: - Deletion methods
     //=================================================================================================
-
+    
     // Timer for deleting message. Is delegaded from NewsViewController
     func executeDeletionTimer(carouselMessageNumber: String) {
         self.messageIsOpenend = false

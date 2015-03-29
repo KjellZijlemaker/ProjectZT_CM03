@@ -24,10 +24,6 @@ class UserManager{
                 if let code = jsonObj["code"].string{
                     token.setReturnCode(code)
                     
-                    if let jsonToken = jsonObj["token"].string{
-                        token.setToken(jsonToken)
-                    }
-                    
                     if let status = jsonObj["status"].string{
                         token.setStatus(status)
                     }
@@ -37,17 +33,22 @@ class UserManager{
                     }
                     
                     // Make new JSON array
-                    if let dataArray = jsonObj["data"].array {
-                        for r in dataArray{
-                            token.setExpireTokenDate(r["expireTokenDate"].stringValue)
-                            token.setRefreshToken(r["refreshToken"].stringValue)
-                        }
-                    }
+                        let tokenFromArray = jsonObj["data"]["token"].string
+                        let refreshTokenFromArray = jsonObj["data"]["refreshToken"].string
+                        let expireTokenDateFromArray = jsonObj["data"]["expireTokenDate"].string
+                        
+                            token.setExpireTokenDate(expireTokenDateFromArray!)
+                            token.setRefreshToken(refreshTokenFromArray!)
+                            token.setToken(tokenFromArray!)
+                        
                     
-                    println(json)
-                    
-                    completionHandler(response: token)
                 }
+                
+                println(token.getToken())
+                println(token.getRefreshToken())
+                println(json)
+                
+                completionHandler(response: token)
             }
         }
     }

@@ -25,6 +25,8 @@
 		21317D991AC0403F00101992 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21317D981AC0403F00101992 /* LoginViewController.swift */; };
 		2131ECA51AB9801B005F844A /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2131ECA41AB9801B005F844A /* Settings.swift */; };
 		21370BCD1AC494DA0063777D /* Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21370BCC1AC494DA0063777D /* Token.swift */; };
+		213CD1411AC815E200B27EA1 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 213CD13E1AC815E200B27EA1 /* Info.plist */; };
+		213CD1421AC815E200B27EA1 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213CD13F1AC815E200B27EA1 /* Keychain.swift */; };
 		214C55DA1AA9E71200555A56 /* MessageContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214C55D91AA9E71200555A56 /* MessageContentViewController.swift */; };
 		2163769B1AC34A77004056AC /* Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2163769A1AC34A77004056AC /* Protocol.swift */; };
 		2186417E1AC31A430084AE46 /* SpeechManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2186417D1AC31A430084AE46 /* SpeechManager.swift */; };
@@ -72,6 +74,9 @@
 		21317D981AC0403F00101992 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		2131ECA41AB9801B005F844A /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		21370BCC1AC494DA0063777D /* Token.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Token.swift; sourceTree = "<group>"; };
+		213CD13E1AC815E200B27EA1 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		213CD13F1AC815E200B27EA1 /* Keychain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
+		213CD1401AC815E200B27EA1 /* KeychainAccess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeychainAccess.h; sourceTree = "<group>"; };
 		214C55D91AA9E71200555A56 /* MessageContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageContentViewController.swift; sourceTree = "<group>"; };
 		2163769A1AC34A77004056AC /* Protocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Protocol.swift; sourceTree = "<group>"; };
 		2186417D1AC31A430084AE46 /* SpeechManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpeechManager.swift; sourceTree = "<group>"; };
@@ -125,6 +130,7 @@
 		212AE8FF1AA9CE4D000255E8 = {
 			isa = PBXGroup;
 			children = (
+				213CD13D1AC815E200B27EA1 /* KeychainAccess */,
 				211A74121AC5856C004517E8 /* SIAlertView */,
 				211A740E1AC581CB004517E8 /* MBProgressHUD */,
 				219F66D81ABC288900EC3194 /* RSDotsView */,
@@ -195,6 +201,16 @@
 				212AE9481AA9CF44000255E8 /* iCarousel.m */,
 			);
 			path = iCarousel;
+			sourceTree = "<group>";
+		};
+		213CD13D1AC815E200B27EA1 /* KeychainAccess */ = {
+			isa = PBXGroup;
+			children = (
+				213CD13E1AC815E200B27EA1 /* Info.plist */,
+				213CD13F1AC815E200B27EA1 /* Keychain.swift */,
+				213CD1401AC815E200B27EA1 /* KeychainAccess.h */,
+			);
+			path = KeychainAccess;
 			sourceTree = "<group>";
 		};
 		2186417F1AC328840084AE46 /* Controllers */ = {
@@ -338,6 +354,7 @@
 				212AE9131AA9CE4D000255E8 /* Main.storyboard in Resources */,
 				211A74181AC5856C004517E8 /* SIAlertView.bundle in Resources */,
 				212AE9181AA9CE4D000255E8 /* LaunchScreen.xib in Resources */,
+				213CD1411AC815E200B27EA1 /* Info.plist in Resources */,
 				212AE9151AA9CE4D000255E8 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -376,6 +393,7 @@
 				211A740D1AC54CB7004517E8 /* News.swift in Sources */,
 				210133871AB5C1E00065D186 /* NewsMessageViewController.swift in Sources */,
 				211A741A1AC5856C004517E8 /* UIWindow+SIUtils.m in Sources */,
+				213CD1421AC815E200B27EA1 /* Keychain.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

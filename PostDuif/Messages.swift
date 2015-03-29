@@ -14,12 +14,16 @@ class Message{
     var subject: String
     var content: String
     var category: String
+    var returnCode: String
+    var fromUser: String
 
     init(){
         self.id = ""
         self.subject = ""
         self.content = ""
         self.category = ""
+        self.returnCode = ""
+        self.fromUser = ""
     }
     
     func setID(id: String){
@@ -52,6 +56,22 @@ class Message{
     
     func getCategory() -> String{
         return self.category
+    }
+    
+    func setReturnCode(returnCode: String){
+        self.returnCode = returnCode
+    }
+    
+    func getReturnCode() -> String{
+        return self.returnCode
+    }
+    
+    func setFromUser(fromUser: String){
+        self.fromUser = fromUser
+    }
+    
+    func getFromUser() -> String{
+        return self.fromUser
     }
     
 }
