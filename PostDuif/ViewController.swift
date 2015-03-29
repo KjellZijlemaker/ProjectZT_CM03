@@ -26,32 +26,38 @@ extension Array {
 
 class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, deleteMessageItem
 {
-    // Array for all the items to be loaded inside the carousel
+    //# MARK: - Array for all the items / settings to be loaded inside the carousel
     var messages: [Message] = []
-    var appendedMessages: [Message] = []
-    var userSettings: [Settings] = []
     var pictures: [UIImage!] = []
     
-    // TextField for showing new items inside the carousel
+    //# MARK: - Variables for adding new items to the array
     var txtField: UITextField!
     var dots: RSDotsView!
     var totalNewItems = 0 // For total of new items
     
-    var speech = SpeechManager() // For speech
+    //# MARK: - Variables for appending messages / news
+    var appendedMessages: [Message] = []
     
     // For checking if data is appending or not. Important for playing the speech or not inside the view,
     // when reloading the carousel!
     var isAppending = false
     
+    
+    //# MARK: - Speech variables
+    var speech = SpeechManager() // For speech
+    
+    //# MARK: - Variables for deleting messages
+    var deleteditemIndexes:[String] = [] // Carousel indexes for deleting (user read)
+    var messageIsOpenend: Bool = false // Checking if message has openend, so not the same item will be removed
+    
+    //# MARK: - User variables
+    var token: Token! // For checking token
+    var userSettings: [Settings] = [] // For getting all the settings from user
+    
     // For passing on to the other ViewControllers
     var currentIndex: Int = 0
     
-    var token: Token! // For checking token
-    
-    var deleteditemIndexes:[String] = [] // Carousel indexes for deleting (user read)
-    
-    var messageIsOpenend: Bool = false
-    
+    //# MARK: - Outlets for displaying labels / carousel
     @IBOutlet var carousel : iCarousel!
     @IBOutlet weak var categoryMessage: UILabel!
     
@@ -104,6 +110,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
         
         
         //# MARK: - Gesture methods
+        //=================================================================================================
         
         //------------right  swipe gestures in view--------------//
         let swipeRight = UISwipeGestureRecognizer(target: self, action: Selector("rightSwiped"))
@@ -132,7 +139,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
         
         
         let tapNewMessage = UITapGestureRecognizer(target: self, action:Selector("newMessageTapped"))
-        tapNewMessage.numberOfTapsRequired = 1
+        tapNewMessage.numberOfTapsRequired = 2
         //self.dots.addGestureRecognizer(tapNewMessage)
         self.dots.addGestureRecognizer(tapNewMessage)
         self.txtField.addGestureRecognizer(tapNewMessage)
@@ -143,6 +150,9 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return UIStatusBarStyle.LightContent
     }
+    
+    //# MARK: - Gesture control methods
+    //=================================================================================================
     
     //------------Dubble tap method for opening new view--------------//
     func singleTapped(){
@@ -211,11 +221,9 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
         }
     }
     
-    func numberOfItemsInCarousel(carousel: iCarousel!) -> Int
-    {
-        return self.messages.count
-    }
-    
+
+    //# MARK: - Carousel methods
+    //=================================================================================================
     func carousel(carousel: iCarousel!, viewForItemAtIndex index: Int, var reusingView view: UIView!) -> UIView!
     {
         var label: UILabel! = nil
@@ -334,6 +342,10 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
         return view
     }
     
+    func numberOfItemsInCarousel(carousel: iCarousel!) -> Int
+    {
+        return self.messages.count
+    }
     
     func carousel(carousel: iCarousel!, valueForOption option: iCarouselOption, withDefault value: CGFloat) -> CGFloat
     {
@@ -344,10 +356,74 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
         return value
     }
     
+    // Function for setting the images per category
+    func setImages(index: Int){
+        
+        switch(self.messages[index].getSubject()){
+        case "Clash of Clans":
+            pictures.append(UIImage(named:"message.jpg"))
+            
+        case "Game of War - Fire Age":
+            pictures.append(UIImage(named:"news.jpg"))
+            
+        default:
+            pictures.append(UIImage(named:"message.jpg"))
+            
+        }
+        
+    }
+    
+    // Setting the categorie names above the carousel
+    func setCategory(index: Int){
+        switch(self.messages[index].getSubject()){
+        case "fesees":
+            categoryMessage.text = "Categorie: Berichten"
+            categoryMessage.layoutIfNeeded()
+        case "lol":
+            categoryMessage.text = "Categorie: Mededelingen"
+            categoryMessage.layoutIfNeeded()
+        default:
+            categoryMessage.text = "Geen categorie"
+            categoryMessage.layoutIfNeeded()
+            break
+            
+        }
+    }
+    
+    // Function for checking if the index from the carousel changed
+    func carouselCurrentItemIndexDidChange(carousel: iCarousel!){
+        println(self.carousel.currentItemIndex)
+        speech.stopSpeech()
+        self.carousel.reloadItemAtIndex(self.carousel.currentItemIndex, animated: false)
+    }
+
+    
+    
+    //# MARK: - User data methods
+    //=================================================================================================
+
+    // Function for getting the main app data and filling it into the array
+    func getUserSettings(userID: String){
+        
+        var url = "http://84.107.107.169:8080/VisioWebApp/notificationTest"
+        
+        DataManager.getUserSettings(url){(settings) in
+            
+            // Transfering array to global array
+            self.userSettings = settings
+            
+        }
+        
+    }
+    
     func getToken(){
         
     }
     
+    
+    //# MARK: - Messages and news data methods
+    //=================================================================================================
+
     // Function for getting the main app data and filling it into the array
     func getAppData(){
         
@@ -443,64 +519,8 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
         
     }
     
-    // Function for getting the main app data and filling it into the array
-    func getUserSettings(userID: String){
-        
-        var url = "http://84.107.107.169:8080/VisioWebApp/notificationTest"
-        
-        DataManager.getUserSettings(url){(settings) in
-            
-            // Transfering array to global array
-            self.userSettings = settings
-            
-        }
-        
-    }
-    
-    // Function for setting the images per category
-    func setImages(index: Int){
-        
-        switch(self.messages[index].getSubject()){
-        case "Clash of Clans":
-            pictures.append(UIImage(named:"message.jpg"))
-            
-        case "Game of War - Fire Age":
-            pictures.append(UIImage(named:"news.jpg"))
-            
-        default:
-            pictures.append(UIImage(named:"message.jpg"))
-            
-        }
-        
-    }
-    
-    // Setting the categorie names above the carousel
-    func setCategory(index: Int){
-        switch(self.messages[index].getSubject()){
-        case "fesees":
-            categoryMessage.text = "Categorie: Berichten"
-            categoryMessage.layoutIfNeeded()
-        case "lol":
-            categoryMessage.text = "Categorie: Mededelingen"
-            categoryMessage.layoutIfNeeded()
-        default:
-            categoryMessage.text = "Geen categorie"
-            categoryMessage.layoutIfNeeded()
-            break
-            
-        }
-    }
-    
-    // Function for checking if the index from the carousel changed
-    func carouselCurrentItemIndexDidChange(carousel: iCarousel!){
-        println(self.carousel.currentItemIndex)
-        speech.stopSpeech()
-        self.carousel.reloadItemAtIndex(self.carousel.currentItemIndex, animated: false)
-    }
-    
-    
-    
-    // UIBackground / Foreground methods
+
+    //# MARK: - UIBackground / Foreground methods
     //=================================================================================================
     func totalNewItemsToForeground(){
         if(totalNewItems >= 0){
@@ -531,8 +551,9 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
     }
     
     
-    // Seque methods
+    // //# MARK: - Seque methods
     //=================================================================================================
+   
     // Preparing the seque and send data with MessageContentViewController
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
         if segue.identifier == "showMessageContent"{
@@ -552,6 +573,10 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
         }
     }
     
+    
+    //# MARK: - Deletion methods
+    //=================================================================================================
+
     // Timer for deleting message. Is delegaded from NewsViewController
     func executeDeletionTimer(carouselMessageNumber: String) {
         self.messageIsOpenend = false
