@@ -13,10 +13,11 @@ class MessageContentViewController: UIViewController {
     var speech:SpeechManager = SpeechManager()
     var delegate: deleteMessageItem!
     var carouselID: String!
+    var speechEnabled: Bool = false
     
     @IBOutlet weak var messageTitleText: UITextView!
     @IBOutlet weak var messageText: UITextView!
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -30,15 +31,19 @@ class MessageContentViewController: UIViewController {
         self.messageText.layer.cornerRadius = 8
         self.messageText.text = self.message.getContent() //Putting back the message inside the controller
         
-        // Making new sentence array for speech
-        var sentenceArray: [String] = []
-        sentenceArray.append("Onderwerp bericht: " + self.message.getSubject())
-        sentenceArray.append("Inhoud bericht: ")
-        sentenceArray.append(self.messageText.text)
-        sentenceArray.append("Einde bericht")
-        sentenceArray.append("Veeg naar rechts om het bericht te sluiten")
+        if(self.speechEnabled){
+            
+            // Making new sentence array for speech
+            var sentenceArray: [String] = []
+            sentenceArray.append("Onderwerp bericht: " + self.message.getSubject())
+            sentenceArray.append("Inhoud bericht: ")
+            sentenceArray.append(self.messageText.text)
+            sentenceArray.append("Einde bericht")
+            sentenceArray.append("Veeg naar rechts om het bericht te sluiten")
+            
+            self.speech.speechArray(sentenceArray) //Execute speech
+        }
         
-        self.speech.speechArray(sentenceArray) //Execute speech
 
     }
     
@@ -54,7 +59,9 @@ class MessageContentViewController: UIViewController {
         self.presentingViewController?.dismissViewControllerAnimated(true, completion: {
             let secondPresentingVC = self.presentingViewController?.presentingViewController;
             secondPresentingVC?.dismissViewControllerAnimated(true, completion: {});
-            self.speech.speechString("U heeft het bericht gelezen") //Little speech for user
+            if(self.speechEnabled){
+                self.speech.speechString("U heeft het bericht gelezen") //Little speech for user
+            }
             self.delegate.executeDeletionTimer(self.carouselID)
         });
     }

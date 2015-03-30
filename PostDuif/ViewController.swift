@@ -56,6 +56,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
     var refreshToken: String!
     var isRefreshToken: Bool = true
     var userSettings: [Settings] = [] // For getting all the settings from user
+    var speechEnabled: Bool = false
     
     // For passing on to the other ViewControllers
     var currentIndex: Int = 0
@@ -91,7 +92,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
             getAppData(token!)
             
         }
-
+        
     }
     
     override func viewDidLoad()
@@ -105,16 +106,16 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
         self.carousel.delegate = self
         self.carousel.type = .Custom
         self.carousel.scrollEnabled = false
-
+        
         let logoutButton   = UIButton.buttonWithType(UIButtonType.System) as UIButton
         logoutButton.frame = CGRectMake(20, 20, 130, 130)
         logoutButton.userInteractionEnabled = true
-
+        
         self.view.addSubview(logoutButton)
         let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: "logoutButtonAction:")
         logoutButton.addGestureRecognizer(longPressRecognizer)
     }
-
+    
     
     // Only when the keys are empty!!
     override func viewDidAppear(animated: Bool) {
@@ -122,13 +123,13 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
         
         if(passToLogin){
             self.performSegueWithIdentifier("showLogin", sender: self)
-
-        // Dismiss the controller
-        self.presentingViewController?.dismissViewControllerAnimated(true, completion: {
-            let secondPresentingVC = self.presentingViewController?.presentingViewController;
-            secondPresentingVC?.dismissViewControllerAnimated(true, completion: {});
             
-        });
+            // Dismiss the controller
+            self.presentingViewController?.dismissViewControllerAnimated(true, completion: {
+                let secondPresentingVC = self.presentingViewController?.presentingViewController;
+                secondPresentingVC?.dismissViewControllerAnimated(true, completion: {});
+                
+            });
         }
     }
     
@@ -240,7 +241,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
         
         let tapNewMessage = UITapGestureRecognizer(target: self, action:Selector("newMessageTapped"))
         tapNewMessage.numberOfTapsRequired = 2
-
+        
         // Making dot animation for new item
         self.dots = RSDotsView(frame: CGRectMake(870, -30, 300, 300))
         self.dots.dotsColor = UIColor.yellowColor()
@@ -279,7 +280,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
         
         
         
-
+        
         
         
     }
@@ -295,7 +296,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
     func setupTimerInit(){
         // Setup the viewController with Carousel
         var timer = NSTimer.scheduledTimerWithTimeInterval(10.0, target:self, selector: Selector("appendAppData"), userInfo: nil, repeats: true)
-
+        
     }
     
     
@@ -313,7 +314,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
             
             // BUG: carousel sometimes will begin at -1?? No item is displayed then. This is workaround
             if(index == 0){
-               // self.carousel.scrollToItemAtIndex(0, animated: true)
+                // self.carousel.scrollToItemAtIndex(0, animated: true)
             }
             
             //don't do anything specific to the index within
@@ -362,18 +363,19 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
             
             // Will execute, only when not appending
             if(!isAppending){
-                
-                if(!self.speech.isSpeaking()){
-                    var textToSend:[String] = []
-                    
-                    textToSend.append(String(index+1) + "e " + " Ongelezen bericht")
-                    textToSend.append("Onderwerp: " + self.messages[index].getSubject())
-                    textToSend.append("Tik op het scherm om het bericht te openen")
-                    
-                    
-                    //TODO: Check JSON if user has speech in his settings
-                    self.speech.speechArray(textToSend)
-                    
+                if(self.speechEnabled){
+                    if(!self.speech.isSpeaking()){
+                        var textToSend:[String] = []
+                        
+                        textToSend.append(String(index+1) + "e " + " Ongelezen bericht")
+                        textToSend.append("Onderwerp: " + self.messages[index].getSubject())
+                        textToSend.append("Tik op het scherm om het bericht te openen")
+                        
+                        
+                        //TODO: Check JSON if user has speech in his settings
+                        self.speech.speechArray(textToSend)
+                        
+                    }
                 }
             }
             
@@ -407,8 +409,9 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
         if(self.carousel.currentItemIndex == self.messages.count-1 && self.totalNewItems == 0){
             // Will execute, only when not appending
             if(!isAppending){
-                self.speech.speechString("U heeft geen nieuwe berichten meer")
-                
+                if(self.speechEnabled){
+                    self.speech.speechString("U heeft geen nieuwe berichten meer")
+                }
             }
         }
         
@@ -561,7 +564,9 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                 }
             }
             else{
-                self.speech.speechString("Er zijn geen berichten op dit moment")
+                if(self.speechEnabled){
+                    self.speech.speechString("Er zijn geen berichten op dit moment")
+                }
                 MBProgressHUD.hideAllHUDsForView(self.view, animated: true) // Close notification
             }
             
@@ -609,7 +614,10 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                         self.carousel.insertItemAtIndex(r, animated: true) // Add new item at carousel
                         
                         // tell the total of new items
-                        self.totalNewItemsToSpeech()
+                        if(self.speechEnabled){
+                            self.totalNewItemsToSpeech()
+                        }
+                        
                         
                         
                         /*// Extra check to check if the item is really new in the array(Optional)
@@ -742,7 +750,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                 var carouselItemIndex = self.deleteditemIndexes.first?.toInt() // Getting first item from the array
                 self.deleteditemIndexes.removeAtIndex(0) // Delete it
                 var messageID = self.messages[carouselItemIndex!].getID() // Get the messageID for JSON array
-                
+                println(messageID)
                 var url = "http://84.107.107.169:8080/VisioWebApp/API/chat/confirm?messageId=" + String(messageID)
                 
                 DataManager.checkMessageRead(url){(codeFromJSON) in

@@ -44,7 +44,7 @@ class DataManager{
                                     
                             
                             // Setting the message ID
-                            var messageID: String = messages["messageId"].stringValue
+                            var messageID: String = messages["messageID"].stringValue
                             newMessage.setID(messageID)
                             
                             // Setting the name of the user that send the message
