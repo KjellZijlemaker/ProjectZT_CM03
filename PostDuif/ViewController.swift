@@ -61,18 +61,19 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
     var currentIndex: Int = 0
     var passToLogin: Bool = false
     
+    let defaults = NSUserDefaults.standardUserDefaults()
     
     //# MARK: - Outlets for displaying labels / carousel
     @IBOutlet var carousel : iCarousel!
     @IBOutlet weak var categoryMessage: UILabel!
+    @IBOutlet weak var logoutButton: UIButton!
     
     
     override func awakeFromNib() {
         // Getting the tokens
-        self.token = keychain.get("token")
-        self.refreshToken = keychain.get("refreshToken")
+        self.token =  self.defaults.stringForKey("token")//keychain.get("token")
+        self.refreshToken = self.defaults.stringForKey("refreshToken")//keychain.get("refreshToken")
         
-        println(self.token)
         
         // If both tokens are empty, user has to login
         if(token == nil || refreshToken == nil){
@@ -102,10 +103,18 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
         self.carousel.delegate = self
         self.carousel.type = .Custom
         self.carousel.scrollEnabled = false
-        
-        
+
+        let logoutButton   = UIButton.buttonWithType(UIButtonType.System) as UIButton
+        logoutButton.frame = CGRectMake(20, 20, 100, 100)
+        logoutButton.userInteractionEnabled = true
+
+        self.view.addSubview(logoutButton)
+        let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: "logoutButtonAction:")
+        logoutButton.addGestureRecognizer(longPressRecognizer)
     }
+
     
+    // Only when the keys are empty!!
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(false)
         
@@ -195,6 +204,24 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
         }
     }
     
+    func logoutButtonAction(sender: UILongPressGestureRecognizer) {
+        if sender.state == UIGestureRecognizerState.Began
+        {
+            self.speech.stopSpeech()
+            //self.keychain.removeAll()
+            self.defaults.removeObjectForKey("token")
+            self.defaults.removeObjectForKey("refreshToken")
+            self.performSegueWithIdentifier("showLogin", sender: self)
+            
+            // Dismiss the controller
+            self.presentingViewController?.dismissViewControllerAnimated(true, completion: {
+                let secondPresentingVC = self.presentingViewController?.presentingViewController;
+                secondPresentingVC?.dismissViewControllerAnimated(true, completion: {});
+                
+            });
+        }
+        
+    }
     
     //# MARK: - View inits
     //=================================================================================================
@@ -209,11 +236,15 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
         self.txtField.borderStyle = UITextBorderStyle.None
         self.txtField.text = String(self.totalNewItems)
         
+        let tapNewMessage = UITapGestureRecognizer(target: self, action:Selector("newMessageTapped"))
+        tapNewMessage.numberOfTapsRequired = 2
+
         // Making dot animation for new item
         self.dots = RSDotsView(frame: CGRectMake(870, -30, 300, 300))
-        self.view.addSubview(self.dots)
         self.dots.dotsColor = UIColor.yellowColor()
         self.dots.hidden = true
+        self.dots.addGestureRecognizer(tapNewMessage)
+        self.view.addSubview(self.dots)
         
         
         //# MARK: - Gesture methods
@@ -245,11 +276,8 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
         self.view.addGestureRecognizer(singleTap)
         
         
-        let tapNewMessage = UITapGestureRecognizer(target: self, action:Selector("newMessageTapped"))
-        tapNewMessage.numberOfTapsRequired = 2
-        //self.dots.addGestureRecognizer(tapNewMessage)
-        self.dots.addGestureRecognizer(tapNewMessage)
-        self.txtField.addGestureRecognizer(tapNewMessage)
+        
+
         
         
     }
@@ -283,7 +311,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
             
             // BUG: carousel sometimes will begin at -1?? No item is displayed then. This is workaround
             if(index == 0){
-                self.carousel.scrollToItemAtIndex(0, animated: true)
+               // self.carousel.scrollToItemAtIndex(0, animated: true)
             }
             
             //don't do anything specific to the index within

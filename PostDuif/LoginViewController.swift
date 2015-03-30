@@ -18,6 +18,7 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var loginPincode3: UITextField!
     var token: Token!
     var keychain = Keychain(service: "com.visio.postduif")
+    let defaults = NSUserDefaults.standardUserDefaults()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -72,10 +73,11 @@ class LoginViewController: UIViewController {
                 if(token.getStatus() == "success"){
                     MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
                     
-                    self.keychain.set(self.token.getToken(), key: "token")
-                    self.keychain.set(self.token.getRefreshToken(), key: "refreshToken")
+                    self.defaults.setObject(self.token.getToken(), forKey: "token")
+                    self.defaults.setObject(self.token.getRefreshToken(), forKey: "refreshToken")
+//                    self.keychain.set(self.token.getToken(), key: "token")
+//                    self.keychain.set(self.token.getRefreshToken(), key: "refreshToken")
 
-                    println(self.keychain.get("token"))
                     // For performing the seque inside the storyboard
                     self.performSegueWithIdentifier("loginSucceed", sender: self)
                 }
@@ -100,7 +102,15 @@ class LoginViewController: UIViewController {
     // Preparing the seque and send data with ViewController
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
         if segue.identifier == "loginSucceed"{
+            // Dismiss the controller
+            self.presentingViewController?.dismissViewControllerAnimated(true, completion: {
+                let secondPresentingVC = self.presentingViewController?.presentingViewController;
+                secondPresentingVC?.dismissViewControllerAnimated(true, completion: {});
+                
+            });
+            
             let vc = segue.destinationViewController as ViewController
+            
             //vc.keychain = self.keychain // Sending keyChain
         }
     }
