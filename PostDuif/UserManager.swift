@@ -33,14 +33,20 @@ class UserManager{
                     }
                     
                     // Make new JSON array
-                        let tokenFromArray = jsonObj["data"]["token"].string
-                        let refreshTokenFromArray = jsonObj["data"]["refreshToken"].string
-                        let expireTokenDateFromArray = jsonObj["data"]["expireTokenDate"].string
-                        
-                            token.setExpireTokenDate(expireTokenDateFromArray!)
-                            token.setRefreshToken(refreshTokenFromArray!)
-                            token.setToken(tokenFromArray!)
-                        
+                    if let tokenFromArray = jsonObj["data"]["token"].string{
+                        token.setToken(tokenFromArray)
+
+                    }
+                    if let refreshTokenFromArray = jsonObj["data"]["refreshToken"].string{
+                        token.setRefreshToken(refreshTokenFromArray)
+
+                    }
+                    if let expireTokenDateFromArray = jsonObj["data"]["expireTokenDate"].string{
+                        token.setExpireTokenDate(expireTokenDateFromArray)
+
+                    }
+                    
+                    
                     
                 }
                 

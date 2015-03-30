@@ -54,6 +54,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
     var keychain = Keychain(service: "com.visio.postduif")
     var token: String!
     var refreshToken: String!
+    var isRefreshToken: Bool = true
     var userSettings: [Settings] = [] // For getting all the settings from user
     
     // For passing on to the other ViewControllers
@@ -66,19 +67,12 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
     @IBOutlet weak var categoryMessage: UILabel!
     
     
-    override func viewDidLoad()
-    {
-        super.viewDidLoad()
-        
-        // Setting inital settings for swipe gestures
-        self.carousel.userInteractionEnabled = true
-        self.carousel.delegate = self
-        self.carousel.type = .Custom
-        self.carousel.scrollEnabled = false
-        
+    override func awakeFromNib() {
         // Getting the tokens
         self.token = keychain.get("token")
         self.refreshToken = keychain.get("refreshToken")
+        
+        println(self.token)
         
         // If both tokens are empty, user has to login
         if(token == nil || refreshToken == nil){
@@ -94,8 +88,21 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
             
             // Getting the app data and fill it in the global array
             getAppData(token!)
-    
+            
         }
+
+    }
+    
+    override func viewDidLoad()
+    {
+        super.viewDidLoad()
+        
+        // Setting inital settings for swipe gestures
+        self.carousel.userInteractionEnabled = true
+        self.carousel.delegate = self
+        self.carousel.type = .Custom
+        self.carousel.scrollEnabled = false
+        
         
     }
     
@@ -192,7 +199,6 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
     //# MARK: - View inits
     //=================================================================================================
     func setupViewController(){
-        var timer = NSTimer.scheduledTimerWithTimeInterval(10.0, target:self, selector: Selector("appendAppData"), userInfo: nil, repeats: true)
         
         // Making textfield for new items
         self.txtField = UITextField(frame: CGRect(x: 43, y: 130, width: 15.00, height: 30.00));
@@ -208,10 +214,6 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
         self.view.addSubview(self.dots)
         self.dots.dotsColor = UIColor.yellowColor()
         self.dots.hidden = true
-        
-        NSNotificationCenter.defaultCenter().addObserver(self, selector:"totalNewItemsToForeground", name:
-            UIApplicationWillEnterForegroundNotification, object: nil)
-        
         
         
         //# MARK: - Gesture methods
@@ -248,8 +250,23 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
         //self.dots.addGestureRecognizer(tapNewMessage)
         self.dots.addGestureRecognizer(tapNewMessage)
         self.txtField.addGestureRecognizer(tapNewMessage)
+        
+        
     }
     
+    //# MARK: - Setting up the backround and foreground notifications
+    func setupBackgroundForegroundInit(){
+        NSNotificationCenter.defaultCenter().addObserver(self, selector:"totalNewItemsToForeground", name:
+            UIApplicationWillEnterForegroundNotification, object: nil)
+    }
+    
+    
+    //# MARK: - Setting up the timer(s)
+    func setupTimerInit(){
+        // Setup the viewController with Carousel
+        var timer = NSTimer.scheduledTimerWithTimeInterval(10.0, target:self, selector: Selector("appendAppData"), userInfo: nil, repeats: true)
+
+    }
     
     
     //# MARK: - Carousel methods
@@ -478,7 +495,6 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                 // If first message has returncode of 200, the token is correct and messages are fetched
                 if(messages[0].getReturnCode() == "200"){
                     
-                    
                     // Iterate through all possible values
                     for r in 0...messages.count-1{
                         self.carousel.insertItemAtIndex(r, animated: true)
@@ -493,17 +509,25 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                     
                     // If the code is something else, the token is incorrect. Login again
                 else{
-                    println("NOT correct")
+                    if(self.isRefreshToken){
+                        
+                        self.isRefreshToken = false
+                        self.getAppData("http://84.107.107.169:8080/VisioWebApp/API/allMessages?tokenKey=" + self.refreshToken)
+                    }
+                    else{
+                        println("NOT correct")
+                        
+                        MBProgressHUD.hideAllHUDsForView(self.view, animated: true) // Close notification
+                        
+                        self.performSegueWithIdentifier("showLogin", sender: self)
+                        
+                        // Dismiss the controller
+                        self.presentingViewController?.dismissViewControllerAnimated(true, completion: {
+                            let secondPresentingVC = self.presentingViewController?.presentingViewController;
+                            secondPresentingVC?.dismissViewControllerAnimated(true, completion: {});
+                        });
+                    }
                     
-                    MBProgressHUD.hideAllHUDsForView(self.view, animated: true) // Close notification
-                    
-                    self.performSegueWithIdentifier("showLogin", sender: self)
-
-                    // Dismiss the controller
-                    self.presentingViewController?.dismissViewControllerAnimated(true, completion: {
-                        let secondPresentingVC = self.presentingViewController?.presentingViewController;
-                        secondPresentingVC?.dismissViewControllerAnimated(true, completion: {});
-                    });
                 }
             }
             else{
@@ -513,8 +537,10 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
             
             if(viewMayLoad){
                 
-                // Setup the viewController with Carousel
-               self.setupViewController()
+                // Setting up the views and other misc
+                self.setupViewController()
+                self.setupBackgroundForegroundInit()
+                self.setupTimerInit()
             }
         }
     }
@@ -583,6 +609,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
     //=================================================================================================
     func totalNewItemsToForeground(){
         if(totalNewItems >= 0){
+            self.speech.stopSpeech()
             self.totalNewItemsToSpeech()
             self.carousel.scrollToItemAtIndex(self.messages.count-1-self.totalNewItems, animated: true) // Scroll to the section of last items
         }
@@ -700,64 +727,6 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
             }
         }
     }
-    
-    
-    /* When getting appended data from the datamanager
-    func appendAppData(){
-    
-    var url = "http://84.107.107.169:8080/VisioWebApp/notificationTest"
-    
-    DataManager.appendMessages(url, items: self.items){(messages) in
-    
-    // Iterate through all possible values
-    for r in 0...messages.count{
-    if(!messages.isEmpty){
-    self.items.append(messages[0])
-    self.carousel.insertItemAtIndex(r, animated: true)
-    println("YAY")
-    }
-    
-    }
-    
-    }
-    
-    }*/
-    
-    
-    /* Function for activating when view will dissapear
-    override func viewWillDisappear(animated: Bool) {
-    var oldItems: [Message] = self.items
-    
-    // URL for the JSON
-    var url = "https://itunes.apple.com/us/rss/topgrossingipadapplications/limit=3/json"
-    
-    // Getting the app data and fill it in the global array
-    getAppData(url)
-    
-    println(oldItems)
-    println(items)
-    
-    for i in 0...items.count-1{
-    if(oldItems[i].getName() != items[i].getName()){
-    println("Dat is een nieuwe!")
-    }
-    }
-    
-    }*/
-    
-    
-    /* For calling View programmaticlly
-    let storyboard = UIStoryboard(name: "Main", bundle: nil)
-    let vc = storyboard.instantiateViewControllerWithIdentifier("ContentView") as UIViewController
-    self.presentViewController(vc, animated: true, completion: nil)
-    */
-    
-    /* For making an Alert dialog with OK button
-    var alert = UIAlertController(title:  "The index", message: String(index), preferredStyle: UIAlertControllerStyle.Alert)
-    alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
-    self.presentViewController(alert, animated: true, completion: nil)
-    */
-    
 }
 
 

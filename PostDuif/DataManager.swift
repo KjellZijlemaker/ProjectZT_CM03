@@ -22,14 +22,11 @@ class DataManager{
                 // Making the JSON object from the JSON
                 var jsonObj = JSON(json!)
                 
-                
-                
-                
-                
                 var messageArray = [Message]()
                 
+                if jsonObj["code"].string == "200"{
                 
-                
+                    
                 // Making new array
                 if let dataArray = jsonObj["data"]["entry"].array{
                     
@@ -40,6 +37,11 @@ class DataManager{
                             
                             // Making new Message object
                             var newMessage = Message()
+                            
+                            
+                            var returnCode = jsonObj["code"].stringValue
+                            newMessage.setReturnCode(returnCode)
+                                    
                             
                             // Setting the message ID
                             var messageID: String = messages["messageId"].stringValue
@@ -61,15 +63,26 @@ class DataManager{
                             messageArray.append(newMessage)
                         }
                     }
-                    if let returnCode = jsonObj["code"].string{
-                        messageArray[0].setReturnCode(returnCode)
+                    
                     }
-                    
-                    
                 }
-
-                // Give the array back to the main Thread
-                completionHandler(response: messageArray)
+                else{
+                    if let returnCode = jsonObj["code"].string{
+                        var newMessage = Message()
+                        newMessage.setReturnCode(returnCode)
+                        messageArray.append(newMessage)
+                    }
+                }
+                
+                
+                
+                
+                
+                    // Give the array back to the main Thread
+                    completionHandler(response: messageArray)
+                
+                
+                
                 
                 
                     
@@ -89,7 +102,11 @@ class DataManager{
                 }
             }
         
+        
     }
+    
+    
+    
     
     class func getUserSettings(apiEndPoint: String, completionHandler: (response: [Settings]) -> ()) {
         // Making GET request to the URL
