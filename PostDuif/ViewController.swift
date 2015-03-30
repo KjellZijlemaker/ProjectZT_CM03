@@ -98,6 +98,8 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
     {
         super.viewDidLoad()
         
+        
+        
         // Setting inital settings for swipe gestures
         self.carousel.userInteractionEnabled = true
         self.carousel.delegate = self
@@ -105,7 +107,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
         self.carousel.scrollEnabled = false
 
         let logoutButton   = UIButton.buttonWithType(UIButtonType.System) as UIButton
-        logoutButton.frame = CGRectMake(20, 20, 100, 100)
+        logoutButton.frame = CGRectMake(20, 20, 130, 130)
         logoutButton.userInteractionEnabled = true
 
         self.view.addSubview(logoutButton)
@@ -205,13 +207,13 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
     }
     
     func logoutButtonAction(sender: UILongPressGestureRecognizer) {
+        self.speech.stopSpeech()
         if sender.state == UIGestureRecognizerState.Began
         {
-            self.speech.stopSpeech()
             //self.keychain.removeAll()
             self.defaults.removeObjectForKey("token")
             self.defaults.removeObjectForKey("refreshToken")
-            self.performSegueWithIdentifier("showLogin", sender: self)
+            //self.performSegueWithIdentifier("showLogin", sender: self)
             
             // Dismiss the controller
             self.presentingViewController?.dismissViewControllerAnimated(true, completion: {

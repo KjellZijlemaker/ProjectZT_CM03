@@ -101,18 +101,16 @@ class LoginViewController: UIViewController {
     //=================================================================================================
     // Preparing the seque and send data with ViewController
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
-        if segue.identifier == "loginSucceed"{
-            // Dismiss the controller
-            self.presentingViewController?.dismissViewControllerAnimated(true, completion: {
-                let secondPresentingVC = self.presentingViewController?.presentingViewController;
-                secondPresentingVC?.dismissViewControllerAnimated(true, completion: {});
-                
-            });
-            
+        self.loginEmail.text = ""
+        self.loginPincode1.text = ""
+        self.loginPincode2.text = ""
+        self.loginPincode3.text = ""
+        if segue.identifier == "loginSucceed"{            
             let vc = segue.destinationViewController as ViewController
             
             //vc.keychain = self.keychain // Sending keyChain
         }
+        
     }
 
 }

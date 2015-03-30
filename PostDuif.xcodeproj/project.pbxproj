@@ -14,6 +14,7 @@
 		211A74191AC5856C004517E8 /* SIAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 211A74151AC5856C004517E8 /* SIAlertView.m */; };
 		211A741A1AC5856C004517E8 /* UIWindow+SIUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 211A74171AC5856C004517E8 /* UIWindow+SIUtils.m */; };
 		211E24591AC4325E00ADF518 /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 211E24581AC4325E00ADF518 /* UserManager.swift */; };
+		212750181AC979FC005D6A7F /* SoundManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212750171AC979FC005D6A7F /* SoundManager.swift */; };
 		212936381AAD99370061BE6A /* Messages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212936371AAD99370061BE6A /* Messages.swift */; };
 		212AE90E1AA9CE4D000255E8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212AE90D1AA9CE4D000255E8 /* AppDelegate.swift */; };
 		212AE9101AA9CE4D000255E8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212AE90F1AA9CE4D000255E8 /* ViewController.swift */; };
@@ -56,6 +57,7 @@
 		211A74161AC5856C004517E8 /* UIWindow+SIUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIWindow+SIUtils.h"; sourceTree = "<group>"; };
 		211A74171AC5856C004517E8 /* UIWindow+SIUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIWindow+SIUtils.m"; sourceTree = "<group>"; };
 		211E24581AC4325E00ADF518 /* UserManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
+		212750171AC979FC005D6A7F /* SoundManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SoundManager.swift; sourceTree = "<group>"; };
 		212936371AAD99370061BE6A /* Messages.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Messages.swift; sourceTree = "<group>"; };
 		212AE9081AA9CE4D000255E8 /* PostDuif.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PostDuif.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		212AE90C1AA9CE4D000255E8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -238,6 +240,7 @@
 				21CF744E1AADB8260047ABC3 /* DataManager.swift */,
 				2186417D1AC31A430084AE46 /* SpeechManager.swift */,
 				211E24581AC4325E00ADF518 /* UserManager.swift */,
+				212750171AC979FC005D6A7F /* SoundManager.swift */,
 			);
 			name = Managers;
 			sourceTree = "<group>";
@@ -317,6 +320,11 @@
 				TargetAttributes = {
 					212AE9071AA9CE4D000255E8 = {
 						CreatedOnToolsVersion = 6.1.1;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
 					};
 					212AE91C1AA9CE4D000255E8 = {
 						CreatedOnToolsVersion = 6.1.1;
@@ -378,6 +386,7 @@
 				21DF2C011AADC0C5007921E4 /* SwiftyJSON.swift in Sources */,
 				2131ECA51AB9801B005F844A /* Settings.swift in Sources */,
 				212AE9101AA9CE4D000255E8 /* ViewController.swift in Sources */,
+				212750181AC979FC005D6A7F /* SoundManager.swift in Sources */,
 				211A74191AC5856C004517E8 /* SIAlertView.m in Sources */,
 				214C55DA1AA9E71200555A56 /* MessageContentViewController.swift in Sources */,
 				2186417E1AC31A430084AE46 /* SpeechManager.swift in Sources */,
