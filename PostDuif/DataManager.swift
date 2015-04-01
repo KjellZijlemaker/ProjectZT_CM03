@@ -37,7 +37,6 @@ class DataManager{
                         var hasRead: String = messages["hasRead"].stringValue
                         if(hasRead != "true"){
                             var type = jsonObj["type"].stringValue
-                            if type == "1"{
                                 
                             // Making new Message object
                             var newMessage = Message()
@@ -65,11 +64,7 @@ class DataManager{
                             
                             // Append the app names
                             messageArray.append(newMessage)
-                            }
                             
-                            else{
-                                //TODO: Put news object here
-                            }
                         }
                     }
                     
