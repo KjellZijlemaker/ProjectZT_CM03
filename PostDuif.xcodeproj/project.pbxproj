@@ -30,6 +30,7 @@
 		214C55DA1AA9E71200555A56 /* MessageContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214C55D91AA9E71200555A56 /* MessageContentViewController.swift */; };
 		2163769B1AC34A77004056AC /* Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2163769A1AC34A77004056AC /* Protocol.swift */; };
 		2186417E1AC31A430084AE46 /* SpeechManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2186417D1AC31A430084AE46 /* SpeechManager.swift */; };
+		218C8C421ACAA9C10023321B /* Roekoe.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 218C8C401ACAA0130023321B /* Roekoe.m4a */; };
 		219F66DA1ABC288900EC3194 /* RSDotsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 219F66D91ABC288900EC3194 /* RSDotsView.swift */; };
 		21CF744F1AADB8260047ABC3 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21CF744E1AADB8260047ABC3 /* DataManager.swift */; };
 		21DF2C001AADC0C5007921E4 /* Alamofire.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DF2BFC1AADC0C5007921E4 /* Alamofire.swift */; };
@@ -80,6 +81,7 @@
 		214C55D91AA9E71200555A56 /* MessageContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageContentViewController.swift; sourceTree = "<group>"; };
 		2163769A1AC34A77004056AC /* Protocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Protocol.swift; sourceTree = "<group>"; };
 		2186417D1AC31A430084AE46 /* SpeechManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpeechManager.swift; sourceTree = "<group>"; };
+		218C8C401ACAA0130023321B /* Roekoe.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = Roekoe.m4a; sourceTree = "<group>"; };
 		219F66D91ABC288900EC3194 /* RSDotsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RSDotsView.swift; sourceTree = "<group>"; };
 		21CF744E1AADB8260047ABC3 /* DataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		21DF2BFB1AADC0C5007921E4 /* Alamofire.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Alamofire.h; sourceTree = "<group>"; };
@@ -155,6 +157,7 @@
 		212AE90A1AA9CE4D000255E8 /* PostDuif */ = {
 			isa = PBXGroup;
 			children = (
+				218C8C411ACAA0350023321B /* Sounds */,
 				212AE90D1AA9CE4D000255E8 /* AppDelegate.swift */,
 				2186417F1AC328840084AE46 /* Controllers */,
 				218641801AC328EA0084AE46 /* Models */,
@@ -243,6 +246,14 @@
 				212750171AC979FC005D6A7F /* SoundManager.swift */,
 			);
 			name = Managers;
+			sourceTree = "<group>";
+		};
+		218C8C411ACAA0350023321B /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				218C8C401ACAA0130023321B /* Roekoe.m4a */,
+			);
+			name = Sounds;
 			sourceTree = "<group>";
 		};
 		219F66D81ABC288900EC3194 /* RSDotsView */ = {
@@ -356,6 +367,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				218C8C421ACAA9C10023321B /* Roekoe.m4a in Resources */,
 				212AE9131AA9CE4D000255E8 /* Main.storyboard in Resources */,
 				211A74181AC5856C004517E8 /* SIAlertView.bundle in Resources */,
 				212AE9181AA9CE4D000255E8 /* LaunchScreen.xib in Resources */,

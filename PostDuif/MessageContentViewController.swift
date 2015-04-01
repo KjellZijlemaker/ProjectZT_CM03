@@ -11,9 +11,10 @@ import UIKit
 class MessageContentViewController: UIViewController {
     var message:Message!
     var speech:SpeechManager = SpeechManager()
-    var delegate: deleteMessageItem!
+    var deletingMessage: deleteMessageItem!
+    var openendMessage: messageOpenend!
     var carouselID: String!
-    var speechEnabled: Bool = false
+    var speechEnabled: Bool = true
     
     @IBOutlet weak var messageTitleText: UITextView!
     @IBOutlet weak var messageText: UITextView!
@@ -62,7 +63,8 @@ class MessageContentViewController: UIViewController {
             if(self.speechEnabled){
                 self.speech.speechString("U heeft het bericht gelezen") //Little speech for user
             }
-            self.delegate.executeDeletionTimer(self.carouselID)
+            self.openendMessage.messageIsOpenend = false
+            self.deletingMessage.executeDeletionTimer(self.carouselID)
         });
     }
     

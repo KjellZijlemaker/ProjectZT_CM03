@@ -107,7 +107,6 @@ class LoginViewController: UIViewController {
         self.loginPincode3.text = ""
         if segue.identifier == "loginSucceed"{            
             let vc = segue.destinationViewController as ViewController
-            
             //vc.keychain = self.keychain // Sending keyChain
         }
         

@@ -11,3 +11,10 @@ import Foundation
 protocol deleteMessageItem {
     func executeDeletionTimer(String)
 }
+
+protocol messageOpenend{
+    var messageIsOpenend: Bool{
+        get set
+    }
+}
+

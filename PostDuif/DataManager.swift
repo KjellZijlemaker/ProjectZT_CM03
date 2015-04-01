@@ -15,10 +15,12 @@ class DataManager{
         
         // Making GET request to the URL
         request(.GET, apiEndPoint).responseJSON { (request, response, json, error) in
+             println(apiEndPoint)
+            println(error)
             
             // Making sure if the JSON is not empty
             if (json != nil) {
-                
+               
                 // Making the JSON object from the JSON
                 var jsonObj = JSON(json!)
                 
@@ -34,7 +36,9 @@ class DataManager{
                     for messages in dataArray{
                         var hasRead: String = messages["hasRead"].stringValue
                         if(hasRead != "true"){
-                            
+                            var type = jsonObj["type"].stringValue
+                            if type == "1"{
+                                
                             // Making new Message object
                             var newMessage = Message()
                             
@@ -44,7 +48,7 @@ class DataManager{
                                     
                             
                             // Setting the message ID
-                            var messageID: String = messages["messageID"].stringValue
+                            var messageID: String = messages["messageId"].stringValue
                             newMessage.setID(messageID)
                             
                             // Setting the name of the user that send the message
@@ -61,6 +65,11 @@ class DataManager{
                             
                             // Append the app names
                             messageArray.append(newMessage)
+                            }
+                            
+                            else{
+                                //TODO: Put news object here
+                            }
                         }
                     }
                     
@@ -72,18 +81,10 @@ class DataManager{
                         newMessage.setReturnCode(returnCode)
                         messageArray.append(newMessage)
                     }
-                }
-                
-                
-                
-                
+                }           
                 
                     // Give the array back to the main Thread
                     completionHandler(response: messageArray)
-                
-                
-                
-                
                 
                     
                     /* Code snippet for getting single item out of JSON array
@@ -99,6 +100,14 @@ class DataManager{
                     // If there is an error.....
                 else if (error != nil){
                     println("error!")
+                // Making new Message object
+                var newMessage = Message()
+                newMessage.setReturnCode("403")
+                var messageArray = [Message]()
+                messageArray.append(newMessage)
+                
+                // Give the array back to the main Thread
+                completionHandler(response: messageArray)
                 }
             }
         

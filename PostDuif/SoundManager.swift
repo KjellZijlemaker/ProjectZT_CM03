@@ -9,21 +9,28 @@
 import Foundation
 import AVFoundation
 
-class Sound{
-var beepSound: NSURL!
+class SoundManager{
+    var audioSound: NSURL!
+    var audioPlayer:AVAudioPlayer!
     
     init(resourcePath: String, fileType: String){
-        beepSound = NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource(resourcePath, ofType: fileType)!)
+        self.audioSound = NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource(resourcePath, ofType: fileType)!)
     }
     
     func stopSound(){
-        
+        self.audioPlayer.stop()
     }
+    
     func playSound(){
-//        self.beepPlayer = AVAudioPlayer(contentsOfURL: beepSound, error: nil)
-//        self.beepPlayer.prepareToPlay()
-//        self.beepPlayer.play()
+        self.audioPlayer = AVAudioPlayer(contentsOfURL: audioSound, error: nil)
+        self.audioPlayer.prepareToPlay()
+        self.audioPlayer.volume = 1.0
+        self.audioPlayer.play()
     }
 
+    func soundIsPlaying() -> Bool{
+        return self.audioPlayer.playing
+    }
+    
 }
 
