@@ -16,6 +16,7 @@ class Message{
     var category: String
     var returnCode: String
     var fromUser: String
+    var type: String
 
     init(){
         self.id = ""
@@ -24,6 +25,7 @@ class Message{
         self.category = ""
         self.returnCode = ""
         self.fromUser = ""
+        self.type = ""
     }
     
     func setID(id: String){
@@ -72,6 +74,14 @@ class Message{
     
     func getFromUser() -> String{
         return self.fromUser
+    }
+    
+    func setType(type: String){
+        self.type = type
+    }
+    
+    func getType() -> String{
+        return self.type
     }
     
 }

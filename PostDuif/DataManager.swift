@@ -34,38 +34,70 @@ class DataManager{
                     
                     
                     for messages in dataArray{
-                        var hasRead: String = messages["hasRead"].stringValue
-                        if(hasRead != "true"){
-                            var type = jsonObj["type"].stringValue
+                        var type: String = messages["type"].stringValue
+                        if(type == "1"){
+                            var hasRead: String = messages["hasRead"].stringValue
+                            if(hasRead != "true"){
                                 
+                                // Making new Message object
+                                var newMessage = Message()
+                                
+                                // Setting returncode
+                                var returnCode = jsonObj["code"].stringValue
+                                newMessage.setReturnCode(returnCode)
+                                
+                                // Setting returncode
+                                newMessage.setType(type)
+                                
+                                // Setting the message ID
+                                var messageID: String = messages["messageId"].stringValue
+                                newMessage.setID(messageID)
+                                
+                                // Setting the name of the user that send the message
+                                var fromUser: String = messages["fromUser"].stringValue
+                                newMessage.setFromUser(fromUser)
+                                
+                                // Set name inside the object
+                                var messageName: String = messages["subject"].stringValue
+                                newMessage.setSubject(messageName)
+                                
+                                // Set the website for the object
+                                var messageContent: String = messages["message"].stringValue
+                                newMessage.setContent(messageContent)
+                                
+                                // Append the app names
+                                messageArray.append(newMessage)
+                                
+                            }
+
+                        }
+                        else if (type == "2"){
                             // Making new Message object
                             var newMessage = Message()
                             
-                            
+                            // Setting returncode
                             var returnCode = jsonObj["code"].stringValue
                             newMessage.setReturnCode(returnCode)
-                                    
+                            
+                            // Setting type
+                            newMessage.setType(type)
                             
                             // Setting the message ID
-                            var messageID: String = messages["messageId"].stringValue
-                            newMessage.setID(messageID)
-                            
-                            // Setting the name of the user that send the message
-                            var fromUser: String = messages["fromUser"].stringValue
-                            newMessage.setFromUser(fromUser)
+                            var newsFeedID: String = messages["NewsFeedItemId"].stringValue
+                            newMessage.setID(newsFeedID)
                             
                             // Set name inside the object
-                            var messageName: String = messages["subject"].stringValue
-                            newMessage.setSubject(messageName)
+                            var newsTitle: String = messages["Title"].stringValue
+                            newMessage.setSubject(newsTitle)
                             
                             // Set the website for the object
-                            var messageContent: String = messages["message"].stringValue
-                            newMessage.setContent(messageContent)
+                            var newsContent: String = messages["content"].stringValue
+                            newMessage.setContent(newsContent)
                             
                             // Append the app names
                             messageArray.append(newMessage)
-                            
                         }
+                        
                     }
                     
                     }
