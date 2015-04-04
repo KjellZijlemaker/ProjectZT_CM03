@@ -538,34 +538,38 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
         
         // Will execute, only when not appending
         if(!isAppending){
-            if(self.speechEnabled){
-                
-                var textToSend:[String] = [] // Array for sending message
-                
-                // Check if the item is message or newsitem
-                if(self.messages[self.carousel.currentItemIndex].getType() == "1"){
+            
+            if(self.carousel.currentItemIndex != 0){
+                if(self.speechEnabled){
                     
+                    var textToSend:[String] = [] // Array for sending message
                     
-                    textToSend.append(String(self.carousel.currentItemIndex+1) + "e " + " Ongelezen bericht")
-                    textToSend.append("Onderwerp: " + self.messages[self.carousel.currentItemIndex].getSubject())
-                    textToSend.append("Tik op het scherm om het bericht te openen")
-                    
-                    
-                    //TODO: Check JSON if user has speech in his settings
-                    self.speech.speechArray(textToSend)
-                }
-                else{
-                    var textToSend:[String] = []
-                    
-                    textToSend.append(String(self.carousel.currentItemIndex+1) + "e " + " Ongelezen nieuwsbericht")
-                    textToSend.append("Titel: " + self.messages[self.carousel.currentItemIndex].getSubject())
-                    textToSend.append("Tik op het scherm om het nieuwsbericht te openen")
-                    
-                    
-                    //TODO: Check JSON if user has speech in his settings
-                    self.speech.speechArray(textToSend)
+                    // Check if the item is message or newsitem
+                    if(self.messages[self.carousel.currentItemIndex].getType() == "1"){
+                        
+                        var currentItem = self.messagesCount - self.messagesCount + self.carousel.currentItemIndex + 1
+
+                        
+                        textToSend.append(String(currentItem) + "e " + " Ongelezen bericht")
+                        textToSend.append("Onderwerp: " + self.messages[self.carousel.currentItemIndex].getSubject())
+                        textToSend.append("Tik op het scherm om het bericht te openen")
+                        
+                        self.speech.speechArray(textToSend)
+                    }
+                        
+                    else{
+                        
+                        var currentItem = self.carousel.currentItemIndex - messagesCount + 1
+                        
+                        textToSend.append(String(currentItem) + "e " + " Ongelezen nieuwsbericht")
+                        textToSend.append("Titel: " + self.messages[self.carousel.currentItemIndex].getSubject())
+                        textToSend.append("Tik op het scherm om het nieuwsbericht te openen")
+                        
+                        self.speech.speechArray(textToSend)
+                    }
                 }
             }
+            
         }
         self.carousel.reloadItemAtIndex(self.carousel.currentItemIndex, animated: false)
     }
@@ -669,14 +673,6 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                     for r in 0...messages.count-1{
                         self.carousel.insertItemAtIndex(r, animated: true) // Insert items at last index
                         
-                        // Add the amount of messages or news
-                        if(self.messages[r].type == "1"){
-                            self.messagesCount++
-                        }
-                        else{
-                            self.newsCount++
-                        }
-                        
                         if(r == messages.count-1){
                             MBProgressHUD.hideAllHUDsForView(self.view, animated: true) // Close notification
                         }
@@ -775,6 +771,15 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                             // If the index is null, it means a new element inside the array has been added
                             // AKA, a new item has been added
                             if(self.messages.getArrayIndex(r) == nil){
+                                
+                                // Add the amount of messages or news
+                                if(self.messages[r].type == "1"){
+                                    self.messagesCount++
+                                }
+                                else{
+                                    self.newsCount++
+                                }
+                                
                                 // If the animation is not already active, start it
                                 if(!self.dots.isAnimating()){
                                     self.dots.startAnimating()
@@ -824,6 +829,15 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                     // If the index is null, it means a new element inside the array has been added
                     // AKA, a new item has been added
                     if(self.messages.getArrayIndex(r) == nil){
+                        
+                        // Add the amount of messages or news
+                        if(self.messages[r].type == "1"){
+                            self.messagesCount++
+                        }
+                        else{
+                            self.newsCount++
+                        }
+                        
                         self.itemAlreadyChecked = true
                         //self.totalNewItems++ // Append the number of items
                         self.totalNewItemsRealtime++ // Append realtime for checking in carousel
