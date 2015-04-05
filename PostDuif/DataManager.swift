@@ -141,9 +141,7 @@ class DataManager{
         
     }
     
-    
-    
-    
+
     class func getUserSettings(apiEndPoint: String, completionHandler: (response: [Settings]) -> ()) {
         // Making GET request to the URL
         request(.GET, apiEndPoint).responseJSON { (request, response, json, error) in

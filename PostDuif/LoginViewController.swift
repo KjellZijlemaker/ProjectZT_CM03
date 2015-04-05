@@ -56,7 +56,7 @@ class LoginViewController: UIViewController {
         var pincode = self.loginPincode1.text + "-" + self.loginPincode2.text + "-" + self.loginPincode3.text
         
         // Making URL
-        var url = "http://84.107.107.169:8080/VisioWebApp/API/authentication?email=" + self.loginEmail.text + "&pincode=" + pincode
+        var url = "http://84.107.107.169:8080/VisioWebApp/API/authentication?username=" + self.loginEmail.text + "&pincode=" + pincode
         
         let loadingNotification = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
         loadingNotification.mode = MBProgressHUDMode.Indeterminate
