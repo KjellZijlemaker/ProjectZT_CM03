@@ -513,7 +513,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                 }
                 
                 if(self.speechEnabled){
-                    self.speech.speechString("U heeft geen nieuwe berichten meer")
+                    self.speech.speechString("U heeft geen berichten op dit moment")
                 }
             }
         }
@@ -544,7 +544,8 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
         // Will execute, only when not appending
         if(!isAppending){
             
-            if(self.carousel.currentItemIndex != 0){
+            // Will execute when it's not the first item anymore (for speech)
+            if(!self.firstItem){
                 if(self.speechEnabled){
                     
                     var textToSend:[String] = [] // Array for sending message
@@ -573,10 +574,11 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                         self.speech.speechArray(textToSend)
                     }
                 }
+                self.carousel.reloadItemAtIndex(self.carousel.currentItemIndex, animated: false)
             }
             
         }
-        self.carousel.reloadItemAtIndex(self.carousel.currentItemIndex, animated: false)
+        
     }
     
     func numberOfItemsInCarousel(carousel: iCarousel!) -> Int
@@ -623,7 +625,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
             pictures.insert(UIImage(named:"message.jpg"), atIndex: index)
             
         }
-
+        
     }
     
     
@@ -890,9 +892,9 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                 }
                 
                 if(!self.messages.isEmpty){
-                for i in 0...self.messages.count-1{
-                    idArrayOld.append(self.messages[i].getID().toInt()!)
-                }
+                    for i in 0...self.messages.count-1{
+                        idArrayOld.append(self.messages[i].getID().toInt()!)
+                    }
                 }
                 
                 var set1 = NSMutableSet(array: idArrayOld)
@@ -918,7 +920,17 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                                 self.itemAlreadyChecked = true
                                 self.totalNewItemsRealtime++ // Append realtime for checking in carousel
                                 
-                                if(self.carousel.numberOfItems == 2){
+                                
+                                if(!self.firstItem){ // Will execute if it's not the first item anymore (for speech)
+                                    if(self.totalNewItemsRealtime > 0 || self.carousel.currentItemIndex != 0){
+                                        // tell the total of new items
+                                        if(self.speechEnabled){
+                                            self.newItemsToSpeech(self.totalNewItemsRealtime)
+                                            
+                                        }
+                                    }
+                                }
+                                if(self.carousel.numberOfItems == 0){
                                     self.totalNewItemsRealtime--
                                 }
                                 
@@ -945,23 +957,19 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                                     self.newsCount++
                                 }
                                 
-                                if(self.carousel.currentItemIndex != 0){
-                                    // tell the total of new items
-                                    if(self.speechEnabled){
-                                        self.newItemsToSpeech(self.totalNewItemsRealtime)
-                                        
-                                    }
-                                }
                                 
                                 continue
                             }
                             
-                            self.carousel.reloadData() // If appended succesful, reload carousel
-                            self.speech.stopSpeech()
-                            
                             
                         }
                     }
+                    
+                    
+                    
+                    
+                    //                            self.carousel.reloadData() // If appended succesful, reload carousel
+                    //                            self.speech.stopSpeech()
                 }
                 
             }
@@ -997,7 +1005,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
         
         self.speech.speechString(newMessageSpeechString) // Say the speech
         
-        self.carousel.reloadItemAtIndex(self.messages.count, animated: true) // Reload only the last item
+        //self.carousel.reloadItemAtIndex(self.messages.count, animated: true) // Reload only the last item
         
     }
     
