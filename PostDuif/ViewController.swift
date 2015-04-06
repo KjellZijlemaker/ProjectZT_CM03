@@ -35,6 +35,10 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
     var messagesCount = 0
     var newsCount = 0
     
+    //#MARK: - Counters and booleans for amount of new messages and news
+    var newMessagesCount = 0
+    var newNewsCount = 0
+    
     //# MARK: - Variables for adding new items to the array
     var txtField: UITextField!
     var dots: RSDotsView!
@@ -146,14 +150,9 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
         super.viewDidAppear(false)
         
         if(passToLogin){
-            // Dismiss the controller
-            self.presentingViewController?.dismissViewControllerAnimated(true, completion: {
-                let secondPresentingVC = self.presentingViewController?.presentingViewController;
-                secondPresentingVC?.dismissViewControllerAnimated(true, completion: {});
-                
-            });
-            self.dataTimer.invalidate()
-            self.performSegueWithIdentifier("showLogin", sender: self)
+            
+            // Sending user back to login phase
+            self.goToLogin()
         }
     }
     
@@ -235,19 +234,8 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
         self.speech.stopSpeech()
         if sender.state == UIGestureRecognizerState.Began
         {
-            //self.keychain.removeAll()
-            self.defaults.removeObjectForKey("token")
-            self.defaults.removeObjectForKey("refreshToken")
-            self.dataTimer.invalidate()
-            
-            // Dismiss the controller
-            self.presentingViewController?.dismissViewControllerAnimated(true, completion: {
-                let secondPresentingVC = self.presentingViewController?.presentingViewController;
-                secondPresentingVC?.dismissViewControllerAnimated(true, completion: {});
-                
-            });
-            
-            self.performSegueWithIdentifier("showLogin", sender: self)
+            // Sending user back to login phase
+            self.goToLogin()
             
         }
         
@@ -326,11 +314,6 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
         dataTimer = NSTimer.scheduledTimerWithTimeInterval(10.0, target:self, selector: Selector("appendAppData"), userInfo: nil, repeats: true)
         
     }
-    
-    func scrollToLastIndex(){
-        self.carousel.scrollToItemAtIndex(self.carousel.numberOfItems, animated: true)
-    }
-    
     
     //# MARK: - Carousel methods
     //=================================================================================================
@@ -595,6 +578,10 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
         return value
     }
     
+    
+    //# MARK: - Methods for setting images and category
+    //=================================================================================================
+    
     // Function for setting the images per category
     func setImages(index: Int){
         
@@ -628,7 +615,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
         
     }
     
-    
+    // Removing the image at index
     func removeImage(index:Int ){
         self.pictures.removeAtIndex(index)
         
@@ -683,10 +670,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
         var viewMayLoad: Bool = false
         var url = "http://84.107.107.169:8080/VisioWebApp/API/chat/allMessages?tokenKey=" + tokenKey
         
-        // Notification for getting messages
-        let loadingNotification = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
-        loadingNotification.mode = MBProgressHUDMode.Indeterminate
-        loadingNotification.labelText = "Berichten en nieuws ophalen"
+        self.setLoadingView("Berichten en nieuws ophalen")
         
         DataManager.getMessages(url){(messages) in
             
@@ -724,39 +708,18 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                             println("NOT correct")
                             
                             MBProgressHUD.hideAllHUDsForView(self.view, animated: true) // Close notification
-                            self.dataTimer.invalidate() // Invalidade the timer
-                            self.performSegueWithIdentifier("showLogin", sender: self)
                             
-                            // Dismiss the controller
-                            self.presentingViewController?.dismissViewControllerAnimated(true, completion: {
-                                let secondPresentingVC = self.presentingViewController?.presentingViewController;
-                                secondPresentingVC?.dismissViewControllerAnimated(true, completion: {});
-                            });
+                            // Send user back to login phase
+                            self.goToLogin()
                         }
-                        
                         
                     }
                     else{
-                        var alert:SIAlertView  = SIAlertView(title: "Probleem", andMessage: "Probleem met server!!")
-                        alert.titleFont = UIFont(name: "Verdana", size: 30)
-                        alert.messageFont = UIFont(name: "Verdana", size: 26)
-                        alert.addButtonWithTitle("OK", type: SIAlertViewButtonType.Default, handler: nil)
-                        alert.buttonFont = UIFont(name: "Verdana", size: 30)
-                        alert.transitionStyle = SIAlertViewTransitionStyle.Bounce
-                        
-                        alert.show()
+                        self.setAlertView("Probleem", message: "Probleem met server!!")
                         MBProgressHUD.hideAllHUDsForView(self.view, animated: true) // Close notification
                         
-                        //                        self.performSegueWithIdentifier("showLogin", sender: self)
-                        //
-                        //                        // Dismiss the controller
-                        //                        self.presentingViewController?.dismissViewControllerAnimated(true, completion: {
-                        //                            let secondPresentingVC = self.presentingViewController?.presentingViewController;
-                        //                            secondPresentingVC?.dismissViewControllerAnimated(true, completion: {});
-                        //                        });
-                        
-                        
-                        
+                         // Send user back to login phase
+                        self.goToLogin()
                     }
                     
                 }
@@ -768,18 +731,56 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                     self.speech.speechString("Er zijn geen berichten op dit moment")
                 }
                 else{
-                    var alert:SIAlertView  = SIAlertView(title: "Melding", andMessage: "Er zijn geen berichten op dit moment")
-                    alert.titleFont = UIFont(name: "Verdana", size: 30)
-                    alert.messageFont = UIFont(name: "Verdana", size: 26)
-                    alert.addButtonWithTitle("OK", type: SIAlertViewButtonType.Default, handler: nil)
-                    alert.buttonFont = UIFont(name: "Verdana", size: 30)
-                    alert.transitionStyle = SIAlertViewTransitionStyle.Bounce
-                    
-                    alert.show()
+                    self.setAlertView("Melding", message: "Er zijn geen berichten op dit moment")
                 }
+                
                 MBProgressHUD.hideAllHUDsForView(self.view, animated: true) // Close notification
             }
         }
+    }
+    
+    // For loading screen
+    func setLoadingView(title: String){
+        // Notification for getting messages
+        let loadingNotification = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+        loadingNotification.mode = MBProgressHUDMode.Indeterminate
+        loadingNotification.labelText = title
+    }
+    
+    // Setting alertView for notification user
+    func setAlertView(title: String, message: String){
+        var alert:SIAlertView  = SIAlertView(title: title, andMessage: message)
+        alert.titleFont = UIFont(name: "Verdana", size: 30)
+        alert.messageFont = UIFont(name: "Verdana", size: 26)
+        alert.addButtonWithTitle("OK", type: SIAlertViewButtonType.Default, handler: nil)
+        alert.buttonFont = UIFont(name: "Verdana", size: 30)
+        alert.transitionStyle = SIAlertViewTransitionStyle.Bounce
+        
+        alert.show()
+    }
+    
+    // Function for going to the login phase
+    func goToLogin(){
+        // Dismiss the controller
+        self.presentingViewController?.dismissViewControllerAnimated(true, completion: {
+            let secondPresentingVC = self.presentingViewController?.presentingViewController;
+            secondPresentingVC?.dismissViewControllerAnimated(true, completion: {});
+            
+        });
+        
+        // Invalidate timer if present
+        if(self.dataTimer.valid){
+            self.dataTimer.invalidate() // Invalidate the timer
+        }
+        
+        // Remove the keys if present
+        if(self.defaults.objectForKey("token") != nil && self.defaults.objectForKey("refreshToken") != nil){
+            
+            self.defaults.removeObjectForKey("token")
+            self.defaults.removeObjectForKey("refreshToken")
+        }
+       
+        self.performSegueWithIdentifier("showLogin", sender: self) // Go to the login screen
     }
     
     // Function for appending app data, only and only if the number of items is greater then 1. This is for getting the new items only when at the end of the carousel
