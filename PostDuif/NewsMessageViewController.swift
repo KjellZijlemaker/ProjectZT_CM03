@@ -9,12 +9,16 @@
 import UIKit
 
 class NewsMessageViewController: UIViewController {
-    var newsMessageContent:String!
+    var message:Message!
     var speech:SpeechManager = SpeechManager()
     var delegate: deleteMessageItem!
-    var speechEnabled: Bool = false
+    var openendMessage: messageOpenend!
+    var deletingMessage: deleteMessageItem!
+    var carouselID: String!
+    var speechEnabled: Bool = true
+    
 
-    @IBOutlet weak var newsMessageTitleText: UITextView!
+    @IBOutlet weak var newsMessageTitle: UITextView!
     @IBOutlet weak var newsMessageText: UITextView!
     
     override func viewDidLoad() {
@@ -25,25 +29,23 @@ class NewsMessageViewController: UIViewController {
         swipeRight.direction = UISwipeGestureRecognizerDirection.Right
         self.view.addGestureRecognizer(swipeRight)
         
-        self.newsMessageTitleText.layer.cornerRadius = 8
+        self.newsMessageTitle.layer.cornerRadius = 8
+        self.newsMessageTitle.text = self.message.getSubject()
         self.newsMessageText.layer.cornerRadius = 8
-        self.newsMessageText.text = self.newsMessageContent //Putting back the message inside the controller
-
-        
-        
-       // self.newsMessageText.font = UIFont.systemFontOfSize(26.0)
+        self.newsMessageText.text = self.message.getContent() //Putting back the message inside the controller
         
         if(self.speechEnabled){
+            
             // Making new sentence array for speech
             var sentenceArray: [String] = []
+            sentenceArray.append("Titel nieuwsbericht: " + self.message.getSubject())
             sentenceArray.append("Inhoud nieuwsbericht: ")
-            sentenceArray.append(self.newsMessageContent)
+            sentenceArray.append(self.newsMessageText.text)
             sentenceArray.append("Einde nieuwsbericht")
             sentenceArray.append("Veeg naar rechts om het nieuwsbericht te sluiten")
             
             self.speech.speechArray(sentenceArray) //Execute speech
         }
-        
         
     }
     
@@ -62,7 +64,7 @@ class NewsMessageViewController: UIViewController {
             if(self.speechEnabled){
                 self.speech.speechString("U heeft het nieuwsbericht gelezen") //Little speech for user
             }
-            self.delegate.executeDeletionTimer("0", "2")
+            self.delegate.executeDeletionTimer(self.carouselID, "2")
         });
     }
     

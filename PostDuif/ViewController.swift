@@ -53,7 +53,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
     var isAppending = false
     var indexBeginningNewItems = 0 // Index when the new items appended (for counting down the new items in notification)
     var boundaryBeginningNewItems = 0 // Int for giving the total of old items before the new items appended
-    var test = true
+    var oldBoundaryBeginningNewItems = 0
     
     //# MARK: - Speech variables
     var speech = SpeechManager() // For speech
@@ -171,12 +171,12 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
             currentIndex = carousel.currentItemIndex
             
             
-            switch self.messages[currentIndex].getCategory(){
-            case "message ":
+            switch self.messages[currentIndex].getType(){
+            case "1":
                 // For performing the seque inside the storyboard
                 performSegueWithIdentifier("showMessageContent", sender: self)
                 println("message")
-            case "news":
+            case "2":
                 performSegueWithIdentifier("showNewsMessageContent", sender: self)
                 println("news")
             default:
@@ -322,7 +322,6 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
         //create new view if no view is available for recycling
         if (view == nil)
         {
-            
             //don't do anything specific to the index within
             //this `if (view == nil) {...}` statement because the view will be
             //recycled and used with other index values later
@@ -594,13 +593,29 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                     if(self.messages[self.carousel.currentItemIndex].getType() == "1"){
                         
                         var currentItem = 0
-                        if(newNewsCount == 0){
-                            currentItem = self.messagesCount - self.messagesCount + self.carousel.currentItemIndex + 1
+                        if(self.carousel.currentItemIndex > self.boundaryBeginningNewItems || self.carousel.currentItemIndex == self.carousel.numberOfItems-1){
+                            currentItem = self.boundaryBeginningNewItems - self.carousel.currentItemIndex + self.messagesCount
                             textToSend.append(String(currentItem) + "e " + " Ongelezen bericht")
                         }
                         else{
-                            currentItem = self.messagesCount - self.newMessagesCount + self.carousel.currentItemIndex - self.newNewsCount
-                            textToSend.append(String(currentItem) + "e " + " Ongelezen bericht")
+                            if(self.oldBoundaryBeginningNewItems > 0){
+                            if(self.carousel.currentItemIndex > self.oldBoundaryBeginningNewItems){
+                                currentItem = self.boundaryBeginningNewItems - self.carousel.currentItemIndex + self.messagesCount
+                                textToSend.append(String(currentItem) + "e " + " Ongelezen bericht")
+                            }
+                            else if(self.carousel.currentItemIndex < self.oldBoundaryBeginningNewItems){
+                                currentItem = self.messagesCount - self.messagesCount + self.carousel.currentItemIndex + 1
+                                textToSend.append(String(currentItem) + "e " + " Ongelezen bericht")
+                            }
+                            else{
+                                
+                            }
+                        }
+                            else{
+                                currentItem = self.messagesCount - self.messagesCount + self.carousel.currentItemIndex + 1
+                                textToSend.append(String(currentItem) + "e " + " Ongelezen bericht")
+                            }
+                        
                         }
                         
                         textToSend.append("Onderwerp: " + self.messages[self.carousel.currentItemIndex].getSubject())
@@ -856,10 +871,9 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                 isAppending = true // Now appending data, so speech may not execute
                 var url = "http://84.107.107.169:8080/VisioWebApp/API/chat/allMessages?tokenKey=" + self.token // URL for JSON
                 self.indexBeginningNewItems = self.messages.count-1 // Index when new items will begin to append
-            if(test){
+                self.oldBoundaryBeginningNewItems = self.boundaryBeginningNewItems
                 self.boundaryBeginningNewItems = self.indexBeginningNewItems // Transfer to boundary for counting
-                test = false
-            }
+            
             
                 self.setLoadingView("Nieuwe berichten laden")
                 DataManager.getMessages(url){(messages) in
@@ -1154,10 +1168,11 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
         }
         if segue.identifier == "showNewsMessageContent"{
             let vc = segue.destinationViewController as NewsMessageViewController
+            vc.deletingMessage = self
+            vc.openendMessage = self
             vc.delegate = self
-            vc.newsMessageContent = self.messages[self.carousel.currentItemIndex].getContent()
-            //            vc.deletingMessage = self
-            //            vc.openendMessage = self
+            vc.message = self.messages[self.carousel.currentItemIndex]
+            vc.carouselID = String(self.carousel.currentItemIndex)
             self.speech.stopSpeech()
             self.messageIsOpenend = true
         }
