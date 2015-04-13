@@ -51,7 +51,9 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
     // For checking if data is appending or not. Important for playing the speech or not inside the view,
     // when reloading the carousel!
     var isAppending = false
-    
+    var indexBeginningNewItems = 0 // Index when the new items appended (for counting down the new items in notification)
+    var boundaryBeginningNewItems = 0 // Int for giving the total of old items before the new items appended
+    var test = true
     
     //# MARK: - Speech variables
     var speech = SpeechManager() // For speech
@@ -75,8 +77,6 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
     
     var sound = SoundManager(resourcePath: "Roekoe", fileType: "m4a") // For the sounds
     var dataTimer = NSTimer() // Timer for getting data (appending)
-    
-    var itemAlreadyChecked: Bool = false // For indicating that item was already appended, so no appending to messages array needed
     
     //# MARK: - Outlets for displaying labels / carousel
     @IBOutlet var carousel : iCarousel!
@@ -140,8 +140,6 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
         // Setting up the views and other misc
         self.setupViewController()
         self.setupBackgroundForegroundInit()
-        self.setupTimerInit()
-        
     }
     
     
@@ -311,7 +309,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
     func setupTimerInit(){
         
         // Setup the viewController with Carousel
-        dataTimer = NSTimer.scheduledTimerWithTimeInterval(10.0, target:self, selector: Selector("appendAppData"), userInfo: nil, repeats: true)
+        dataTimer = NSTimer.scheduledTimerWithTimeInterval(10.0, target:self, selector: Selector("appendAppDataRealtime"), userInfo: nil, repeats: true)
         
     }
     
@@ -378,7 +376,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                 self.speech.speechString("U heeft in totaal: " + String(self.messagesCount) + " nieuwe berichten, en " + String(self.newsCount) + " nieuwe nieuwsberichten")
                 
                 self.firstItem = false
-            }
+            
             
             
             var textToSend:[String] = [] // Array for sending message
@@ -404,6 +402,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                 //TODO: Check JSON if user has speech in his settings
                 self.speech.speechArray(textToSend)
             }
+            }
             
         }
         
@@ -414,63 +413,30 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
             println("Total realtime items: " + String(self.totalNewItemsRealtime))
             if(self.dots != nil){
                 
-                if(self.carousel.currentItemIndex == self.carousel.numberOfItems - 1 && self.totalNewItems > 0 || self.totalNewItemsRealtime > 0){
+                if(self.carousel.currentItemIndex == self.carousel.numberOfItems - 1 && self.totalNewItemsRealtime > 0){
                     
                     self.dots.hidden = false
                     self.txtField.hidden = false // New items, so unhide textView
                     
                     // If the realtime items are not 0, decrement the counter
-                    if(self.itemAlreadyChecked && self.totalNewItemsRealtime > 0){ // TODO: Delete itemalreadychecked?
+                    if(self.totalNewItemsRealtime > 0){
                         
                         for i in 0...self.totalNewItemsRealtime-1{
                             self.totalNewItemsRealtime--
                         }
-                        self.itemAlreadyChecked = false
-                        
-                        // If the total items are not 0, append it to the carousel
-                        if(self.totalNewItems > 0){
-                            
-                            self.speech.stopSpeech() // Solving bug speeching 2 times message
-                            
-                            // tell the total of new items
-                            if(self.speechEnabled){
-                                if(self.speech.isSpeaking()){
-                                    self.newItemsToSpeech(self.totalNewItems)
-                                    self.sound.playSound() // Play the ROEKOE sound
-                                }
-                                
-                            }
-                            
-                            for i in index+1...index+self.totalNewItems{
-                                self.carousel.insertItemAtIndex(i, animated: true) // Add new item at carousel
-                                self.appendImage(i)
-                                self.totalNewItems--
-                            }
-                        }
+                    
                     }
                         
-                        // If realtime items are 0, there are only non-realtime items to append to carousel
-                    else{
-                        
-                        self.speech.stopSpeech() // Solving bug speeching 2 times message
-                        
-                        
-                        // tell the total of new items
-                        if(self.speechEnabled){
-                            if(self.speech.isSpeaking()){
-                                self.newItemsToSpeech(self.totalNewItems)
-                                self.sound.playSound() // Play the ROEKOE sound
-                            }
-                            
-                        }
-                        for i in index+1...index+self.totalNewItems{
-                            self.carousel.insertItemAtIndex(i, animated: true) // Add new item at carousel
-                            self.appendImage(i)
-                            self.totalNewItems--
-                        }
-                    }
+                    
                     
                 }
+                    // If realtime items are 0, there are only non-realtime items to append to carousel
+                else if (self.carousel.currentItemIndex == self.carousel.numberOfItems - 1) {
+                    
+                    self.appendAppData()
+                    
+                }
+                
             }
         }
         else{
@@ -482,24 +448,6 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
             }
         }
         
-        // When reaching the last item inside the array
-        if(self.carousel.currentItemIndex == self.messages.count-1 && self.totalNewItems == 0){
-            
-            // Will execute, only when not appending
-            if(!isAppending){
-                if(self.dots != nil){
-                    self.txtField.removeFromSuperview()
-                    self.dots.stopAnimating()
-                    
-                    // Hide it instead of removing view, otherwise txtView won't re appear
-                    self.dots.hidden = true
-                }
-                
-                if(self.speechEnabled){
-                    self.speech.speechString("U heeft geen berichten op dit moment")
-                }
-            }
-        }
         
         for i in 0...self.messages.count-1{
             // Setting the right images for each category
@@ -524,6 +472,115 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
         // Setting category per item inside the array
         self.setCategory(self.carousel.currentItemIndex)
         
+        
+        
+        if(self.indexBeginningNewItems != 0 && self.carousel.currentItemIndex > self.indexBeginningNewItems){
+            self.totalNewItems--
+            self.txtField.text = String(self.totalNewItems) // Update the text
+            self.indexBeginningNewItems = self.carousel.currentItemIndex // Update the index
+            
+            
+            if(self.messages[self.carousel.currentItemIndex].type == "1"){
+                self.newMessagesCount--
+            }
+            else{
+                self.newNewsCount--
+            }
+            
+            // If the totalNewItems is 0, delete the notification
+            if(self.totalNewItems == 0){
+                self.indexBeginningNewItems = 0
+                if(self.dots != nil){
+                    self.txtField.removeFromSuperview()
+                    self.dots.stopAnimating()
+                    
+                    // Hide it instead of removing view, otherwise txtView won't re appear
+                    self.dots.hidden = true
+                }
+                
+            }
+        }
+        
+//        // Counting down items and remove it from view when 0
+//        if(self.indexBeginningNewItems != 0 && self.carousel.currentItemIndex > self.boundaryBeginningNewItems){
+//            
+//            // Will execute, only when not appending
+//            if(!isAppending){
+//                
+//                // Will execute when it's not the first item anymore (for speech)
+//                if(!self.firstItem){
+//                    if(self.speechEnabled){
+//                        
+//                        var textToSend:[String] = [] // Array for sending message
+//                        println("messages: " + String(newMessagesCount))
+//                        
+//                        // Check if the item is message or newsitem
+//                        if(self.messages[self.carousel.currentItemIndex].getType() == "1"){
+//                            var currentItem = self.boundaryBeginningNewItems - self.carousel.currentItemIndex  + self.newMessagesCount
+//                            textToSend.append(String(currentItem) + "e " + " nieuw bericht")
+//            
+//                            textToSend.append("Onderwerp: " + self.messages[self.carousel.currentItemIndex].getSubject())
+//                            textToSend.append("Tik op het scherm om het bericht te openen")
+//                            
+//                            self.speech.speechArray(textToSend)
+//                            
+//                        }
+//                        else{
+//                            var currentItem = self.boundaryBeginningNewItems - self.carousel.currentItemIndex  + self.newNewsCount
+//                            textToSend.append(String(currentItem) + "e " + " nieuw nieuwsbericht")
+//                            textToSend.append("Titel: " + self.messages[self.carousel.currentItemIndex].getSubject())
+//                            textToSend.append("Tik op het scherm om het nieuwsbericht te openen")
+//                            
+//                            self.speech.speechArray(textToSend)
+//                        }
+//                        self.carousel.reloadItemAtIndex(self.carousel.currentItemIndex, animated: false)
+//
+//                    }
+//                }
+//            }
+//        }
+//        else{
+//                        // Will execute when it's not the first item anymore (for speech)
+//                        if(!self.firstItem){
+//                            if(self.speechEnabled){
+//            
+//                                var textToSend:[String] = [] // Array for sending message
+//            
+//                                // Check if the item is message or newsitem
+//                                if(self.messages[self.carousel.currentItemIndex].getType() == "1"){
+//            
+//                                    var currentItem = self.messagesCount - self.messagesCount + self.carousel.currentItemIndex + 1
+//                                    textToSend.append(String(currentItem) + "e " + " Ongelezen bericht")
+//            
+//                                    textToSend.append("Onderwerp: " + self.messages[self.carousel.currentItemIndex].getSubject())
+//                                    textToSend.append("Tik op het scherm om het bericht te openen")
+//            
+//                                    self.speech.speechArray(textToSend)
+//                                }
+//            
+//                                else{
+//                        
+//                                        var currentItem = self.carousel.currentItemIndex + 1 - self.messagesCount - self.newMessagesCount
+//                                        textToSend.append(String(currentItem) + "e " + " Ongelezen nieuwsbericht")
+//            
+//            
+//            
+//                                    
+//                                    textToSend.append("Titel: " + self.messages[self.carousel.currentItemIndex].getSubject())
+//                                    textToSend.append("Tik op het scherm om het nieuwsbericht te openen")
+//                                    
+//                                    self.speech.speechArray(textToSend)
+//                                }
+//                            }
+//                            self.carousel.reloadItemAtIndex(self.carousel.currentItemIndex, animated: false)
+//                        }
+//
+//        }
+//        
+        
+        
+        
+        
         // Will execute, only when not appending
         if(!isAppending){
             
@@ -536,10 +593,16 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                     // Check if the item is message or newsitem
                     if(self.messages[self.carousel.currentItemIndex].getType() == "1"){
                         
-                        var currentItem = self.messagesCount - self.messagesCount + self.carousel.currentItemIndex + 1
+                        var currentItem = 0
+                        if(newNewsCount == 0){
+                            currentItem = self.messagesCount - self.messagesCount + self.carousel.currentItemIndex + 1
+                            textToSend.append(String(currentItem) + "e " + " Ongelezen bericht")
+                        }
+                        else{
+                            currentItem = self.messagesCount - self.newMessagesCount + self.carousel.currentItemIndex - self.newNewsCount
+                            textToSend.append(String(currentItem) + "e " + " Ongelezen bericht")
+                        }
                         
-                        
-                        textToSend.append(String(currentItem) + "e " + " Ongelezen bericht")
                         textToSend.append("Onderwerp: " + self.messages[self.carousel.currentItemIndex].getSubject())
                         textToSend.append("Tik op het scherm om het bericht te openen")
                         
@@ -548,9 +611,12 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                         
                     else{
                         
-                        var currentItem = self.carousel.currentItemIndex - messagesCount + 1
+                        var currentItem = 0
                         
-                        textToSend.append(String(currentItem) + "e " + " Ongelezen nieuwsbericht")
+                            currentItem = self.carousel.currentItemIndex + 1 - self.messagesCount - self.newMessagesCount
+                            textToSend.append(String(currentItem) + "e " + " Ongelezen nieuwsbericht")
+                       
+                        
                         textToSend.append("Titel: " + self.messages[self.carousel.currentItemIndex].getSubject())
                         textToSend.append("Tik op het scherm om het nieuwsbericht te openen")
                         
@@ -786,11 +852,16 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
     // Function for appending app data, only and only if the number of items is greater then 1. This is for getting the new items only when at the end of the carousel
     func appendAppData(){
         if(!self.messageIsOpenend){
-            if(self.carousel.numberOfItems > 1 && !itemAlreadyChecked){
-                
+            
                 isAppending = true // Now appending data, so speech may not execute
                 var url = "http://84.107.107.169:8080/VisioWebApp/API/chat/allMessages?tokenKey=" + self.token // URL for JSON
-                
+                self.indexBeginningNewItems = self.messages.count-1 // Index when new items will begin to append
+            if(test){
+                self.boundaryBeginningNewItems = self.indexBeginningNewItems // Transfer to boundary for counting
+                test = false
+            }
+            
+                self.setLoadingView("Nieuwe berichten laden")
                 DataManager.getMessages(url){(messages) in
                     
                     // If not empty, enable appending data
@@ -801,12 +872,17 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                         var newIDArray: [Int] = []
                         var newArray: [AnyObject] = []
                         
-                        for j in 0...messages.count-1{
-                            idArrayNew.append(messages[j].getID().toInt()!)
-                            
+                        if(!messages.isEmpty){
+                            for j in 0...messages.count-1{
+                                idArrayNew.append(messages[j].getID().toInt()!)
+                                
+                            }
                         }
-                        for i in 0...self.messages.count-1{
-                            idArrayOld.append(self.messages[i].getID().toInt()!)
+                        
+                        if(!self.messages.isEmpty){
+                            for i in 0...self.messages.count-1{
+                                idArrayOld.append(self.messages[i].getID().toInt()!)
+                            }
                         }
                         
                         var set1 = NSMutableSet(array: idArrayOld)
@@ -829,14 +905,14 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                                 for k in 0...newIDArray.count-1{
                                     if(messages[l].getID().toInt() == newIDArray[k]){
                                         
-                                        self.messages.append(messages[l]) // Append the new message to existing view
-                                        
                                         //Add the amount of messages or news
-                                        if(self.messages[l].type == "1"){
+                                        if(messages[l].type == "1"){
                                             self.messagesCount++
+                                            self.newMessagesCount++
                                         }
                                         else{
                                             self.newsCount++
+                                            self.newNewsCount++
                                         }
                                         
                                         // If the animation is not already active, start it
@@ -847,24 +923,49 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                                         
                                         self.totalNewItems++ // Append the number of items
                                         self.txtField.text = String(self.totalNewItems) // Update the text
+                                        self.txtField.hidden = false // New items, so unhide textView
+                                        self.dots.hidden = false
                                         
+                                        self.messages.append(messages[l]) // Append the new message to existing view
+                                        self.appendImage(self.messages.count-1)
+                                        self.carousel.insertItemAtIndex(messages.count, animated: true) // Add new item at carousel
+                                    
                                         continue
                                     }
                                     
                                     
                                 }
                             }
-                        }
+                            self.isAppending = false
+                            
+                            // tell the total of new items
+                            if(self.speechEnabled){
+                                if(self.speech.isSpeaking()){
+                                    if(self.newMessagesCount > 0 && self.newNewsCount > 0){
+                                        self.newItemsToSpeech(self.newMessagesCount, type: "1")
+                                        self.newItemsToSpeech(self.newNewsCount, type: "2")
+                                    }
+                                    else if(self.newMessagesCount > 0){
+                                        self.newItemsToSpeech(self.newMessagesCount, type: "1")
+                                    }
+                                    else{
+                                        self.newItemsToSpeech(self.newNewsCount, type: "2")
+                                    }
+                                    
+                                    self.sound.playSound() // Play the ROEKOE sound
+                                    self.carousel.reloadData()
+                                    //self.speech.stopSpeech()
+                                }
+                                
+                            }
                     }
-                    
+                        
                 }
+                    MBProgressHUD.hideAllHUDsForView(self.view, animated: true) // Close notification
+
             }
-                
-                // If there are less items at the current moment, realtime appending will be called
-            else{
-                println("OK")
-                appendAppDataNoItems()
-            }
+            
+            
         }
         
         
@@ -872,10 +973,12 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
     
     // Function for getting items realtime
     // TODO: (IS REPETATIVE CODE, MUST PUT IT IN APPENDING DATA METHOD!!!)
-    func appendAppDataNoItems(){
+    func appendAppDataRealtime(){
         isAppending = true // Now appending data, so speech may not execute
         var url = "http://84.107.107.169:8080/VisioWebApp/API/chat/allMessages?tokenKey=" + self.token // URL for JSON
-        
+        self.indexBeginningNewItems = self.messages.count-1 // Index when new items will begin to append
+        self.boundaryBeginningNewItems = self.indexBeginningNewItems // Transfer to boundary for counting
+
         DataManager.getMessages(url){(messages) in
             
             // If not empty, enable appending data
@@ -887,9 +990,11 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                 var newIDArray: [Int] = []
                 var newArray: [AnyObject] = []
                 
-                for j in 0...messages.count-1{
-                    idArrayNew.append(messages[j].getID().toInt()!)
-                    
+                if(!messages.isEmpty){
+                    for j in 0...messages.count-1{
+                        idArrayNew.append(messages[j].getID().toInt()!)
+                        
+                    }
                 }
                 
                 if(!self.messages.isEmpty){
@@ -918,7 +1023,6 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                         for k in 0...newIDArray.count-1{
                             if(messages[l].getID().toInt() == newIDArray[k]){
                                 
-                                self.itemAlreadyChecked = true
                                 self.totalNewItemsRealtime++ // Append realtime for checking in carousel
                                 
                                 
@@ -926,7 +1030,14 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                                     if(self.totalNewItemsRealtime > 0 || self.carousel.currentItemIndex != 0){
                                         // tell the total of new items
                                         if(self.speechEnabled){
-                                            self.newItemsToSpeech(self.totalNewItemsRealtime)
+                                            if(self.messages[l].type == "1"){
+                                                self.newItemsToSpeech(self.totalNewItemsRealtime, type: "1")
+
+                                            }
+                                            else{
+                                                self.newItemsToSpeech(self.totalNewItemsRealtime, type: "2")
+
+                                            }
                                             
                                         }
                                     }
@@ -953,9 +1064,11 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                                 // Add the amount of messages or news
                                 if(self.messages[l].type == "1"){
                                     self.messagesCount++
+                                    self.newMessagesCount++
                                 }
                                 else{
                                     self.newsCount++
+                                    self.newNewsCount++
                                 }
                                 
                                 
@@ -966,10 +1079,11 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                         }
                     }
                     
+                    self.isAppending = false
+
                     
                     
-                    
-                    //                            self.carousel.reloadData() // If appended succesful, reload carousel
+                                                self.carousel.reloadData() // If appended succesful, reload carousel
                     //                            self.speech.stopSpeech()
                 }
                 
@@ -981,29 +1095,42 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
     
     //# MARK: - UIBackground / Foreground methods
     //=================================================================================================
-    func totalNewItemsToForeground(){
-        if(totalNewItems >= 0){
-            self.speech.stopSpeech()
-            self.newItemsToSpeech(self.totalNewItems)
-            self.carousel.scrollToItemAtIndex(self.messages.count-1-self.totalNewItems, animated: true) // Scroll to the section of last items
-        }
-        
-    }
+//    func totalNewItemsToForeground(){
+//        if(totalNewItems >= 0){
+//            self.speech.stopSpeech()
+//            self.newItemsToSpeech(self.totalNewItems)
+//            self.carousel.scrollToItemAtIndex(self.messages.count-1-self.totalNewItems, animated: true) // Scroll to the section of last items
+//        }
+//        
+//    }
     
     //TODO: Make background stop speech
     
     
-    func newItemsToSpeech(newItems: Int){
+    func newItemsToSpeech(newItems: Int, type: String){
         var newMessageSpeechString = ""
-        
-        // Small check for grammar
-        if(newItems == 1){
-            newMessageSpeechString = "U heeft: " + String(newItems) + " nieuw bericht"
+        var typeItem = ""
+        if(type == "1"){
+            // Small check for grammar
+            if(newItems == 1){
+                typeItem = "bericht"
+            }
+            else{
+                typeItem = "berichten"
+            }
         }
         else{
-            newMessageSpeechString = "U heeft: " + String(newItems) + " nieuwe berichten"
+            // Small check for grammar
+            if(newItems == 1){
+                typeItem = "nieuwsbericht"
+            }
+            else{
+                typeItem = "nieuwsberichten"
+            }
         }
         
+        newMessageSpeechString = "U heeft: " + String(newItems) + "nieuwe " + typeItem
+
         self.speech.speechString(newMessageSpeechString) // Say the speech
         
         //self.carousel.reloadItemAtIndex(self.messages.count, animated: true) // Reload only the last item
@@ -1045,7 +1172,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
     //=================================================================================================
     
     // Timer for deleting message. Is delegaded from NewsViewController
-    func executeDeletionTimer(carouselMessageNumber: String) {
+    func executeDeletionTimer(carouselMessageNumber: String, _ type: String) {
         self.messageIsOpenend = false
         
         // Check if array is not empty
@@ -1071,25 +1198,27 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
         }
         
         // Timer for periodically update the messages
-        var timer = NSTimer.scheduledTimerWithTimeInterval(10.0, target:self, selector: Selector("deleteMessage"), userInfo: nil, repeats: false)
+        var timer = NSTimer.scheduledTimerWithTimeInterval(10.0, target:self, selector: Selector("deleteMessage:"), userInfo: type, repeats: false)
         
         
         
     }
     
     // Selector for making message read and deleting it from carousel
-    func deleteMessage(){
+    func deleteMessage(timer: NSTimer){
         
         // Checks if message is openened or not
         if(!self.messageIsOpenend){
             
             // Check if index is empty or not for bounds of array
             if(!self.deleteditemIndexes.isEmpty){
+                isAppending = true
+                let type = timer.userInfo as String // Convert timer to String
                 var carouselItemIndex = self.deleteditemIndexes.first?.toInt() // Getting first item from the array
                 self.deleteditemIndexes.removeAtIndex(0) // Delete it
                 var messageID = self.messages[carouselItemIndex!].getID() // Get the messageID for JSON array  --> Gaat hier fout
-                var url = "http://84.107.107.169:8080/VisioWebApp/API/chat/confirm?messageId=" + String(messageID)
                 
+                var url = "http://84.107.107.169:8080/VisioWebApp/API/chat/confirm?messageId=" + String(messageID) + "&type=" + type
                 DataManager.checkMessageRead(url){(codeFromJSON) in
                     
                     if(codeFromJSON == "200"){

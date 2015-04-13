@@ -16,7 +16,6 @@ class DataManager{
         // Making GET request to the URL
         request(.GET, apiEndPoint).responseJSON { (request, response, json, error) in
              println(apiEndPoint)
-            println(error)
             
             // Making sure if the JSON is not empty
             if (json != nil) {
@@ -83,7 +82,7 @@ class DataManager{
                             newMessage.setType(type)
                             
                             // Setting the message ID
-                            var newsFeedID: String = messages["NewsFeedItemId"].stringValue
+                            var newsFeedID: String = messages["newsFeedItemMessageId"].stringValue
                             newMessage.setID(newsFeedID)
                             
                             // Set name inside the object
@@ -110,6 +109,7 @@ class DataManager{
                     }
                 }           
                 
+                println(messageArray)
                     // Give the array back to the main Thread
                     completionHandler(response: messageArray)
                 

@@ -64,7 +64,7 @@ class MessageContentViewController: UIViewController {
                 self.speech.speechString("U heeft het bericht gelezen") //Little speech for user
             }
             self.openendMessage.messageIsOpenend = false
-            self.deletingMessage.executeDeletionTimer(self.carouselID)
+            self.deletingMessage.executeDeletionTimer(self.carouselID, "1")
         });
     }
     

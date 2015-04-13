@@ -62,7 +62,7 @@ class NewsMessageViewController: UIViewController {
             if(self.speechEnabled){
                 self.speech.speechString("U heeft het nieuwsbericht gelezen") //Little speech for user
             }
-            self.delegate.executeDeletionTimer("0")
+            self.delegate.executeDeletionTimer("0", "2")
         });
     }
     

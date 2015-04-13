@@ -9,7 +9,7 @@
 import Foundation
 
 protocol deleteMessageItem {
-    func executeDeletionTimer(String)
+    func executeDeletionTimer(String, String)
 }
 
 protocol messageOpenend{
