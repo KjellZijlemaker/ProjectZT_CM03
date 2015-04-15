@@ -10,8 +10,8 @@ import Foundation
 
 class Settings{
     
-    var userAccessibility: Int
-    var userSpeech: Int
+    private var userAccessibility: Int
+    private var userSpeech: Int
     
     
    // init

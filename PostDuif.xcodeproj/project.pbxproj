@@ -27,10 +27,14 @@
 		21370BCD1AC494DA0063777D /* Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21370BCC1AC494DA0063777D /* Token.swift */; };
 		213CD1421AC815E200B27EA1 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213CD13F1AC815E200B27EA1 /* Keychain.swift */; };
 		214C55DA1AA9E71200555A56 /* MessageContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214C55D91AA9E71200555A56 /* MessageContentViewController.swift */; };
+		214EB9CB1ADEADBA0086A430 /* News.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214EB9CA1ADEADBA0086A430 /* News.swift */; };
 		2163769B1AC34A77004056AC /* Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2163769A1AC34A77004056AC /* Protocol.swift */; };
 		2186417E1AC31A430084AE46 /* SpeechManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2186417D1AC31A430084AE46 /* SpeechManager.swift */; };
 		218C8C421ACAA9C10023321B /* Roekoe.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 218C8C401ACAA0130023321B /* Roekoe.m4a */; };
 		219F66DA1ABC288900EC3194 /* RSDotsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 219F66D91ABC288900EC3194 /* RSDotsView.swift */; };
+		21CCF72E1ADD5C2B00C64170 /* LogoutButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21CCF72D1ADD5C2B00C64170 /* LogoutButton.swift */; };
+		21CCF7301ADD6F7200C64170 /* NotificationText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21CCF72F1ADD6F7200C64170 /* NotificationText.swift */; };
+		21CCF7321ADD7A9C00C64170 /* NotificationDot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21CCF7311ADD7A9C00C64170 /* NotificationDot.swift */; };
 		21CF744F1AADB8260047ABC3 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21CF744E1AADB8260047ABC3 /* DataManager.swift */; };
 		21DF2C001AADC0C5007921E4 /* Alamofire.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DF2BFC1AADC0C5007921E4 /* Alamofire.swift */; };
 		21DF2C011AADC0C5007921E4 /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DF2BFF1AADC0C5007921E4 /* SwiftyJSON.swift */; };
@@ -77,10 +81,14 @@
 		213CD13F1AC815E200B27EA1 /* Keychain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
 		213CD1401AC815E200B27EA1 /* KeychainAccess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeychainAccess.h; sourceTree = "<group>"; };
 		214C55D91AA9E71200555A56 /* MessageContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageContentViewController.swift; sourceTree = "<group>"; };
+		214EB9CA1ADEADBA0086A430 /* News.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = News.swift; sourceTree = "<group>"; };
 		2163769A1AC34A77004056AC /* Protocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Protocol.swift; sourceTree = "<group>"; };
 		2186417D1AC31A430084AE46 /* SpeechManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpeechManager.swift; sourceTree = "<group>"; };
 		218C8C401ACAA0130023321B /* Roekoe.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = Roekoe.m4a; sourceTree = "<group>"; };
 		219F66D91ABC288900EC3194 /* RSDotsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RSDotsView.swift; sourceTree = "<group>"; };
+		21CCF72D1ADD5C2B00C64170 /* LogoutButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogoutButton.swift; sourceTree = "<group>"; };
+		21CCF72F1ADD6F7200C64170 /* NotificationText.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationText.swift; sourceTree = "<group>"; };
+		21CCF7311ADD7A9C00C64170 /* NotificationDot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationDot.swift; sourceTree = "<group>"; };
 		21CF744E1AADB8260047ABC3 /* DataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		21DF2BFB1AADC0C5007921E4 /* Alamofire.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Alamofire.h; sourceTree = "<group>"; };
 		21DF2BFC1AADC0C5007921E4 /* Alamofire.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Alamofire.swift; sourceTree = "<group>"; };
@@ -155,6 +163,7 @@
 		212AE90A1AA9CE4D000255E8 /* PostDuif */ = {
 			isa = PBXGroup;
 			children = (
+				21CCF72C1ADD5C1000C64170 /* Views */,
 				218C8C411ACAA0350023321B /* Sounds */,
 				212AE90D1AA9CE4D000255E8 /* AppDelegate.swift */,
 				2186417F1AC328840084AE46 /* Controllers */,
@@ -230,6 +239,7 @@
 				212936371AAD99370061BE6A /* Messages.swift */,
 				2131ECA41AB9801B005F844A /* Settings.swift */,
 				21370BCC1AC494DA0063777D /* Token.swift */,
+				214EB9CA1ADEADBA0086A430 /* News.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -259,6 +269,16 @@
 				219F66D91ABC288900EC3194 /* RSDotsView.swift */,
 			);
 			path = RSDotsView;
+			sourceTree = "<group>";
+		};
+		21CCF72C1ADD5C1000C64170 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				21CCF72D1ADD5C2B00C64170 /* LogoutButton.swift */,
+				21CCF72F1ADD6F7200C64170 /* NotificationText.swift */,
+				21CCF7311ADD7A9C00C64170 /* NotificationDot.swift */,
+			);
+			name = Views;
 			sourceTree = "<group>";
 		};
 		21DF2BFA1AADC0C5007921E4 /* Alamofire */ = {
@@ -397,14 +417,18 @@
 				212AE9101AA9CE4D000255E8 /* ViewController.swift in Sources */,
 				212750181AC979FC005D6A7F /* SoundManager.swift in Sources */,
 				211A74191AC5856C004517E8 /* SIAlertView.m in Sources */,
+				21CCF7301ADD6F7200C64170 /* NotificationText.swift in Sources */,
 				214C55DA1AA9E71200555A56 /* MessageContentViewController.swift in Sources */,
 				2186417E1AC31A430084AE46 /* SpeechManager.swift in Sources */,
 				219F66DA1ABC288900EC3194 /* RSDotsView.swift in Sources */,
 				212AE90E1AA9CE4D000255E8 /* AppDelegate.swift in Sources */,
 				211A74111AC581CB004517E8 /* MBProgressHUD.m in Sources */,
 				2163769B1AC34A77004056AC /* Protocol.swift in Sources */,
+				214EB9CB1ADEADBA0086A430 /* News.swift in Sources */,
 				21DF2C001AADC0C5007921E4 /* Alamofire.swift in Sources */,
 				210133871AB5C1E00065D186 /* NewsMessageViewController.swift in Sources */,
+				21CCF7321ADD7A9C00C64170 /* NotificationDot.swift in Sources */,
+				21CCF72E1ADD5C2B00C64170 /* LogoutButton.swift in Sources */,
 				211A741A1AC5856C004517E8 /* UIWindow+SIUtils.m in Sources */,
 				213CD1421AC815E200B27EA1 /* Keychain.swift in Sources */,
 			);

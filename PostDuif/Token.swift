@@ -9,12 +9,12 @@
 import Foundation
 
 class Token{
-    var returnCode: String
-    var expireTokenDate: String
-    var refreshToken: String
-    var token: String
-    var status: String
-    var message: String
+    private var returnCode: String
+    private var expireTokenDate: String
+    private var refreshToken: String
+    private var token: String
+    private var status: String
+    private var message: String
     
     init(){
         self.returnCode = ""

@@ -11,7 +11,7 @@ import Foundation
 class DataManager{
     
     
-    class func getMessages(apiEndPoint: String, completionHandler: (response: [Message]) -> ()) {
+    class func getItems(apiEndPoint: String, completionHandler: (response: [Message]) -> ()) {
         
         // Making GET request to the URL
         request(.GET, apiEndPoint).responseJSON { (request, response, json, error) in
