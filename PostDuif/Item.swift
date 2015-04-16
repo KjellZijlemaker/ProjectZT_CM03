@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Message{
+class Item{
     
     private var id: String
     private var subject: String

@@ -9,7 +9,7 @@
 import UIKit
 
 class MessageContentViewController: UIViewController {
-    var message:Message!
+    var message:Item!
     var speech:SpeechManager = SpeechManager()
     var deletingMessage: deleteMessageItem!
     var openendMessage: messageOpenend!

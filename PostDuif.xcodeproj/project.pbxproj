@@ -14,7 +14,7 @@
 		211A741A1AC5856C004517E8 /* UIWindow+SIUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 211A74171AC5856C004517E8 /* UIWindow+SIUtils.m */; };
 		211E24591AC4325E00ADF518 /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 211E24581AC4325E00ADF518 /* UserManager.swift */; };
 		212750181AC979FC005D6A7F /* SoundManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212750171AC979FC005D6A7F /* SoundManager.swift */; };
-		212936381AAD99370061BE6A /* Messages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212936371AAD99370061BE6A /* Messages.swift */; };
+		212936381AAD99370061BE6A /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212936371AAD99370061BE6A /* Item.swift */; };
 		212AE90E1AA9CE4D000255E8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212AE90D1AA9CE4D000255E8 /* AppDelegate.swift */; };
 		212AE9101AA9CE4D000255E8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212AE90F1AA9CE4D000255E8 /* ViewController.swift */; };
 		212AE9131AA9CE4D000255E8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 212AE9111AA9CE4D000255E8 /* Main.storyboard */; };
@@ -27,7 +27,6 @@
 		21370BCD1AC494DA0063777D /* Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21370BCC1AC494DA0063777D /* Token.swift */; };
 		213CD1421AC815E200B27EA1 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213CD13F1AC815E200B27EA1 /* Keychain.swift */; };
 		214C55DA1AA9E71200555A56 /* MessageContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214C55D91AA9E71200555A56 /* MessageContentViewController.swift */; };
-		214EB9CB1ADEADBA0086A430 /* News.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214EB9CA1ADEADBA0086A430 /* News.swift */; };
 		2163769B1AC34A77004056AC /* Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2163769A1AC34A77004056AC /* Protocol.swift */; };
 		2186417E1AC31A430084AE46 /* SpeechManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2186417D1AC31A430084AE46 /* SpeechManager.swift */; };
 		218C8C421ACAA9C10023321B /* Roekoe.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 218C8C401ACAA0130023321B /* Roekoe.m4a */; };
@@ -61,7 +60,7 @@
 		211A74171AC5856C004517E8 /* UIWindow+SIUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIWindow+SIUtils.m"; sourceTree = "<group>"; };
 		211E24581AC4325E00ADF518 /* UserManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
 		212750171AC979FC005D6A7F /* SoundManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SoundManager.swift; sourceTree = "<group>"; };
-		212936371AAD99370061BE6A /* Messages.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Messages.swift; sourceTree = "<group>"; };
+		212936371AAD99370061BE6A /* Item.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		212AE9081AA9CE4D000255E8 /* PostDuif.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PostDuif.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		212AE90C1AA9CE4D000255E8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		212AE90D1AA9CE4D000255E8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -81,7 +80,6 @@
 		213CD13F1AC815E200B27EA1 /* Keychain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
 		213CD1401AC815E200B27EA1 /* KeychainAccess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeychainAccess.h; sourceTree = "<group>"; };
 		214C55D91AA9E71200555A56 /* MessageContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageContentViewController.swift; sourceTree = "<group>"; };
-		214EB9CA1ADEADBA0086A430 /* News.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = News.swift; sourceTree = "<group>"; };
 		2163769A1AC34A77004056AC /* Protocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Protocol.swift; sourceTree = "<group>"; };
 		2186417D1AC31A430084AE46 /* SpeechManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpeechManager.swift; sourceTree = "<group>"; };
 		218C8C401ACAA0130023321B /* Roekoe.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = Roekoe.m4a; sourceTree = "<group>"; };
@@ -236,10 +234,9 @@
 		218641801AC328EA0084AE46 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				212936371AAD99370061BE6A /* Messages.swift */,
+				212936371AAD99370061BE6A /* Item.swift */,
 				2131ECA41AB9801B005F844A /* Settings.swift */,
 				21370BCC1AC494DA0063777D /* Token.swift */,
-				214EB9CA1ADEADBA0086A430 /* News.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -407,7 +404,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				21317D991AC0403F00101992 /* LoginViewController.swift in Sources */,
-				212936381AAD99370061BE6A /* Messages.swift in Sources */,
+				212936381AAD99370061BE6A /* Item.swift in Sources */,
 				21CF744F1AADB8260047ABC3 /* DataManager.swift in Sources */,
 				211E24591AC4325E00ADF518 /* UserManager.swift in Sources */,
 				21370BCD1AC494DA0063777D /* Token.swift in Sources */,
@@ -424,7 +421,6 @@
 				212AE90E1AA9CE4D000255E8 /* AppDelegate.swift in Sources */,
 				211A74111AC581CB004517E8 /* MBProgressHUD.m in Sources */,
 				2163769B1AC34A77004056AC /* Protocol.swift in Sources */,
-				214EB9CB1ADEADBA0086A430 /* News.swift in Sources */,
 				21DF2C001AADC0C5007921E4 /* Alamofire.swift in Sources */,
 				210133871AB5C1E00065D186 /* NewsMessageViewController.swift in Sources */,
 				21CCF7321ADD7A9C00C64170 /* NotificationDot.swift in Sources */,

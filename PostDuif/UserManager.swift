@@ -35,15 +35,15 @@ class UserManager{
                     // Make new JSON array
                     if let tokenFromArray = jsonObj["data"]["token"].string{
                         token.setToken(tokenFromArray)
-
+                        
                     }
                     if let refreshTokenFromArray = jsonObj["data"]["refreshToken"].string{
                         token.setRefreshToken(refreshTokenFromArray)
-
+                        
                     }
                     if let expireTokenDateFromArray = jsonObj["data"]["expireTokenDate"].string{
                         token.setExpireTokenDate(expireTokenDateFromArray)
-
+                        
                     }
                     
                     
@@ -58,4 +58,78 @@ class UserManager{
             }
         }
     }
+    
+    class func getUserSettings(apiEndPoint: String, completionHandler: (response: Settings) -> ()) {
+        // Making GET request to the URL
+        request(.GET, apiEndPoint).responseJSON { (request, response, json, error) in
+            
+            // Making sure if the JSON is not empty
+            if (json != nil) {
+                
+                // Making the JSON object from the JSON
+                var jsonObj = JSON(json!)
+                
+                var settingsArray = [Settings]()
+                
+                if jsonObj["code"].string == "200"{
+                    
+                    
+                    // Making new array
+                    if let dataArray = jsonObj["data"]["entry"].array{
+                        
+                        for messages in dataArray{
+                            
+                            // Making new Object for putting in the array
+                            var newSettings = Settings()
+                            
+                            // Set notification
+                            var notification: Bool = messages["notificationSoundEnabled"].bool!
+                            newSettings.hasNotificationSoundEnabled(notification)
+                            
+                            // Set speech
+                            var speech: Bool = messages["isSpeechEnabled"].bool!
+                            newSettings.hasSpeechEnabled(speech)
+                            
+                            // Set accessibility
+                            var accessibility: Bool = messages["accessibilityEnabled"].bool!
+                            newSettings.hasAccessibilityEnabled(accessibility)
+                            
+                            
+                            /* Code snippet for getting single item out of JSON array
+                            if let appName = jsonObj["feed"]["entry"][1]["im:name"]["label"].string{
+                            let test1 = Test(age: 9, name: appName)
+                            //self.tableView.reloadData()
+                            completion(response: test1)
+                            }
+                            */
+                            
+                            settingsArray.append(newSettings)
+                        }
+                    }
+                }
+                else{
+                    if let returnCode = jsonObj["code"].string{
+                        var newSetting = Settings()
+                        newSetting.setReturnCode(returnCode)
+                        settingsArray.append(newSetting)
+                    }
+                }
+                
+                // Give the array back to the main Thread
+                completionHandler(response: settingsArray[0])
+            }
+                
+                
+                // If there is an error.....
+            else if (error != nil){
+                // Making new Message object
+                var newSetting = Settings()
+                newSetting.setReturnCode("403")
+                
+                // Give the array back to the main Thread
+                completionHandler(response: newSetting)
+            }
+        }
+    }
 }
+

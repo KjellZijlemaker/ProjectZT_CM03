@@ -12,6 +12,7 @@ class Token{
     private var returnCode: String
     private var expireTokenDate: String
     private var refreshToken: String
+    private var gotRefreshToken: Bool
     private var token: String
     private var status: String
     private var message: String
@@ -23,6 +24,7 @@ class Token{
         self.token = ""
         self.status = ""
         self.message = ""
+        self.gotRefreshToken = true
     }
     
     func setReturnCode(returnCode: String){
@@ -60,6 +62,12 @@ class Token{
     }
     func getMessage() -> String{
         return self.message
+    }
+    func isRefreshToken() -> Bool{
+        return self.gotRefreshToken
+    }
+    func hasRefreshToken(refreshToken: Bool){
+        self.gotRefreshToken = refreshToken
     }
     
 }

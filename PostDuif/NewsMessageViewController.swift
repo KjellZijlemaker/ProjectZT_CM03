@@ -9,7 +9,7 @@
 import UIKit
 
 class NewsMessageViewController: UIViewController {
-    var message:Message!
+    var news:Item!
     var speech:SpeechManager = SpeechManager()
     var delegate: deleteMessageItem!
     var openendMessage: messageOpenend!
@@ -30,15 +30,15 @@ class NewsMessageViewController: UIViewController {
         self.view.addGestureRecognizer(swipeRight)
         
         self.newsMessageTitle.layer.cornerRadius = 8
-        self.newsMessageTitle.text = self.message.getSubject()
+        self.newsMessageTitle.text = self.news.getSubject()
         self.newsMessageText.layer.cornerRadius = 8
-        self.newsMessageText.text = self.message.getContent() //Putting back the message inside the controller
+        self.newsMessageText.text = self.news.getContent() //Putting back the message inside the controller
         
         if(self.speechEnabled){
             
             // Making new sentence array for speech
             var sentenceArray: [String] = []
-            sentenceArray.append("Titel nieuwsbericht: " + self.message.getSubject())
+            sentenceArray.append("Titel nieuwsbericht: " + self.news.getSubject())
             sentenceArray.append("Inhoud nieuwsbericht: ")
             sentenceArray.append(self.newsMessageText.text)
             sentenceArray.append("Einde nieuwsbericht")

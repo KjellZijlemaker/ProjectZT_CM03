@@ -11,7 +11,7 @@ import Foundation
 class DataManager{
     
     
-    class func getItems(apiEndPoint: String, completionHandler: (response: [Message]) -> ()) {
+    class func getItems(apiEndPoint: String, completionHandler: (response: [Item]) -> ()) {
         
         // Making GET request to the URL
         request(.GET, apiEndPoint).responseJSON { (request, response, json, error) in
@@ -23,7 +23,7 @@ class DataManager{
                 // Making the JSON object from the JSON
                 var jsonObj = JSON(json!)
                 
-                var messageArray = [Message]()
+                var messageArray = [Item]()
                 
                 if jsonObj["code"].string == "200"{
                 
@@ -39,7 +39,7 @@ class DataManager{
                             if(hasRead != "true"){
                                 
                                 // Making new Message object
-                                var newMessage = Message()
+                                var newMessage = Item()
                                 
                                 // Setting returncode
                                 var returnCode = jsonObj["code"].stringValue
@@ -72,7 +72,7 @@ class DataManager{
                         }
                         else if (type == "2"){
                             // Making new Message object
-                            var newMessage = Message()
+                            var newMessage = Item()
                             
                             // Setting returncode
                             var returnCode = jsonObj["code"].stringValue
@@ -89,6 +89,10 @@ class DataManager{
                             var newsTitle: String = messages["Title"].stringValue
                             newMessage.setSubject(newsTitle)
                             
+                            // Set category inside the object
+                            var newsCategory: String = messages["category"].stringValue
+                            newMessage.setCategory(newsCategory)
+                            
                             // Set the website for the object
                             var newsContent: String = messages["content"].stringValue
                             newMessage.setContent(newsContent)
@@ -103,7 +107,7 @@ class DataManager{
                 }
                 else{
                     if let returnCode = jsonObj["code"].string{
-                        var newMessage = Message()
+                        var newMessage = Item()
                         newMessage.setReturnCode(returnCode)
                         messageArray.append(newMessage)
                     }
@@ -128,9 +132,9 @@ class DataManager{
                 else if (error != nil){
                     println("error!")
                 // Making new Message object
-                var newMessage = Message()
+                var newMessage = Item()
                 newMessage.setReturnCode("403")
-                var messageArray = [Message]()
+                var messageArray = [Item]()
                 messageArray.append(newMessage)
                 
                 // Give the array back to the main Thread
@@ -141,61 +145,6 @@ class DataManager{
         
     }
     
-
-    class func getUserSettings(apiEndPoint: String, completionHandler: (response: [Settings]) -> ()) {
-        // Making GET request to the URL
-        request(.GET, apiEndPoint).responseJSON { (request, response, json, error) in
-            
-            // Making sure if the JSON is not empty
-            if (json != nil) {
-                
-                // Making the JSON object from the JSON
-                var jsonObj = JSON(json!)
-                
-                // Make new JSON array
-                if let appArray = jsonObj["feed"]["entry"].array {
-                    
-                    var settingsArray = [Settings]()
-                    
-                    // Check for every app in the array
-                    for appDict in appArray {
-                        
-                        // Making new Object for putting in the array
-                        var newSettings = Settings()
-                        
-                        // Set name inside the object
-                        var accessibility: Int = appDict["subject"].intValue
-                        newSettings.setUserHasAccessibility(accessibility)
-                        
-                        // Set the website for the object
-                        var speech: Int = appDict["subject"].intValue
-                        newSettings.setUserHasSpeech(speech)
-                        
-                        // Append the app names
-                        settingsArray.append(newSettings)
-                        
-                    }
-                    
-                    // Give the array back to the main Thread
-                    completionHandler(response: settingsArray)
-                    
-                    /* Code snippet for getting single item out of JSON array
-                    if let appName = jsonObj["feed"]["entry"][1]["im:name"]["label"].string{
-                    let test1 = Test(age: 9, name: appName)
-                    //self.tableView.reloadData()
-                    completion(response: test1)
-                    }
-                    */
-                }
-                    
-                    
-                    // If there is an error.....
-                else if (error != nil){
-                    println("error!")
-                }
-            }
-        }
-    }
     
     class func checkMessageRead(apiEndPoint: String, completionHandler: (response: String) -> ()) {
         
