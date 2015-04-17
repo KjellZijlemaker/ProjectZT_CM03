@@ -421,7 +421,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
         println("Nieuws: " + String(newNewsCount))
         
         
-        if(self.indexBeginningNewNews > 0 && self.carousel.currentItemIndex > self.indexBeginningNewNews){
+        if(self.newNewsCount != 0 && self.indexBeginningNewNews > 0 && self.carousel.currentItemIndex > self.indexBeginningNewNews){
             self.totalNewItems--
             self.notificationText.setNotificationTextView(String(self.newNewsCount)) // Update the text
             self.indexBeginningNewNews = self.carousel.currentItemIndex // Update the index
@@ -440,7 +440,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                 
             }
         }
-        else if(self.indexBeginningNewMessages > 0 && self.carousel.currentItemIndex > self.indexBeginningNewMessages){
+        else if(self.newMessagesCount != 0 && self.indexBeginningNewMessages > 0 && self.carousel.currentItemIndex > self.indexBeginningNewMessages){
             self.totalNewItems--
             self.notificationText.setNotificationTextView(String(self.newMessagesCount)) // Update the text
             self.indexBeginningNewMessages = self.carousel.currentItemIndex // Update the index
@@ -894,8 +894,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                                         
                                         // Check the type and append
                                         if(items[l].getType() == "1"){
-                                            
-                                            if(l <= self.userSettings.getPrivateMessageLimit()){
+                                            if(self.messagesCount < self.userSettings.getPrivateMessageLimit()){
                                                 indexHasChanged = true // New item may append
                                                 
                                                 showNotification()
@@ -914,10 +913,9 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                                             }
                                         }
                                         else{
-                                            if(l <= self.userSettings.getNewsMessageLimit()){
+                                            if(self.newsCount < self.userSettings.getNewsMessageLimit()){
                                                 
                                                 indexHasChanged = true
-                                                
                                                 showNotification()
                                                 
                                                 var indexNewsCount = self.messagesCount + self.newsCount
@@ -992,8 +990,9 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
             else if(type == "2" && self.newsCount < self.userSettings.getNewsMessageLimit()){
                 executeAppending()
             }
-            
-            
+            else if(type == "0"){
+                executeAppending()
+            }
             
         }
         
