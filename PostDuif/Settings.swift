@@ -13,7 +13,7 @@ class Settings{
     private var notificationSoundEnabled: Bool
     private var privateMessageLimit: Int
     private var userSpeech: Bool
-    private var privateNewsLimit: Int
+    private var newsMessageLimit: Int
     private var contrastType: String
     private var colorType: String
     private var userAccessibility: Bool
@@ -26,7 +26,7 @@ class Settings{
         self.notificationSoundEnabled = true
         self.privateMessageLimit = 10
         self.userSpeech = true
-        self.privateNewsLimit = 10
+        self.newsMessageLimit = 10
         self.contrastType = "default"
         self.colorType = "default"
         self.userAccessibility = true
@@ -57,12 +57,12 @@ class Settings{
         return self.userSpeech
     }
     
-    func setPrivateNewsLimit(limit: Int){
-        self.privateNewsLimit = limit
+    func setNewsMessageLimit(limit: Int){
+        self.newsMessageLimit = limit
     }
     
-    func getPrivateNewsLimit() -> Int{
-        return self.privateNewsLimit
+    func getNewsMessageLimit() -> Int{
+        return self.newsMessageLimit
     }
     
     func setContrastType(contrastType: String){

@@ -10,6 +10,7 @@ import UIKit
 
 class NewsMessageViewController: UIViewController {
     var news:Item!
+    var userSettings:Settings!
     var speech:SpeechManager = SpeechManager()
     var delegate: deleteMessageItem!
     var openendMessage: messageOpenend!

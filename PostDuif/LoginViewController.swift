@@ -17,6 +17,7 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var loginPincode2: UITextField!
     @IBOutlet weak var loginPincode3: UITextField!
     var token: Token!
+    var settings:Settings!
     var keychain = Keychain(service: "com.visio.postduif")
     let defaults = NSUserDefaults.standardUserDefaults()
     

@@ -68,8 +68,10 @@ class UserManager{
                 
                 // Making the JSON object from the JSON
                 var jsonObj = JSON(json!)
-                
+                println(json)
                 var settingsArray = [Settings]()
+                
+                
                 
                 if jsonObj["code"].string == "200"{
                     
@@ -77,22 +79,55 @@ class UserManager{
                     // Making new array
                     if let dataArray = jsonObj["data"]["entry"].array{
                         
-                        for messages in dataArray{
+                        for settings in dataArray{
                             
                             // Making new Object for putting in the array
                             var newSettings = Settings()
                             
+                            newSettings.setReturnCode("200")
+                            
                             // Set notification
-                            var notification: Bool = messages["notificationSoundEnabled"].bool!
-                            newSettings.hasNotificationSoundEnabled(notification)
+                            var notification: String = settings["notificationSoundEnabled"].stringValue
+                            if(notification == "true"){
+                                newSettings.hasNotificationSoundEnabled(true)
+                            }
+                            else{
+                                newSettings.hasNotificationSoundEnabled(false)
+                            }
+                            
+                            // Set message limit
+                            var privateMessageLimit: String = settings["ShowPrivateMessageLimit"].stringValue
+                            newSettings.setPrivateMessageLimit(privateMessageLimit.toInt()!)
                             
                             // Set speech
-                            var speech: Bool = messages["isSpeechEnabled"].bool!
-                            newSettings.hasSpeechEnabled(speech)
+                            var speech: String = settings["isSpeechEnabled"].stringValue
+                            if(speech == "true"){
+                                newSettings.hasSpeechEnabled(true)
+                            }
+                            else{
+                                newSettings.hasSpeechEnabled(false)
+                            }
+                            
+                            // Set news limit
+                            var newsMessageLimit: String = settings["ShowNewsMessageLimit"].stringValue
+                            newSettings.setNewsMessageLimit(newsMessageLimit.toInt()!)
+                            
+                            // Set contrast
+                            var contrastType: String = settings["contrastType"].stringValue
+                            newSettings.setContrastType(contrastType)
+                            
+                            // Set color
+                            var colorType: String = settings["colorType"].stringValue
+                            newSettings.setColorType(colorType)
                             
                             // Set accessibility
-                            var accessibility: Bool = messages["accessibilityEnabled"].bool!
-                            newSettings.hasAccessibilityEnabled(accessibility)
+                            var accessibility: String = settings["accessibilityEnabled"].stringValue
+                            if(accessibility == "true"){
+                                newSettings.hasAccessibilityEnabled(true)
+                            }
+                            else{
+                                newSettings.hasAccessibilityEnabled(false)
+                            }
                             
                             
                             /* Code snippet for getting single item out of JSON array
@@ -104,6 +139,7 @@ class UserManager{
                             */
                             
                             settingsArray.append(newSettings)
+                            
                         }
                     }
                 }
