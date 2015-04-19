@@ -49,6 +49,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
     // For checking if data is appending or not. Important for playing the speech or not inside the view,
     // when reloading the carousel!
     var isAppending = false
+    var isRealtimeAppending = true
     var indexBeginningNewMessages = 0 // Index when the new messages appended (for counting down the new items in notification)
     var indexBeginningNewNews = 0 // Index when the new messages appended (for counting down the new items in notification)
     
@@ -68,7 +69,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
     
     var dataTimer = NSTimer() // Timer for getting data (appending)
     
-    //# MARK: Views
+    //# MARK: custom Views
     var notificationDot: NotificationDot!
     var notificationText: NotificationText!
     
@@ -87,6 +88,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
     //# MARK: - Outlets for displaying labels / carousel
     @IBOutlet var carousel : iCarousel!
     @IBOutlet weak var categoryMessage: UILabel!
+    @IBOutlet weak var categoryView: CategoryTypeView!
     
     override func awakeFromNib() {
         
@@ -123,9 +125,16 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
         let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: "logoutButtonAction:")
         logoutButton.addGestureRecognizer(longPressRecognizer)
         
+        
+        
+        
         // Setting up the views and other misc
         self.setupViewController()
         self.setupBackgroundForegroundInit()
+        
+        if(self.carousel.numberOfItems < 2){
+            self.setupTimerInit()
+        }
     }
     
     
@@ -226,6 +235,8 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
         self.notificationDot.hideDotView()
         self.view.addSubview(self.notificationDot.getDotView())
         
+        self.categoryView.backgroundColor = UIColor.whiteColor()
+
         
         //# MARK: - Gesture methods
         //=================================================================================================
@@ -268,9 +279,10 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
     //# MARK: - Setting up the timer(s)
     func setupTimerInit(){
         
-        // Setup the viewController with Carousel
-        dataTimer = NSTimer.scheduledTimerWithTimeInterval(10.0, target:self, selector: Selector("appendAppDataRealtime"), userInfo: nil, repeats: true)
-        
+//        if(self.carousel.numberOfItems < 2){
+//        // Setup the viewController with Carousel
+//        dataTimer = NSTimer.scheduledTimerWithTimeInterval(10.0, target:self, selector: Selector("appendAppDataRealtime"), userInfo: nil, repeats: true)
+//        }
     }
     
     //# MARK: - Carousel methods
@@ -314,10 +326,12 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
         
         // If the number is lower then two there will no appending in the carousel, but items will be decremented for array
         if(self.carousel.numberOfItems >= 2){
+            
             println("Total items: " + String(self.totalNewItems))
             println("Total realtime items: " + String(self.totalNewItemsRealtime))
             if(self.notificationDot != nil){
                 
+                // If there are still realtime items, process it
                 if(self.carousel.currentItemIndex == self.carousel.numberOfItems - 1 && self.totalNewItemsRealtime > 0){
                     
                     self.notificationDot.showDotView() // Show dot
@@ -375,13 +389,13 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
         if(self.firstItem){
             
             if (self.carousel.currentItemIndex == 0) {
-                
                 self.setCategory(self.carousel.currentItemIndex) // Setting the category
                 
+                self.categoryView.hidden = false // Unhide view
+                self.setCategoryType(self.carousel.currentItemIndex) // Setting the category type
+                
                 self.firstItem = false
-                
-                
-                
+
                 var textToSend:[String] = [] // Array for sending message
                 
                 // Check if the item is message or newsitem
@@ -416,6 +430,8 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
         println("categorie: " + self.items[self.carousel.currentItemIndex].getCategory())
         // Setting category per item inside the array
         self.setCategory(self.carousel.currentItemIndex)
+        
+        self.setCategoryType(self.carousel.currentItemIndex) // Setting the category type
         
         println("Berichten: " + String(newMessagesCount))
         println("Nieuws: " + String(newNewsCount))
@@ -460,7 +476,21 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
             }
         }
         
-        
+        else if(self.totalNewItemsRealtime != 0 && self.carousel.currentItemIndex > self.totalNewItems){
+            self.totalNewItemsRealtime--
+            self.notificationText.setNotificationTextView(String(self.totalNewItemsRealtime)) // Update the text
+            
+            if(self.totalNewItemsRealtime == 0){
+                if(self.notificationDot != nil){
+                    self.notificationText.removeNotificationTextFromView() // Remove from view
+                    self.notificationDot.getDotView().stopAnimating()
+                    
+                    // Hide it instead of removing view, otherwise txtView won't re appear
+                    self.notificationDot.hideDotView()
+                }
+
+            }
+        }
         // Will execute, only when not appending
         if(!isAppending){
             
@@ -558,26 +588,29 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
     }
     
     
-    // Setting the categorie names above the carousel
+    // Setting the category names above the carousel
     func setCategory(index: Int){
-        
+        println(self.items[index].getCategory())
         categoryMessage.text = "Categorie: " + self.items[index].getCategory()
-        
-        //        switch(self.items[index].getType()){
-        //        case "1":
-        //            categoryMessage.text = "Categorie: Berichten"
-        //            categoryMessage.layoutIfNeeded()
-        //        case "2":
-        //            categoryMessage.text = "Categorie: Nieuws"
-        //            categoryMessage.layoutIfNeeded()
-        //        default:
-        //            categoryMessage.text = "Geen categorie"
-        //            categoryMessage.layoutIfNeeded()
-        //            break
-        //
-        //        }
     }
     
+    
+    func setCategoryType(index: Int){
+        
+        switch(self.items[index].getType()){
+        case "1":
+            self.categoryView.setCategoryTypeLabel("Persoonlijk bericht")
+            self.categoryView.nextItemAnimate(UIColor.greenColor())
+        case "2":
+            self.categoryView.setCategoryTypeLabel("Nieuwsbericht")
+            self.categoryView.nextItemAnimate(UIColor.yellowColor())
+        default:
+            self.categoryView.nextItemAnimate(UIColor.greenColor())
+            break
+            
+        }
+        
+    }
     
     
     
@@ -613,6 +646,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
             else if(settings.getReturnCode() == "400"){
                 if(self.token.isRefreshToken()){
                     self.token.hasRefreshToken(false)
+                    self.getUserSettings("http://84.107.107.169:8080/VisioWebApp/API/clientSettings?tokenKey=" + self.token.getRefreshToken())
                 }
                 else{
                     // Send user back to login phase
@@ -1001,6 +1035,8 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
     // Function for getting items realtime
     // TODO: (IS REPETATIVE CODE, MUST PUT IT IN APPENDING DATA METHOD!!!)
     func appendAppDataRealtime(){
+        if(self.isRealtimeAppending){
+        
         isAppending = true // Now appending data, so speech may not execute
         var url = "http://84.107.107.169:8080/VisioWebApp/API/chat/allMessages?tokenKey=" + self.token.getToken() // URL for JSON
         self.indexBeginningNewMessages = self.messagesCount-1 // Index when new items will begin to append
@@ -1054,23 +1090,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                                 self.totalNewItemsRealtime++ // Append realtime for checking in carousel
                                 
                                 
-                                if(!self.firstItem){ // Will execute if it's not the first item anymore (for speech)
-                                    if(self.totalNewItemsRealtime > 0 || self.carousel.currentItemIndex != 0){
-                                        // tell the total of new items
-                                        if(self.userSettings.isSpeechEnabled()){
-                                            if(self.items[l].getType() == "1"){
-                                                self.newItemsToSpeech(self.totalNewItemsRealtime, type: "1")
-                                                
-                                            }
-                                            else{
-                                                self.newItemsToSpeech(self.totalNewItemsRealtime, type: "2")
-                                                
-                                            }
-                                            
-                                        }
-                                    }
-                                }
-                                if(self.carousel.numberOfItems == 0){
+                                                              if(self.carousel.numberOfItems == 0){
                                     self.totalNewItemsRealtime--
                                 }
                                 
@@ -1084,9 +1104,12 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                                         self.notificationDot.getDotView().startAnimating()
                                         self.notificationDot.getDotView().addSubview(self.notificationText.getNotificationTextView())
                                     }
-                                }
-                                
+                                } 
                                 self.items.append(items[l]) // Append the new message to existing view
+                               
+                                // Setting the right images for each category
+                                self.setImages(l)
+                                
                                 self.carousel.insertItemAtIndex(l, animated: true) // Add new item at carousel
                                 
                                 // Add the amount of messages or news
@@ -1098,7 +1121,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                                     self.newsCount++
                                     self.newNewsCount++
                                 }
-                                
+                            
                                 
                                 continue
                             }
@@ -1113,12 +1136,34 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                     
                     self.carousel.reloadData() // If appended succesful, reload carousel
                     //                            self.speech.stopSpeech()
+                    
+                    // Check if it's still appending realtime. If so, set it to false
+                    if(self.carousel.numberOfItems >= 2 && self.isRealtimeAppending){
+                        self.isRealtimeAppending = false
+                    }
+                    
+                    if(!self.firstItem){ // Will execute if it's not the first item anymore (for speech)
+                        // tell the total of new items
+                        if(self.userSettings.isSpeechEnabled()){
+                            if(self.newMessagesCount > 0){
+                                self.newItemsToSpeech(self.totalNewItemsRealtime, type: "1")
+                                
+                            }
+                            else{
+                                self.newItemsToSpeech(self.totalNewItemsRealtime, type: "2")
+                                
+                            }
+                            
+                        }
+                        
+                    }
+
                 }
                 
             }
             
         }
-        
+        }
     }
     
     //# MARK: - UIBackground / Foreground methods

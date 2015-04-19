@@ -89,7 +89,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ojd-TR-BEd" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-817" y="274"/>
+            <point key="canvasLocation" x="-655" y="1304"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="ufC-wZ-h7g">
@@ -109,18 +109,38 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BbD-YH-2l2" customClass="iCarousel">
                                 <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Categorie" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xtq-pg-PMZ">
-                                        <rect key="frame" x="263" y="52" width="499" height="20.5"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xtq-pg-PMZ">
+                                        <rect key="frame" x="263" y="32" width="499" height="58.5"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="30"/>
                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <view hidden="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rYb-NQ-ciM" customClass="CategoryTypeView" customModule="PostDuif" customModuleProvider="target">
+                                        <rect key="frame" x="204" y="638" width="613" height="118"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oyb-AM-ppw">
+                                                <rect key="frame" x="133" y="42" width="346" height="34"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="29"/>
+                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="centerX" secondItem="oyb-AM-ppw" secondAttribute="centerX" constant="0.5" id="4jF-ug-hkO"/>
+                                            <constraint firstAttribute="centerY" secondItem="oyb-AM-ppw" secondAttribute="centerY" id="lMm-ia-g0f"/>
+                                        </constraints>
+                                        <connections>
+                                            <outlet property="categoryTypeViewLabel" destination="oyb-AM-ppw" id="ug5-L7-RIa"/>
+                                        </connections>
+                                    </view>
                                 </subviews>
                                 <color key="backgroundColor" red="0.0" green="0.00033075853692582781" blue="0.4797782512626263" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
-                                    <constraint firstItem="Xtq-pg-PMZ" firstAttribute="top" secondItem="BbD-YH-2l2" secondAttribute="top" constant="52" id="AK3-se-h0h"/>
-                                    <constraint firstItem="Xtq-pg-PMZ" firstAttribute="leading" secondItem="BbD-YH-2l2" secondAttribute="leading" constant="263" id="QId-RA-bUV"/>
-                                    <constraint firstAttribute="trailing" secondItem="Xtq-pg-PMZ" secondAttribute="trailing" constant="262" id="oog-lT-B0p"/>
+                                    <constraint firstAttribute="trailing" secondItem="Xtq-pg-PMZ" secondAttribute="trailing" constant="262" id="3Gt-ny-KaS"/>
+                                    <constraint firstItem="Xtq-pg-PMZ" firstAttribute="leading" secondItem="BbD-YH-2l2" secondAttribute="leading" constant="263" id="ET6-Li-l15"/>
+                                    <constraint firstItem="Xtq-pg-PMZ" firstAttribute="top" secondItem="BbD-YH-2l2" secondAttribute="top" constant="32" id="WpE-nQ-3YH"/>
+                                    <constraint firstAttribute="centerY" secondItem="rYb-NQ-ciM" secondAttribute="centerY" constant="-313" id="aoI-gz-aTT"/>
                                 </constraints>
                                 <connections>
                                     <outlet property="dataSource" destination="vXZ-lx-hvc" id="81k-26-bEM"/>
@@ -143,6 +163,7 @@
                     <connections>
                         <outlet property="carousel" destination="BbD-YH-2l2" id="sTF-F8-DQJ"/>
                         <outlet property="categoryMessage" destination="Xtq-pg-PMZ" id="a2b-Qq-tFA"/>
+                        <outlet property="categoryView" destination="rYb-NQ-ciM" id="WfG-zG-gBA"/>
                         <segue destination="GxM-yO-7Ii" kind="show" identifier="showMessageContent" id="nXb-fP-FA4"/>
                         <segue destination="rnV-cY-8Ma" kind="show" identifier="showNewsMessageContent" id="D2w-G0-hsh"/>
                         <segue destination="TXV-tG-Vkp" kind="show" identifier="showLogin" id="EGn-ie-D2G"/>
@@ -150,6 +171,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="492" y="390"/>
         </scene>
         <!--Message Content View Controller-->
         <scene sceneID="7k3-cF-TZo">
