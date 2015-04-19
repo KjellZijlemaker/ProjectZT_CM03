@@ -37,6 +37,8 @@
 		21CCF7301ADD6F7200C64170 /* NotificationText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21CCF72F1ADD6F7200C64170 /* NotificationText.swift */; };
 		21CCF7321ADD7A9C00C64170 /* NotificationDot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21CCF7311ADD7A9C00C64170 /* NotificationDot.swift */; };
 		21CF744F1AADB8260047ABC3 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21CF744E1AADB8260047ABC3 /* DataManager.swift */; };
+		21D58D971AE3E459001D6CB7 /* LoginEmailTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D58D961AE3E459001D6CB7 /* LoginEmailTextView.swift */; };
+		21D58D991AE3E96E001D6CB7 /* LoginPincodeTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D58D981AE3E96E001D6CB7 /* LoginPincodeTextView.swift */; };
 		21DF2C001AADC0C5007921E4 /* Alamofire.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DF2BFC1AADC0C5007921E4 /* Alamofire.swift */; };
 		21DF2C011AADC0C5007921E4 /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DF2BFF1AADC0C5007921E4 /* SwiftyJSON.swift */; };
 /* End PBXBuildFile section */
@@ -92,6 +94,8 @@
 		21CCF72F1ADD6F7200C64170 /* NotificationText.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationText.swift; sourceTree = "<group>"; };
 		21CCF7311ADD7A9C00C64170 /* NotificationDot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationDot.swift; sourceTree = "<group>"; };
 		21CF744E1AADB8260047ABC3 /* DataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
+		21D58D961AE3E459001D6CB7 /* LoginEmailTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginEmailTextView.swift; sourceTree = "<group>"; };
+		21D58D981AE3E96E001D6CB7 /* LoginPincodeTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginPincodeTextView.swift; sourceTree = "<group>"; };
 		21DF2BFB1AADC0C5007921E4 /* Alamofire.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Alamofire.h; sourceTree = "<group>"; };
 		21DF2BFC1AADC0C5007921E4 /* Alamofire.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Alamofire.swift; sourceTree = "<group>"; };
 		21DF2BFE1AADC0C5007921E4 /* SwiftyJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwiftyJSON.h; sourceTree = "<group>"; };
@@ -280,6 +284,8 @@
 				21CCF7311ADD7A9C00C64170 /* NotificationDot.swift */,
 				2156FA031AE03E9B00A2A314 /* MainCarouselView.swift */,
 				21A950531AE3BB03002CF761 /* CategoryTypeView.swift */,
+				21D58D961AE3E459001D6CB7 /* LoginEmailTextView.swift */,
+				21D58D981AE3E96E001D6CB7 /* LoginPincodeTextView.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -421,6 +427,7 @@
 				212AE9101AA9CE4D000255E8 /* ViewController.swift in Sources */,
 				212750181AC979FC005D6A7F /* SoundManager.swift in Sources */,
 				211A74191AC5856C004517E8 /* SIAlertView.m in Sources */,
+				21D58D991AE3E96E001D6CB7 /* LoginPincodeTextView.swift in Sources */,
 				21CCF7301ADD6F7200C64170 /* NotificationText.swift in Sources */,
 				214C55DA1AA9E71200555A56 /* MessageContentViewController.swift in Sources */,
 				2186417E1AC31A430084AE46 /* SpeechManager.swift in Sources */,
@@ -435,6 +442,7 @@
 				21CCF72E1ADD5C2B00C64170 /* LogoutButton.swift in Sources */,
 				211A741A1AC5856C004517E8 /* UIWindow+SIUtils.m in Sources */,
 				213CD1421AC815E200B27EA1 /* Keychain.swift in Sources */,
+				21D58D971AE3E459001D6CB7 /* LoginEmailTextView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

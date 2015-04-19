@@ -8,14 +8,13 @@
 
 import UIKit
 
-class LoginViewController: UIViewController {
+class LoginViewController: UIViewController, UITextFieldDelegate {
 
-    @IBOutlet weak var LoginBtn: UIButton!
-    @IBOutlet weak var loginEmail: UITextField!
+    @IBOutlet weak var loginEmail: LoginEmailTextView!
     
-    @IBOutlet weak var loginPincode1: UITextField!
-    @IBOutlet weak var loginPincode2: UITextField!
-    @IBOutlet weak var loginPincode3: UITextField!
+    @IBOutlet weak var loginPincode1: LoginPincodeTextView!
+    @IBOutlet weak var loginPincode2: LoginPincodeTextView!
+    @IBOutlet weak var loginPincode3: LoginPincodeTextView!
     var token: Token!
     var settings:Settings!
     var keychain = Keychain(service: "com.visio.postduif")
@@ -23,6 +22,9 @@ class LoginViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.loginEmail.delegate = self
+        self.loginPincode1.delegate = self
         
         // For putting the view up when having keyboard
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("keyboardWillShow:"), name:UIKeyboardWillShowNotification, object: nil);
@@ -34,6 +36,36 @@ class LoginViewController: UIViewController {
         self.view.addGestureRecognizer(swipeRight)
     }
 
+//    func textFieldShouldBeginEditing(textField: UITextField!) -> CBool{
+//        if(self.loginEmail == textField){
+//            // For putting the view up when having keyboard
+//            NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("keyboardWillShow1:"), name:UIKeyboardWillShowNotification, object: nil);
+//
+//        }
+//        if(self.loginPincode1 == textField){
+//            // For putting the view up when having keyboard
+//            NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("keyboardWillShow:"), name:UIKeyboardWillShowNotification, object: nil);
+//            
+//        }
+//        
+//        return true
+//    }
+//    
+//    func textFieldShouldEndEditing(textField: UITextField!) -> Bool {
+//                NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("keyboardWillHide1:"), name:UIKeyboardWillHideNotification, object: nil);
+//        
+//        return true
+//    }
+//    
+    // Functions for putting view to top
+    func keyboardWillShow(sender: NSNotification) {
+        self.view.frame.origin.y -= 200
+    }
+    func keyboardWillHide(sender: NSNotification) {
+        self.view.frame.origin.y += 200
+        
+    }
+    
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return UIStatusBarStyle.LightContent
     }
@@ -43,14 +75,11 @@ class LoginViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    // Functions for putting view to top
-    func keyboardWillShow(sender: NSNotification) {
-        self.view.frame.origin.y -= 200
+    override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
+        view.endEditing(true)
+        super.touchesBegan(touches, withEvent: event)
     }
-    func keyboardWillHide(sender: NSNotification) {
-        self.view.frame.origin.y += 200
-    }
-    
+
     func rightSwiped(){
         
         // Making pincode

@@ -780,6 +780,18 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
         }
     }
     
+    func logoutButtonAction(sender: UILongPressGestureRecognizer) {
+        self.speech.stopSpeech()
+        if sender.state == UIGestureRecognizerState.Began
+        {
+            // Sending user back to login phase
+            self.goToLogin()
+            
+        }
+        
+    }
+    
+    
     // For loading screen
     func setLoadingView(title: String){
         // Notification for getting items
