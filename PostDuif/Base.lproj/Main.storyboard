@@ -75,11 +75,12 @@
                         <outlet property="loginPincode1" destination="uz1-FU-xQk" id="CII-o9-12t"/>
                         <outlet property="loginPincode2" destination="lwe-kb-3T7" id="fzq-zv-XLV"/>
                         <outlet property="loginPincode3" destination="hfK-Gh-hSZ" id="QB4-GG-IMD"/>
+                        <segue destination="vXZ-lx-hvc" kind="show" identifier="loginSucceed" id="67I-mG-Mat"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ojd-TR-BEd" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-655" y="1304"/>
+            <point key="canvasLocation" x="-667" y="1240"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="ufC-wZ-h7g">
@@ -90,17 +91,17 @@
                         <viewControllerLayoutGuide type="bottom" id="2fi-mo-0CV"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="kh9-bI-dsS">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ong-qD-mZa">
-                                <rect key="frame" x="0.0" y="-7" width="600" height="612"/>
+                                <rect key="frame" x="0.0" y="-7" width="1024" height="780"/>
                             </imageView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BbD-YH-2l2" customClass="iCarousel">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xtq-pg-PMZ">
-                                        <rect key="frame" x="263" y="32" width="75" height="58.5"/>
+                                        <rect key="frame" x="263" y="32" width="499" height="58.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="30"/>
                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
