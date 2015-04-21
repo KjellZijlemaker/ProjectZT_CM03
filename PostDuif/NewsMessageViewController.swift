@@ -19,6 +19,7 @@ class NewsMessageViewController: UIViewController {
     var speechEnabled: Bool = true
     
 
+    @IBOutlet weak var topNewsImage: UIImageView!
     @IBOutlet weak var newsMessageTitle: UITextView!
     @IBOutlet weak var newsMessageText: UITextView!
     
@@ -30,9 +31,20 @@ class NewsMessageViewController: UIViewController {
         swipeRight.direction = UISwipeGestureRecognizerDirection.Right
         self.view.addGestureRecognizer(swipeRight)
         
-        self.newsMessageTitle.layer.cornerRadius = 8
+        var borderColor : UIColor = UIColor.grayColor()
+        self.newsMessageTitle.layer.borderWidth = 1
+        self.newsMessageTitle.layer.borderColor = borderColor.CGColor
+        self.newsMessageTitle.layer.cornerRadius = 0
+        self.newsMessageText.layer.borderWidth = 1
+        self.newsMessageText.layer.borderColor = borderColor.CGColor
+        self.newsMessageText.layer.cornerRadius = 0
+        self.topNewsImage.layer.borderWidth = 1
+        self.topNewsImage.layer.borderColor = borderColor.CGColor
+        self.topNewsImage.layer.cornerRadius = 0
+
+        //self.newsMessageTitle.layer.cornerRadius = 8
         self.newsMessageTitle.text = self.news.getSubject()
-        self.newsMessageText.layer.cornerRadius = 8
+       // self.newsMessageText.layer.cornerRadius = 8
         self.newsMessageText.text = self.news.getContent() //Putting back the message inside the controller
         
         if(self.speechEnabled){

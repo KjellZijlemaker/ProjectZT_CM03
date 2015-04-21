@@ -578,6 +578,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos8.3;
 				SWIFT_OBJC_BRIDGING_HEADER = "PostDuif/PostDuif-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = 2;
 			};
@@ -594,6 +595,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos8.3;
 				SWIFT_OBJC_BRIDGING_HEADER = "PostDuif/PostDuif-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = 2;
 			};
