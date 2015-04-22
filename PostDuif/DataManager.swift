@@ -30,13 +30,11 @@ class DataManager{
                     
                 // Making new array
                 if let dataArray = jsonObj["data"]["entry"].array{
-                    
-                    
+
                     for messages in dataArray{
                         var type: String = messages["type"].stringValue
                         if(type == "1"){
-                            var hasRead: String = messages["hasRead"].stringValue
-                            if(hasRead != "true"){
+  
                                 
                                 // Making new Message object
                                 var newMessage = Item()
@@ -69,7 +67,7 @@ class DataManager{
                                 
                             }
 
-                        }
+                        
                         else if (type == "2"){
                             // Making new Message object
                             var newMessage = Item()
@@ -97,6 +95,33 @@ class DataManager{
                             var newsContent: String = messages["content"].stringValue
                             newMessage.setContent(newsContent)
                             
+                            // Append the app names
+                            messageArray.append(newMessage)
+                        }
+                        
+                        else if(type == "3"){
+                            // Making new Message object
+                            var newMessage = Item()
+                            
+                            // Setting returncode
+                            var returnCode = jsonObj["code"].stringValue
+                            newMessage.setReturnCode(returnCode)
+                            
+                            // Setting type
+                            newMessage.setType(type)
+                            
+                            // Setting the message ID
+                            var clubMessageID: String = messages["clubMessageClientId"].stringValue
+                            newMessage.setID(clubMessageID)
+                            
+                            // Set name inside the object
+                            var clubMessageSubject: String = messages["subject"].stringValue
+                            newMessage.setSubject(clubMessageSubject)
+                            
+                            // Set the website for the object
+                            var clubMessage: String = messages["message"].stringValue
+                            newMessage.setContent(clubMessage)
+
                             // Append the app names
                             messageArray.append(newMessage)
                         }

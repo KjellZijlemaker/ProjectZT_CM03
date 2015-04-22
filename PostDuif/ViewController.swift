@@ -33,10 +33,12 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
     var firstItem: Bool = true
     var messagesCount = 0
     var newsCount = 0
+    var clubNewsCount = 0
     
     //#MARK: - Counters and booleans for amount of new messages and news
     var newMessagesCount = 0
     var newNewsCount = 0
+    var newClubNewsCount = 0
     
     //# MARK: - Variables for adding new items to the array
     
@@ -51,7 +53,9 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
     var isAppending = false
     var isRealtimeAppending = true
     var indexBeginningNewMessages = 0 // Index when the new messages appended (for counting down the new items in notification)
-    var indexBeginningNewNews = 0 // Index when the new messages appended (for counting down the new items in notification)
+    var indexBeginningNewNews = 0 // Index when the new news appended (for counting down the new items in notification)
+    var indexBeginningNewClubNews = 0 // Index when the new clubNews appended
+    
     
     var boundaryBeginningNewItems = 0 // Int for giving the total of old items before the new items appended
     var oldBoundaryBeginningNewItems = 0
@@ -170,6 +174,8 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
             case "2":
                 performSegueWithIdentifier("showNewsMessageContent", sender: self)
                 println("news")
+            case "3":
+                performSegueWithIdentifier("showClubNewsContent", sender: self)
             default:
                 // For performing the seque inside the storyboard
                 performSegueWithIdentifier("showMessageContent", sender: self)
@@ -324,52 +330,6 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
         }
         
         
-        // If the number is lower then two there will no appending in the carousel, but items will be decremented for array
-        if(self.carousel.numberOfItems >= 2){
-            
-            println("Total items: " + String(self.totalNewItems))
-            println("Total realtime items: " + String(self.totalNewItemsRealtime))
-            if(self.notificationDot != nil){
-                
-                // If there are still realtime items, process it
-                if(self.carousel.currentItemIndex == self.carousel.numberOfItems - 1 && self.totalNewItemsRealtime > 0){
-                    
-                    self.notificationDot.showDotView() // Show dot
-                    self.notificationText.hideNotificationTextView() // New items, so unhide textView
-                    
-                    // If the realtime items are not 0, decrement the counter
-                    if(self.totalNewItemsRealtime > 0){
-                        
-                        for i in 0...self.totalNewItemsRealtime-1{
-                            self.totalNewItemsRealtime--
-                        }
-                        
-                    }
-                    
-                    
-                    
-                }
-                    // If realtime items are 0, there are only non-realtime items to append to carousel
-                else if (self.carousel.currentItemIndex == self.messagesCount-1 && self.newsCount == 0){
-                    self.appendAppData("0")
-                }
-                else if (self.carousel.currentItemIndex == self.messagesCount-1){
-                    self.appendAppData("1")
-                }
-                else if (self.carousel.currentItemIndex == self.messagesCount + self.newsCount-1) {
-                    self.appendAppData("2")
-                }
-                
-            }
-        }
-        else{
-            if(self.carousel.currentItemIndex == self.carousel.numberOfItems - self.totalNewItems && self.totalNewItems > 0){
-                self.notificationDot.showDotView() // Show dot
-                self.notificationText.hideNotificationTextView() // New items, so unhide textView
-                
-                self.totalNewItems--
-            }
-        }
         
         //set item label
         //remember to always set any properties of your carousel item
@@ -424,19 +384,70 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
         }
     }
     
+    
+    func carouselCheckForAppendingItems(){
+        
+        // If the number is lower then two there will no appending in the carousel, but items will be decremented for array
+        if(self.carousel.numberOfItems >= 2){
+            
+            if(self.notificationDot != nil){
+                
+                // If there are still realtime items, process it
+                if(self.carousel.currentItemIndex == self.carousel.numberOfItems - 1 && self.totalNewItemsRealtime > 0){
+                    
+                    self.notificationDot.showDotView() // Show dot
+                    self.notificationText.hideNotificationTextView() // New items, so unhide textView
+                    
+                    // If the realtime items are not 0, decrement the counter
+                    if(self.totalNewItemsRealtime > 0){
+                        
+                        for i in 0...self.totalNewItemsRealtime-1{
+                            self.totalNewItemsRealtime--
+                        }
+                        
+                    }
+                    
+                    
+                    
+                }
+                    // If realtime items are 0, there are only non-realtime items to append to carousel
+                else if (self.carousel.currentItemIndex == self.messagesCount-1 && self.newsCount == 0){
+                    self.appendAppData("0")
+                }
+                else if (self.carousel.currentItemIndex == self.messagesCount-1){
+                    self.appendAppData("1")
+                }
+                else if (self.carousel.currentItemIndex == self.messagesCount + self.newsCount-1) {
+                    self.appendAppData("2")
+                }
+                else if(self.carousel.currentItemIndex == self.messagesCount + self.clubNewsCount-1){
+                    self.appendAppData("3")
+                }
+                
+            }
+        }
+        else{
+            if(self.carousel.currentItemIndex == self.carousel.numberOfItems - self.totalNewItems && self.totalNewItems > 0){
+                self.notificationDot.showDotView() // Show dot
+                self.notificationText.hideNotificationTextView() // New items, so unhide textView
+                
+                self.totalNewItems--
+            }
+        }
+    }
+    
     // Function for checking if the index from the carousel changed
     func carouselCurrentItemIndexDidChange(carousel: iCarousel!){
         
-        println("categorie: " + self.items[self.carousel.currentItemIndex].getCategory())
+        self.carouselCheckForAppendingItems() // Check for appending items and decrement notification counter if needed
+        
+
         // Setting category per item inside the array
         self.setCategory(self.carousel.currentItemIndex)
-        
         self.setCategoryType(self.carousel.currentItemIndex) // Setting the category type
         
-        println("Berichten: " + String(newMessagesCount))
-        println("Nieuws: " + String(newNewsCount))
         
-        
+        //For newsmessages
         if(self.newNewsCount != 0 && self.indexBeginningNewNews > 0 && self.carousel.currentItemIndex > self.indexBeginningNewNews){
             self.totalNewItems--
             self.notificationText.setNotificationTextView(String(self.newNewsCount)) // Update the text
@@ -456,7 +467,30 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                 
             }
         }
+        
+            // For messages
         else if(self.newMessagesCount != 0 && self.indexBeginningNewMessages > 0 && self.carousel.currentItemIndex > self.indexBeginningNewMessages){
+            self.totalNewItems--
+            self.notificationText.setNotificationTextView(String(self.newMessagesCount)) // Update the text
+            self.indexBeginningNewMessages = self.carousel.currentItemIndex // Update the index
+            self.newMessagesCount--
+            
+            // If the totalNewItems is 0, delete the notification
+            if(self.newMessagesCount == 0){
+                self.indexBeginningNewMessages = 0
+                if(self.notificationDot != nil){
+                    self.notificationText.removeNotificationTextFromView() // Remove from view
+                    self.notificationDot.getDotView().stopAnimating()
+                    
+                    // Hide it instead of removing view, otherwise txtView won't re appear
+                    self.notificationDot.hideDotView()
+                }
+                
+            }
+        }
+            
+            // For clubNews
+        else if(self.newClubNewsCount != 0 && self.indexBeginningNewMessages > 0 && self.carousel.currentItemIndex > self.indexBeginningNewMessages){
             self.totalNewItems--
             self.notificationText.setNotificationTextView(String(self.newMessagesCount)) // Update the text
             self.indexBeginningNewMessages = self.carousel.currentItemIndex // Update the index
@@ -596,14 +630,27 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
     
     
     func setCategoryType(index: Int){
+        var isHello = true
         
         switch(self.items[index].getType()){
+       
         case "1":
-            self.categoryView.setCategoryTypeLabel("Persoonlijk bericht")
-            self.categoryView.nextItemAnimate(UIColor.greenColor())
+            if(isHello){
+                self.categoryView.setCategoryTypeLabel("Persoonlijk bericht")
+                self.categoryView.nextItemAnimate(UIColor.greenColor())
+                isHello = false
+            }
         case "2":
-            self.categoryView.setCategoryTypeLabel("Nieuwsbericht")
-            self.categoryView.nextItemAnimate(UIColor.yellowColor())
+            if(isHello){
+                self.categoryView.setCategoryTypeLabel("Nieuwsbericht")
+                self.categoryView.nextItemAnimate(UIColor.yellowColor())
+                isHello = false
+            }
+        case "3":
+            self.categoryView.setCategoryTypeLabel("Nieuwsbrief")
+            self.categoryView.nextItemAnimate(UIColor.orangeColor())
+
+            
         default:
             self.categoryView.nextItemAnimate(UIColor.greenColor())
             break
@@ -711,22 +758,30 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                                 break
                             }
                         }
-                    }
-                    
-                    for l in 0...items.count-1{
-                        if(items[l].getType() == "2"){
-                            self.newsCount++
-                            self.items.append(items[l])
-                            
-                            // Setting the right images for each category
-                            self.setImages(l)
-                            
-                            self.carousel.insertItemAtIndex(l, animated: true) // Insert items at last index
-                            if(self.newsCount == self.userSettings.getNewsMessageLimit()){
-                                break
+                            else if(items[i].getType() == "2"){
+                                self.newsCount++
+                                self.items.append(items[i])
+                                
+                                // Setting the right images for each category
+                                self.setImages(i)
+                                
+                                self.carousel.insertItemAtIndex(i, animated: true) // Insert items at last index
+                                if(self.newsCount == self.userSettings.getNewsMessageLimit()){
+                                    break
                             }
                         }
+                        else if(items[i].getType() == "3"){
+                            self.clubNewsCount++
+                            self.items.append(items[i])
+                            
+                            // Setting the right images for each category
+                            self.setImages(i)
+                            
+                            self.carousel.insertItemAtIndex(i, animated: true) // Insert items at last index
+                            
+                        }
                     }
+                    
                     
                     // Seepching total of items
                     self.speech.speechString("U heeft in totaal: " + String(self.messagesCount) + " nieuwe berichten, en " + String(self.newsCount) + " nieuwe nieuwsberichten")
@@ -871,9 +926,6 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                                 else{
                                     idArrayNew.append(items[j].getID().toInt()!)
                                 }
-                                
-                                
-                                
                             }
                         }
                         
@@ -958,7 +1010,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                                                 break
                                             }
                                         }
-                                        else{
+                                        else if(items[l].getType() == "2"){
                                             if(self.newsCount < self.userSettings.getNewsMessageLimit()){
                                                 
                                                 indexHasChanged = true
@@ -976,6 +1028,22 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                                             else{
                                                 break
                                             }
+                                        }
+                                        else if(items[l].getType() == "3"){
+                                                
+                                                indexHasChanged = true
+                                                showNotification()
+                                                
+                                                var indexClubNewsCount = self.messagesCount + self.newsCount + self.clubNewsCount
+                                                self.items.insert(items[l], atIndex: indexClubNewsCount)
+                                                self.appendImage(indexClubNewsCount)
+                                                self.carousel.insertItemAtIndex(indexClubNewsCount, animated: true)
+                                                
+                                                //Add the amount of messages or news
+                                                self.clubNewsCount++
+                                                self.newClubNewsCount++
+                                            
+
                                         }
                                         
                                         
@@ -1022,8 +1090,11 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
             if(type == "1"){
                 self.indexBeginningNewMessages = self.messagesCount-1 // Index when new items will begin to append
             }
-            else{
+            else if(type == "2"){
                 self.indexBeginningNewNews = self.messagesCount + self.newsCount-1 // Index when new items will begin to append
+            }
+            else if(type == "3"){
+                 self.indexBeginningNewClubNews = self.messagesCount + self.newsCount + self.clubNewsCount-1 // Index when new items will begin to append
             }
             
             self.oldBoundaryBeginningNewItems = self.boundaryBeginningNewItems
@@ -1034,6 +1105,9 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                 executeAppending()
             }
             else if(type == "2" && self.newsCount < self.userSettings.getNewsMessageLimit()){
+                executeAppending()
+            }
+            else if(type == "3"){
                 executeAppending()
             }
             else if(type == "0"){
@@ -1204,13 +1278,22 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                 typeItem = "berichten"
             }
         }
-        else{
+        else if(type == "2"){
             // Small check for grammar
             if(newItems == 1){
                 typeItem = "nieuwsbericht"
             }
             else{
                 typeItem = "nieuwsberichten"
+            }
+        }
+        else if(type == "3"){
+            // Small check for grammar
+            if(newItems == 1){
+                typeItem = "nieuwsbrief"
+            }
+            else{
+                typeItem = "nieuwsbrieven"
             }
         }
         
@@ -1244,6 +1327,17 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
             vc.openendMessage = self
             vc.delegate = self
             vc.news = self.items[self.carousel.currentItemIndex]
+            vc.userSettings = self.userSettings
+            vc.carouselID = String(self.carousel.currentItemIndex)
+            self.speech.stopSpeech()
+            self.messageIsOpenend = true
+        }
+        if segue.identifier == "showClubNewsContent"{
+            let vc = segue.destinationViewController as ClubNewsViewController
+            vc.deletingMessage = self
+            vc.openendMessage = self
+            vc.delegate = self
+            vc.clubNews = self.items[self.carousel.currentItemIndex]
             vc.userSettings = self.userSettings
             vc.carouselID = String(self.carousel.currentItemIndex)
             self.speech.stopSpeech()
@@ -1319,8 +1413,11 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                 if(self.items[carouselItemIndex!].getType() == "1"){
                     self.messagesCount--
                 }
-                else{
+                else if(self.items[carouselItemIndex!].getType() == "2"){
                     self.newsCount--
+                }
+                else if(self.items[carouselItemIndex!].getType() == "3"){
+                    self.clubNewsCount--
                 }
                 self.items.removeAtIndex(carouselItemIndex!)
                 self.carousel.removeItemAtIndex(carouselItemIndex!, animated: true)

@@ -18,8 +18,6 @@ class NewsMessageViewController: UIViewController {
     var carouselID: String!
     var speechEnabled: Bool = true
     
-
-    @IBOutlet weak var topNewsImage: UIImageView!
     @IBOutlet weak var newsMessageTitle: UITextView!
     @IBOutlet weak var newsMessageText: UITextView!
     
@@ -38,9 +36,6 @@ class NewsMessageViewController: UIViewController {
         self.newsMessageText.layer.borderWidth = 1
         self.newsMessageText.layer.borderColor = borderColor.CGColor
         self.newsMessageText.layer.cornerRadius = 0
-        self.topNewsImage.layer.borderWidth = 1
-        self.topNewsImage.layer.borderColor = borderColor.CGColor
-        self.topNewsImage.layer.cornerRadius = 0
 
         //self.newsMessageTitle.layer.cornerRadius = 8
         self.newsMessageTitle.text = self.news.getSubject()
