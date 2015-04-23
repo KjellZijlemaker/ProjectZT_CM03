@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		210133871AB5C1E00065D186 /* NewsMessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 210133861AB5C1E00065D186 /* NewsMessageViewController.swift */; };
 		210310EF1AE76D8100C5AC73 /* ClubNewsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 210310EE1AE76D8100C5AC73 /* ClubNewsViewController.swift */; };
+		210310F31AE976E800C5AC73 /* CarouselEnding.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 210310F21AE976E800C5AC73 /* CarouselEnding.m4a */; };
 		211A74111AC581CB004517E8 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 211A74101AC581CB004517E8 /* MBProgressHUD.m */; };
 		211A74181AC5856C004517E8 /* SIAlertView.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 211A74131AC5856C004517E8 /* SIAlertView.bundle */; };
 		211A74191AC5856C004517E8 /* SIAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 211A74151AC5856C004517E8 /* SIAlertView.m */; };
@@ -57,6 +58,7 @@
 /* Begin PBXFileReference section */
 		210133861AB5C1E00065D186 /* NewsMessageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewsMessageViewController.swift; sourceTree = "<group>"; };
 		210310EE1AE76D8100C5AC73 /* ClubNewsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClubNewsViewController.swift; sourceTree = "<group>"; };
+		210310F21AE976E800C5AC73 /* CarouselEnding.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = CarouselEnding.m4a; sourceTree = "<group>"; };
 		211A740F1AC581CB004517E8 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
 		211A74101AC581CB004517E8 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
 		211A74131AC5856C004517E8 /* SIAlertView.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = SIAlertView.bundle; sourceTree = "<group>"; };
@@ -266,6 +268,7 @@
 		218C8C411ACAA0350023321B /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
+				210310F21AE976E800C5AC73 /* CarouselEnding.m4a */,
 				218C8C401ACAA0130023321B /* Roekoe.m4a */,
 			);
 			name = Sounds;
@@ -396,6 +399,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				210310F31AE976E800C5AC73 /* CarouselEnding.m4a in Resources */,
 				218C8C421ACAA9C10023321B /* Roekoe.m4a in Resources */,
 				212AE9131AA9CE4D000255E8 /* Main.storyboard in Resources */,
 				211A74181AC5856C004517E8 /* SIAlertView.bundle in Resources */,

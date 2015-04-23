@@ -83,11 +83,12 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
     
     //# MARK: Managers
     var speech = SpeechManager() // For speech
-    var sound = SoundManager(resourcePath: "Roekoe", fileType: "m4a") // For the sounds
     
     
-    
-    
+    var notificationSound = SoundManager(resourcePath: "Roekoe", fileType: "m4a") // For the sounds
+    var carouselEndSound = SoundManager(resourcePath: "CarouselEnding", fileType: "m4a") // For the sounds
+
+
     //# MARK: - Outlets for displaying labels / carousel
     @IBOutlet var carousel : iCarousel!
     @IBOutlet weak var categoryMessage: UILabel!
@@ -564,7 +565,12 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                 }
                 self.carousel.reloadItemAtIndex(self.carousel.currentItemIndex, animated: false)
             }
-            
+           
+        }
+        
+        // Last item has been reached
+        if(self.carousel.currentItemIndex == self.carousel.numberOfItems-1){
+            self.carouselEndSound.playSound()
         }
     }
     
@@ -1128,7 +1134,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                                         self.newItemsToSpeech(self.newNewsCount, type: "2")
                                     }
                                     
-                                    self.sound.playSound() // Play the ROEKOE sound
+                                    self.notificationSound.playSound() // Play the ROEKOE sound
                                     //self.speech.stopSpeech()
                                     
                                     
