@@ -43,6 +43,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
     //# MARK: - Variables for adding new items to the array
     
     var totalNewItems = 0 // For total of new items (Non realtime appended)
+    var totalNewItemsRealtime = 0 // For total of new items (realtime appended)
     
     //# MARK: - Variables for appending messages / news
     var appendedMessages: [Item] = []
@@ -50,6 +51,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
     // For checking if data is appending or not. Important for playing the speech or not inside the view,
     // when reloading the carousel!
     var isAppending = false
+    var isRealtimeAppending = true
     var indexBeginningNewMessages = 0 // Index when the new messages appended (for counting down the new items in notification)
     var indexBeginningNewNews = 0 // Index when the new news appended (for counting down the new items in notification)
     var indexBeginningNewClubNews = 0 // Index when the new clubNews appended
@@ -69,8 +71,8 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
     var passToLogin: Bool = false
     let defaults = NSUserDefaults.standardUserDefaults() // Instead of key, use UserDefault
     
+    var appendRealtimeTimer = NSTimer() // Timer for getting data (appending realtime)
     var appendDataTimer = NSTimer() // Timer for appendign data
-    var checkAppendingTimer = NSTimer() // Timer for checking if append timer is needed
     
     //# MARK: custom Views
     var notificationDot: NotificationDot!
@@ -134,7 +136,6 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
         // Setting up the views and other misc
         self.setupViewController()
         self.setupBackgroundForegroundInit()
-        self.setupAppendingTimer()
         
     }
     
@@ -280,79 +281,19 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
     
     
     //# MARK: - Setting up the timer(s)
-
-    func setupAppendingTimer(){
-        self.checkAppendingTimer = NSTimer.scheduledTimerWithTimeInterval(13.0, target:self, selector: Selector("checkAppendingTimerSelectorHelper"), userInfo: nil, repeats: true)
-    }
-    
-    // For checking if checking for appending should execute
-    func checkAppendingTimerSelectorHelper(){
-        // If there are no items of one of the categories, setup timer and append in sequences
-        if(self.messagesCount == 0 && self.clubNewsCount == 0 || self.newsCount == 0 ){
-            
-            if(!self.appendDataTimer.valid){
-                println("NO MESSAGES, CLUBS OR NEWS")
-                self.setupAppendDataTimer("0")
-                
-            }
-            else{
-                println("NO MESSAGES, CLUBS OR NEWS")
-                self.deleteTimer(self.appendDataTimer)
-                self.setupAppendDataTimer("0")
-            }
-        }
-            
-        else if(self.messagesCount == 0){
-            if(!self.appendDataTimer.valid){
-                println("NO MESSAGES")
-                self.setupAppendDataTimer("1")
-                
-            }
-            else{
-                println("NO MESSAGES")
-                self.deleteTimer(self.appendDataTimer)
-                self.setupAppendDataTimer("1")
-            }
-        }
-        else if(self.newsCount == 0){
-            if(!self.appendDataTimer.valid){
-                println("NO NEWS")
-                self.setupAppendDataTimer("2")
-                
-            }
-            else{
-                println("NO NEWS")
-                self.deleteTimer(self.appendDataTimer)
-                self.setupAppendDataTimer("2")
-            }
-        }
-        else if(self.clubNewsCount == 0){
-            if(!self.appendDataTimer.valid){
-                println("NO CLUBS")
-                self.setupAppendDataTimer("3")
-                
-            }
-            else{
-                println("NO CLUBS")
-                self.deleteTimer(self.appendDataTimer)
-                self.setupAppendDataTimer("3")
-            }
-        }
-        else{
-            if(self.appendDataTimer.valid){
-                self.deleteTimer(self.appendDataTimer)
-                
-            }
-        }
-    }
+    //    func setupAppendRealtimeDataTimer(){
+    //
+    //        // Setup the viewController with Carousel
+    //        self.appendRealtimeTimer = NSTimer.scheduledTimerWithTimeInterval(10.0, target:self, selector: Selector("appendAppDataRealtime"), userInfo: nil, repeats: true)
+    //    }
     
     func setupAppendDataTimer(type: String){
-        self.appendDataTimer = NSTimer.scheduledTimerWithTimeInterval(8.0, target:self, selector: Selector("appendDataTimerSelectorHelper:"), userInfo: type, repeats: true)
+        self.appendDataTimer = NSTimer.scheduledTimerWithTimeInterval(10.0, target:self, selector: Selector("appendDataTimerSelectorHelper:"), userInfo: type, repeats: true)
     }
     
     func appendDataTimerSelectorHelper(timer: NSTimer){
         var type = timer.userInfo as String
-        self.appendAppData(type, showLoadingScreen: false)
+        self.appendAppData("type", showLoadingScreen: false)
     }
     
     func deleteTimer(timer: NSTimer){
@@ -463,8 +404,23 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
             
             if(self.notificationDot != nil){
                 
+                // If there are still realtime items, process it
+                if(self.carousel.currentItemIndex == self.carousel.numberOfItems - 1 && self.totalNewItemsRealtime > 0){
                     
-                if (self.carousel.currentItemIndex == self.messagesCount-1){
+                    self.notificationDot.showDotView() // Show dot
+                    self.notificationText.hideNotificationTextView() // New items, so unhide textView
+                    
+                    // If the realtime items are not 0, decrement the counter
+                    if(self.totalNewItemsRealtime > 0){
+                        
+                        for i in 0...self.totalNewItemsRealtime-1{
+                            self.totalNewItemsRealtime--
+                        }
+                        
+                    }
+                }
+                    
+                else if (self.carousel.currentItemIndex == self.messagesCount-1){
                     self.appendAppData("1", showLoadingScreen: true)
                 }
                 else if (self.carousel.currentItemIndex == self.messagesCount + self.newsCount-1) {
@@ -473,6 +429,34 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                 else if(self.carousel.currentItemIndex == self.messagesCount + self.clubNewsCount-1){
                     self.appendAppData("3", showLoadingScreen: true)
                 }
+                
+                // If there are no items of one of the categories, setup timer and append in sequences
+                if(self.messagesCount == 0 && self.clubNewsCount == 0){
+                    
+                    if(!self.appendDataTimer.valid){
+                        self.setupAppendDataTimer("0")
+                        
+                    }
+                }
+                else if(self.messagesCount == 0){
+                    if(!self.appendDataTimer.valid){
+                        self.setupAppendDataTimer("1")
+                        
+                    }
+                }
+                else if(self.clubNewsCount == 0){
+                    if(!self.appendDataTimer.valid){
+                        self.setupAppendDataTimer("3")
+                        
+                    }
+                }
+                else{
+                    if(self.appendDataTimer.valid){
+                        self.deleteTimer(self.appendDataTimer)
+                        
+                    }
+                }
+                
             }
             
         }
@@ -805,7 +789,12 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                     
                     
                     MBProgressHUD.hideAllHUDsForView(self.view, animated: true) // Close notification
-
+                    
+                    // If there are less then two items, call the timer
+                    if(self.carousel.numberOfItems < 2){
+                        self.setupAppendDataTimer("0")
+                    }
+                    
                     viewMayLoad = true
                 }
                     
@@ -849,6 +838,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                 
                 // If there are less then two items, call the timer
                 if(self.carousel.numberOfItems < 2){
+                    self.setupAppendDataTimer("0")
                     
                     self.categoryView.hidden = false // Unhide view
                     self.setCategoryType(0, isEmpty: true) // Show the category
@@ -901,12 +891,8 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
         });
         
         // Invalidate timer if present
-        if(self.checkAppendingTimer.valid){
-            self.checkAppendingTimer.invalidate() // Invalidate the timer
-        }
-        // Invalidate timer if present
-        if(self.appendDataTimer.valid){
-            self.appendDataTimer.invalidate() // Invalidate the timer
+        if(self.appendRealtimeTimer.valid){
+            self.appendRealtimeTimer.invalidate() // Invalidate the timer
         }
         
         // Remove the keys if present
@@ -938,11 +924,6 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                     // If not empty, enable appending data
                     if(!items.isEmpty){
                         
-                        // Setting the new messages (if there are any)
-                        var newMessages = 0
-                        var newNews = 0
-                        var newClubNews = 0
-                        
                         var idArrayOld: [Int] = []
                         var idArrayNew: [Int] = []
                         var newIDArray: [Int] = []
@@ -963,7 +944,6 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                                 else{
                                     idArrayNew.append(items[j].getID().toInt()!)
                                 }
-                                
                             }
                         }
                         
@@ -980,7 +960,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                                     }
                                 }
                                 else{
-                                    idArrayOld.append(items[i].getID().toInt()!)
+                                    idArrayOld.append(self.items[i].getID().toInt()!)
                                 }
                                 
                             }
@@ -1046,7 +1026,6 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                                                 //Add the amount of messages or news
                                                 self.messagesCount++
                                                 self.newMessagesCount++
-                                                newMessages++
                                             }
                                             else{
                                                 break
@@ -1068,7 +1047,6 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                                                 self.carousel.insertItemAtIndex(indexNewsCount, animated: true)
                                                 
                                                 //Add the amount of messages or news
-                                                newNews++
                                                 self.newsCount++
                                                 self.newNewsCount++
                                             }
@@ -1091,7 +1069,6 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                                             self.carousel.insertItemAtIndex(indexClubNewsCount, animated: true)
                                             
                                             //Add the amount of messages or news
-                                            newClubNews++
                                             self.clubNewsCount++
                                             self.newClubNewsCount++
                                             
