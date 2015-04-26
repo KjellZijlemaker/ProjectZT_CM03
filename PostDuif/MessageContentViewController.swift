@@ -14,7 +14,6 @@ class MessageContentViewController: UIViewController {
     var speech:SpeechManager = SpeechManager()
     var deletingMessage: deleteMessageItem!
     var openendMessage: messageOpenend!
-    var carouselID: String!
     var speechEnabled: Bool = true
     
     @IBOutlet weak var messageTitleText: UITextView!
@@ -65,7 +64,7 @@ class MessageContentViewController: UIViewController {
                 self.speech.speechString("U heeft het bericht gelezen") //Little speech for user
             }
             self.openendMessage.messageIsOpenend = false
-            self.deletingMessage.executeDeletionTimer(self.carouselID, "1")
+            self.deletingMessage.executeDeletionTimer(self.message.getID(), "1")
         });
     }
     

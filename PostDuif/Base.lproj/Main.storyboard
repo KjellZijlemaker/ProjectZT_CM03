@@ -100,37 +100,31 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BbD-YH-2l2" customClass="iCarousel">
                                 <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xtq-pg-PMZ">
-                                        <rect key="frame" x="263" y="32" width="499" height="59"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="30"/>
-                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
                                     <view hidden="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rYb-NQ-ciM" customClass="CategoryTypeView" customModule="PostDuif" customModuleProvider="target">
                                         <rect key="frame" x="204" y="638" width="613" height="118"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oyb-AM-ppw">
-                                                <rect key="frame" x="133" y="42" width="346" height="34"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oyb-AM-ppw">
+                                                <rect key="frame" x="133" y="15" width="346" height="34"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="35"/>
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="R9Z-mY-3YI">
+                                                <rect key="frame" x="113" y="63" width="386" height="31"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="27"/>
+                                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <constraints>
-                                            <constraint firstAttribute="centerX" secondItem="oyb-AM-ppw" secondAttribute="centerX" constant="0.5" id="4jF-ug-hkO"/>
-                                            <constraint firstAttribute="centerY" secondItem="oyb-AM-ppw" secondAttribute="centerY" id="lMm-ia-g0f"/>
-                                        </constraints>
                                         <connections>
+                                            <outlet property="categoryTypeCategoryViewLabel" destination="R9Z-mY-3YI" id="rbB-Vx-ZAk"/>
                                             <outlet property="categoryTypeViewLabel" destination="oyb-AM-ppw" id="ug5-L7-RIa"/>
                                         </connections>
                                     </view>
                                 </subviews>
                                 <color key="backgroundColor" red="0.0" green="0.00033075853692582781" blue="0.4797782512626263" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="trailing" secondItem="Xtq-pg-PMZ" secondAttribute="trailing" constant="262" id="3Gt-ny-KaS"/>
-                                    <constraint firstItem="Xtq-pg-PMZ" firstAttribute="leading" secondItem="BbD-YH-2l2" secondAttribute="leading" constant="263" id="ET6-Li-l15"/>
-                                    <constraint firstItem="Xtq-pg-PMZ" firstAttribute="top" secondItem="BbD-YH-2l2" secondAttribute="top" constant="32" id="WpE-nQ-3YH"/>
                                     <constraint firstAttribute="centerY" secondItem="rYb-NQ-ciM" secondAttribute="centerY" constant="-313" id="aoI-gz-aTT"/>
                                 </constraints>
                                 <connections>
@@ -153,7 +147,6 @@
                     </view>
                     <connections>
                         <outlet property="carousel" destination="BbD-YH-2l2" id="sTF-F8-DQJ"/>
-                        <outlet property="categoryMessage" destination="Xtq-pg-PMZ" id="a2b-Qq-tFA"/>
                         <outlet property="categoryView" destination="rYb-NQ-ciM" id="WfG-zG-gBA"/>
                         <segue destination="GxM-yO-7Ii" kind="show" identifier="showMessageContent" id="nXb-fP-FA4"/>
                         <segue destination="rnV-cY-8Ma" kind="show" identifier="showNewsMessageContent" id="D2w-G0-hsh"/>

@@ -10,10 +10,15 @@ import Foundation
 
 class CategoryTypeView: UIView{
     @IBOutlet weak var categoryTypeViewLabel: UILabel!
+     @IBOutlet weak var categoryTypeCategoryViewLabel: UILabel!
     
     // Setting the label inside the view
     func setCategoryTypeLabel(text: String){
         self.categoryTypeViewLabel.text = text
+    }
+    
+    func setCategoryTypeCategoryViewLabel(text: String){
+        self.categoryTypeCategoryViewLabel.text = text
     }
     
     // Making animation with transition of type

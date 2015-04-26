@@ -19,7 +19,6 @@ class ClubNewsViewController: UIViewController {
     var delegate: deleteMessageItem!
     var openendMessage: messageOpenend!
     var deletingMessage: deleteMessageItem!
-    var carouselID: String!
     var speechEnabled: Bool = true
     
     override func viewDidLoad() {
@@ -60,7 +59,7 @@ class ClubNewsViewController: UIViewController {
 
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
-        return UIStatusBarStyle.LightContent
+        return UIStatusBarStyle.BlackOpaque
     }
     
     //------------Swipe method to the right--------------//
@@ -74,7 +73,7 @@ class ClubNewsViewController: UIViewController {
             if(self.speechEnabled){
                 self.speech.speechString("U heeft de nieuwsbrief gelezen") //Little speech for user
             }
-            self.delegate.executeDeletionTimer(self.carouselID, "3")
+            self.delegate.executeDeletionTimer(self.clubNews.getID(), "3")
         });
     }
     

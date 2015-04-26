@@ -15,7 +15,6 @@ class NewsMessageViewController: UIViewController {
     var delegate: deleteMessageItem!
     var openendMessage: messageOpenend!
     var deletingMessage: deleteMessageItem!
-    var carouselID: String!
     var speechEnabled: Bool = true
     
     @IBOutlet weak var newsMessageTitle: UITextView!
@@ -58,7 +57,7 @@ class NewsMessageViewController: UIViewController {
     }
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
-        return UIStatusBarStyle.LightContent
+        return UIStatusBarStyle.BlackOpaque
     }
     
     //------------Swipe method to the right--------------//
@@ -72,7 +71,7 @@ class NewsMessageViewController: UIViewController {
             if(self.speechEnabled){
                 self.speech.speechString("U heeft het nieuwsbericht gelezen") //Little speech for user
             }
-            self.delegate.executeDeletionTimer(self.carouselID, "2")
+            self.delegate.executeDeletionTimer(self.news.getID(), "2")
         });
     }
     

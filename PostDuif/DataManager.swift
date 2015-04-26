@@ -136,9 +136,7 @@ class DataManager{
                         newMessage.setReturnCode(returnCode)
                         messageArray.append(newMessage)
                     }
-                }           
-                
-                println(messageArray)
+                }
                     // Give the array back to the main Thread
                     completionHandler(response: messageArray)
                 
