@@ -481,19 +481,23 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                     textToSend.append(String(self.carousel.currentItemIndex+1) + "e " + " Ongelezen bericht")
                     textToSend.append("Onderwerp: " + self.items[self.carousel.currentItemIndex].getSubject())
                     textToSend.append("Tik op het scherm om het bericht te openen")
-                    
-                    
-                    //TODO: Check JSON if user has speech in his settings
+
                     self.speech.speechArray(textToSend)
                 }
-                else{
+                else if(self.items[self.carousel.currentItemIndex].getType() == "2"){
                     
                     textToSend.append(String(self.carousel.currentItemIndex+1) + "e " + " Ongelezen nieuwsbericht")
                     textToSend.append("Titel: " + self.items[self.carousel.currentItemIndex].getSubject())
                     textToSend.append("Tik op het scherm om het nieuwsbericht te openen")
                     
+                    self.speech.speechArray(textToSend)
+                }
+                else if(self.items[self.carousel.currentItemIndex].getType() == "3"){
                     
-                    //TODO: Check JSON if user has speech in his settings
+                    textToSend.append(String(self.carousel.currentItemIndex+1) + "e " + " Ongelezen nieuwsbrief")
+                    textToSend.append("Titel: " + self.items[self.carousel.currentItemIndex].getSubject())
+                    textToSend.append("Tik op het scherm om de nieuwsbrief te openen")
+                    
                     self.speech.speechArray(textToSend)
                 }
             }
@@ -559,13 +563,24 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                     self.speech.speechArray(textToSend)
                 }
                     
-                else{
+                else if(self.items[self.carousel.currentItemIndex].getType() == "2"){
                     
-                    var currentItem = self.carousel.currentItemIndex - messagesCount + 1
+                    var currentItem = self.carousel.currentItemIndex - messagesCount - clubNewsCount + 1
                     
                     textToSend.append(String(currentItem) + "e " + " Ongelezen nieuwsbericht")
                     textToSend.append("Titel: " + self.items[self.carousel.currentItemIndex].getSubject())
+                    textToSend.append("Categorie: " + self.items[self.carousel.currentItemIndex].getCategory())
                     textToSend.append("Tik op het scherm om het nieuwsbericht te openen")
+                    
+                    self.speech.speechArray(textToSend)
+                }
+                else if(self.items[self.carousel.currentItemIndex].getType() == "3"){
+                    
+                    var currentItem = self.carousel.currentItemIndex - messagesCount + 1
+                    
+                    textToSend.append(String(currentItem) + "e " + " Ongelezen nieuwsbrief")
+                    textToSend.append("Titel: " + self.items[self.carousel.currentItemIndex].getSubject())
+                    textToSend.append("Tik op het scherm om de nieuwsbrief te openen")
                     
                     self.speech.speechArray(textToSend)
                 }
@@ -933,7 +948,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                     
                     if(self.userSettings.isSpeechEnabled()){
                         // Seepching total of items
-                        self.speech.speechString("U heeft in totaal: " + String(self.messagesCount) + " nieuwe berichten, en " + String(self.newsCount) + " nieuwe nieuwsberichten")
+                        self.speech.speechString("U heeft in totaal: " + String(self.messagesCount) + " nieuwe berichten, " + String(self.clubNewsCount) + " nieuwe nieuwsbrieven, en " + String(self.newsCount) + " nieuwe nieuwsberichten")
                     }
                     
                     // Check if carousel has items, if not, there is no first item and method should not be executed

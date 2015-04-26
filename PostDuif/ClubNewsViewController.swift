@@ -8,10 +8,8 @@
 
 import UIKit
 
-class ClubNewsViewController: UIViewController {
-
-    @IBOutlet weak var clubNewsTitle: UITextView!
-    @IBOutlet weak var clubNewsContent: UITextView!
+class ClubNewsViewController: UIViewController, clubNewsDelegate {
+    @IBOutlet var clubNewsView: ClubNewsView!
     
     var clubNews:Item!
     var userSettings:Settings!
@@ -19,64 +17,61 @@ class ClubNewsViewController: UIViewController {
     var delegate: deleteMessageItem!
     var openendMessage: messageOpenend!
     var deletingMessage: deleteMessageItem!
-    var speechEnabled: Bool = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+                // Setup the view
+        self.clubNewsView.delegate = self
+        self.clubNewsView.setupTitle()
+        self.clubNewsView.setupContent()
+        self.clubNewsView.setupSwiping()
+        
+        // Setting the text
+        self.clubNewsView.setTitleText(self.clubNews.getSubject())
+        self.clubNewsView.setMessageText(self.clubNews.getContent())//Putting back the message inside the controller
+        
+        // Setting the background
+        self.clubNewsView.setViewBackground(self.userSettings.getColorType())
+        
+        if(self.userSettings.isSpeechEnabled()){
+            // Speech the item
+            self.speechClubNewsItem()
+        }
 
-        //------------right  swipe gestures in view--------------//
-        let swipeRight = UISwipeGestureRecognizer(target: self, action: Selector("rightSwiped"))
-        swipeRight.direction = UISwipeGestureRecognizerDirection.Right
-        self.view.addGestureRecognizer(swipeRight)
+    }
+
+    // Speech the item
+    func speechClubNewsItem(){
         
-        var borderColor : UIColor = UIColor.grayColor()
-        self.clubNewsTitle.layer.borderWidth = 1
-        self.clubNewsTitle.layer.borderColor = borderColor.CGColor
-        self.clubNewsTitle.layer.cornerRadius = 0
-        self.clubNewsContent.layer.borderWidth = 1
-        self.clubNewsContent.layer.borderColor = borderColor.CGColor
-        self.clubNewsContent.layer.cornerRadius = 0
-        
-        //self.newsMessageTitle.layer.cornerRadius = 8
-        self.clubNewsTitle.text = self.clubNews.getSubject()
-        
-        // self.newsMessageText.layer.cornerRadius = 8
-        self.clubNewsContent.text = self.clubNews.getContent() //Putting back the message inside the controller
-        
-        if(self.speechEnabled){
-            
             // Making new sentence array for speech
             var sentenceArray: [String] = []
             sentenceArray.append("Titel nieuwsbrief: " + self.clubNews.getSubject())
             sentenceArray.append("Inhoud nieuwsbrief: ")
-            sentenceArray.append(self.clubNewsContent.text)
+            sentenceArray.append(self.clubNews.getContent())
             sentenceArray.append("Einde nieuwsbrief")
             sentenceArray.append("Veeg naar rechts om het nieuwsbrief te sluiten")
             
             self.speech.speechArray(sentenceArray) //Execute speech
-        }
-    }
-
-    
-    override func preferredStatusBarStyle() -> UIStatusBarStyle {
-        return UIStatusBarStyle.BlackOpaque
     }
     
-    //------------Swipe method to the right--------------//
-    func rightSwiped(){
-        self.speech.stopSpeech() //Stop speech
-        
+    // Dismiss the controller
+    func dismissController(){
         // Dismiss the controller
         self.presentingViewController?.dismissViewControllerAnimated(true, completion: {
             let secondPresentingVC = self.presentingViewController?.presentingViewController;
             secondPresentingVC?.dismissViewControllerAnimated(true, completion: {});
-            if(self.speechEnabled){
+            if(self.userSettings.isSpeechEnabled()){
                 self.speech.speechString("U heeft de nieuwsbrief gelezen") //Little speech for user
             }
             self.delegate.executeDeletionTimer(self.clubNews.getID(), "3")
         });
     }
     
+    
+    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return UIStatusBarStyle.BlackOpaque
+    }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

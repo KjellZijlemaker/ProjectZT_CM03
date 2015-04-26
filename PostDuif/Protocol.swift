@@ -18,3 +18,24 @@ protocol messageOpenend{
     }
 }
 
+protocol clubNewsDelegate{
+    var speech:SpeechManager{
+        get set
+    }
+    func dismissController()
+    
+}
+
+protocol messagesDelegate{
+    var speech:SpeechManager{
+        get set
+    }
+    func dismissController()
+}
+
+protocol newsMessagesDelegate{
+    var speech:SpeechManager{
+        get set
+    }
+    func dismissController()
+}

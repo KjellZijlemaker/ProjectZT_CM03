@@ -104,13 +104,13 @@
                                         <rect key="frame" x="204" y="638" width="613" height="118"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oyb-AM-ppw">
-                                                <rect key="frame" x="133" y="15" width="346" height="34"/>
+                                                <rect key="frame" x="133" y="15" width="346" height="40"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="35"/>
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="R9Z-mY-3YI">
-                                                <rect key="frame" x="113" y="63" width="386" height="31"/>
+                                                <rect key="frame" x="72" y="63" width="468" height="31"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="27"/>
                                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                 <nil key="highlightedColor"/>
@@ -166,18 +166,17 @@
                         <viewControllerLayoutGuide type="top" id="eMF-o8-ROi"/>
                         <viewControllerLayoutGuide type="bottom" id="kvN-vo-xxk"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="NNI-RT-57s">
+                    <view key="view" contentMode="scaleToFill" id="NNI-RT-57s" customClass="MessagesView" customModule="PostDuif" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" bouncesZoom="NO" editable="NO" text="De PostDuif Berichten" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="uiD-eP-3ce">
-                                <rect key="frame" x="65" y="49" width="897" height="168"/>
+                                <rect key="frame" x="65" y="20" width="897" height="197"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="60"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" indicatorStyle="black" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bf0-d9-MCN">
-                                <rect key="frame" x="65" y="236" width="897" height="497"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <accessibility key="accessibilityConfiguration">
                                     <accessibilityTraits key="traits" none="YES" staticText="YES"/>
@@ -186,17 +185,27 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="50"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Vliegende_postduif" translatesAutoresizingMaskIntoConstraints="NO" id="Qft-oo-eNB">
-                                <rect key="frame" x="811" y="49" width="145" height="165"/>
-                            </imageView>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" indicatorStyle="black" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9oo-Y4-Yoo">
+                                <rect key="frame" x="65" y="217" width="897" height="588"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <accessibility key="accessibilityConfiguration">
+                                    <accessibilityTraits key="traits" none="YES" staticText="YES"/>
+                                </accessibility>
+                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
+                                <fontDescription key="fontDescription" type="system" pointSize="46"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.50196081399917603" alpha="1" colorSpace="calibratedRGB"/>
+                        <connections>
+                            <outlet property="messageContent" destination="9oo-Y4-Yoo" id="fTn-4x-9A6"/>
+                            <outlet property="messageTitle" destination="uiD-eP-3ce" id="5X8-h3-kQv"/>
+                        </connections>
                     </view>
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="iPad"/>
                     <connections>
-                        <outlet property="messageText" destination="bf0-d9-MCN" id="KzD-Ce-thn"/>
-                        <outlet property="messageTitleText" destination="uiD-eP-3ce" id="b54-5c-HoE"/>
+                        <outlet property="messagesView" destination="NNI-RT-57s" id="Gfi-zy-UVM"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8w3-GO-ya5" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -211,7 +220,7 @@
                         <viewControllerLayoutGuide type="top" id="ZvY-a6-K53"/>
                         <viewControllerLayoutGuide type="bottom" id="fCd-md-Wdc"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="tFa-R9-zSC">
+                    <view key="view" contentMode="scaleToFill" id="tFa-R9-zSC" customClass="ClubNewsView" customModule="PostDuif" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -221,7 +230,6 @@
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" indicatorStyle="black" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="elG-D6-fPn">
-                                <rect key="frame" x="64" y="180" width="897" height="588"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <accessibility key="accessibilityConfiguration">
                                     <accessibilityTraits key="traits" none="YES" staticText="YES"/>
@@ -231,19 +239,33 @@
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" bouncesZoom="NO" editable="NO" text="De Postduif Clubnews" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="5B3-7s-aBz">
-                                <rect key="frame" x="64" y="15" width="897" height="183"/>
+                                <rect key="frame" x="64" y="20" width="897" height="160"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="55"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" indicatorStyle="black" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9nq-E5-mw8">
+                                <rect key="frame" x="64" y="180" width="897" height="588"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <accessibility key="accessibilityConfiguration">
+                                    <accessibilityTraits key="traits" none="YES" staticText="YES"/>
+                                </accessibility>
+                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
+                                <fontDescription key="fontDescription" type="system" pointSize="46"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
                         </subviews>
                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                        <connections>
+                            <outlet property="clubNewsContent" destination="9nq-E5-mw8" id="EuE-aO-Qeq"/>
+                            <outlet property="clubNewsTitle" destination="5B3-7s-aBz" id="AF9-H9-NnP"/>
+                        </connections>
                     </view>
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="iPad"/>
                     <connections>
-                        <outlet property="clubNewsContent" destination="elG-D6-fPn" id="IOb-qv-Ef7"/>
-                        <outlet property="clubNewsTitle" destination="5B3-7s-aBz" id="x2e-fd-v9z"/>
+                        <outlet property="ClubNewsView" destination="tFa-R9-zSC" id="gbv-vp-rmo"/>
+                        <outlet property="clubNewsView" destination="tFa-R9-zSC" id="pkK-QU-qmH"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2A1-hh-LWW" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -258,7 +280,7 @@
                         <viewControllerLayoutGuide type="top" id="Fir-aT-SX7"/>
                         <viewControllerLayoutGuide type="bottom" id="WhL-z7-NLA"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="aPe-By-v3p">
+                    <view key="view" contentMode="scaleToFill" id="aPe-By-v3p" customClass="NewsMessageView" customModule="PostDuif" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -290,12 +312,15 @@
                             </textView>
                         </subviews>
                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                        <connections>
+                            <outlet property="newsMessageContent" destination="cHg-tL-bd8" id="BxK-oB-5Pl"/>
+                            <outlet property="newsMessageTitle" destination="sgz-ui-COj" id="IT2-S1-hMm"/>
+                        </connections>
                     </view>
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="iPad"/>
                     <connections>
-                        <outlet property="newsMessageText" destination="cHg-tL-bd8" id="DzE-31-Tmb"/>
-                        <outlet property="newsMessageTitle" destination="sgz-ui-COj" id="RtS-6m-CqH"/>
+                        <outlet property="newsMessagesView" destination="aPe-By-v3p" id="msX-ng-kjA"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yZM-7d-gVd" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -303,7 +328,4 @@
             <point key="canvasLocation" x="1740" y="2196"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="Vliegende_postduif" width="300" height="425"/>
-    </resources>
 </document>
