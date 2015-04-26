@@ -34,4 +34,8 @@ class NotificationDot: UIView{
         return self.dot
     }
     
+    func isAnimating() -> Bool{
+        return self.dot.isAnimating()
+    }
+    
 }
