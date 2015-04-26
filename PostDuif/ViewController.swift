@@ -35,13 +35,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
     var newsCount = 0
     var clubNewsCount = 0
     
-    //#MARK: - Counters and booleans for amount of new messages and news
-    var newMessagesCount = 0
-    var newNewsCount = 0
-    var newClubNewsCount = 0
-    
     //# MARK: - Variables for adding new items to the array
-    
     var totalNewItems = 0 // For total of new items (Non realtime appended)
     
     //# MARK: - Variables for appending messages / news
@@ -322,14 +316,14 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
         else if(self.newsCount == 0){
             if(!self.appendDataTimer.valid){
                 println("NO NEWS")
-                if(self.newNewsCount < self.userSettings.getNewsMessageLimit()){
+                if(self.newsCount < self.userSettings.getNewsMessageLimit()){
                     self.setupAppendDataTimer("2")
                 }
             }
             else{
                 println("NO NEWS")
                 self.deleteTimer(self.appendDataTimer)
-                if(self.newNewsCount < self.userSettings.getNewsMessageLimit()){
+                if(self.newsCount < self.userSettings.getNewsMessageLimit()){
                     self.setupAppendDataTimer("2")
                 }            }
         }
@@ -1146,7 +1140,6 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                                             
                                             //Add the amount of messages or news
                                             self.messagesCount++
-                                            self.newMessagesCount++
                                             newMessages++
                                         }
                                         else{
@@ -1171,7 +1164,6 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                                             //Add the amount of messages or news
                                             newNews++
                                             self.newsCount++
-                                            self.newNewsCount++
                                         }
                                         else{
                                             break
@@ -1193,8 +1185,6 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                                         //Add the amount of messages or news
                                         newClubNews++
                                         self.clubNewsCount++
-                                        self.newClubNewsCount++
-                                        
                                         
                                     }
                                     

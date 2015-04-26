@@ -29,7 +29,7 @@ class CategoryTypeView: UIView{
         views.frame = CGRect(x: 204, y: 600, width: 613, height: 118) // Set frame
         
         // set a transition style
-        let transitionOptions = UIViewAnimationOptions.TransitionFlipFromRight
+        let transitionOptions = UIViewAnimationOptions.TransitionCrossDissolve
         
         UIView.transitionWithView(self, duration: 1.0, options: transitionOptions, animations: {
             
