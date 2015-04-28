@@ -1240,7 +1240,10 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                                     self.newItemsToSpeech(newClubNews, type: "3")
                                 }
                                 
-                                self.notificationSound.playSound() // Play the ROEKOE sound
+                                if(self.userSettings.isNotificationSoundEnabled()){
+                                    self.notificationSound.playSound() // Play the ROEKOE sound
+
+                                }
                                 //self.speech.stopSpeech()
                                 
                                 
