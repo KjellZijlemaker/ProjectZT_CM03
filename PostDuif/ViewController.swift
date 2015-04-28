@@ -10,20 +10,6 @@
 import UIKit
 import AVFoundation
 
-// For checking if the array is out of bound
-extension Array {
-    
-    // Safely lookup an index that might be out of bounds,
-    // returning nil if it does not exist
-    func getArrayIndex(index: Int) -> T? {
-        if 0 <= index && index < count {
-            return self[index]
-        } else {
-            return nil
-        }
-    }
-}
-
 class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, deleteMessageItem, messageOpenend
 {
     //# MARK: - Array for all the items / settings to be loaded inside the carousel
@@ -1014,7 +1000,11 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
     func appendAppData(type: String, showLoadingScreen: Bool){
         if(!self.messageIsOpenend){
             
-            var oldID = self.items[self.carousel.currentItemIndex].getID()
+            var oldID = "0"
+            
+            if(self.carousel.currentItemIndex != 0){
+                oldID = self.items[self.carousel.currentItemIndex].getID()
+            }
             
             isAppending = true // Now appending data, so speech may not execute
             var url = "http://84.107.107.169:8080/VisioWebApp/API/chat/allMessages?tokenKey=" + self.token.getToken() // URL for JSON
