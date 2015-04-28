@@ -51,7 +51,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Uw Gebruikersnaam" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oZ9-zQ-5oW">
-                                        <rect key="frame" x="77" y="37" width="661" height="95"/>
+                                        <rect key="frame" x="52" y="37" width="740" height="95"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="74"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -103,13 +103,13 @@
                                     <view hidden="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rYb-NQ-ciM" customClass="CategoryTypeView" customModule="PostDuif" customModuleProvider="target">
                                         <rect key="frame" x="204" y="638" width="613" height="118"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oyb-AM-ppw">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oyb-AM-ppw">
                                                 <rect key="frame" x="133" y="15" width="346" height="40"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="35"/>
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="R9Z-mY-3YI">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="R9Z-mY-3YI">
                                                 <rect key="frame" x="72" y="63" width="468" height="31"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="27"/>
                                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -117,6 +117,12 @@
                                             </label>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="centerY" secondItem="oyb-AM-ppw" secondAttribute="centerY" constant="24" id="9lo-E5-jaN"/>
+                                            <constraint firstAttribute="centerY" secondItem="R9Z-mY-3YI" secondAttribute="centerY" constant="-19.5" id="aFj-yx-HDG"/>
+                                            <constraint firstAttribute="centerX" secondItem="R9Z-mY-3YI" secondAttribute="centerX" constant="0.5" id="hyP-QC-tcn"/>
+                                            <constraint firstAttribute="centerX" secondItem="oyb-AM-ppw" secondAttribute="centerX" constant="0.5" id="iwI-lP-lAC"/>
+                                        </constraints>
                                         <connections>
                                             <outlet property="categoryTypeCategoryViewLabel" destination="R9Z-mY-3YI" id="rbB-Vx-ZAk"/>
                                             <outlet property="categoryTypeViewLabel" destination="oyb-AM-ppw" id="ug5-L7-RIa"/>
@@ -125,6 +131,7 @@
                                 </subviews>
                                 <color key="backgroundColor" red="0.0" green="0.00033075853692582781" blue="0.4797782512626263" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
+                                    <constraint firstAttribute="centerX" secondItem="rYb-NQ-ciM" secondAttribute="centerX" constant="1.5" id="RV9-CV-PIA"/>
                                     <constraint firstAttribute="centerY" secondItem="rYb-NQ-ciM" secondAttribute="centerY" constant="-313" id="aoI-gz-aTT"/>
                                 </constraints>
                                 <connections>
@@ -170,12 +177,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" bouncesZoom="NO" editable="NO" text="De PostDuif Berichten" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="uiD-eP-3ce">
-                                <rect key="frame" x="65" y="20" width="897" height="197"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="60"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                            </textView>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" indicatorStyle="black" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bf0-d9-MCN">
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <accessibility key="accessibilityConfiguration">
@@ -186,7 +187,7 @@
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" indicatorStyle="black" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9oo-Y4-Yoo">
-                                <rect key="frame" x="65" y="217" width="897" height="588"/>
+                                <rect key="frame" x="65" y="171" width="897" height="634"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <accessibility key="accessibilityConfiguration">
                                     <accessibilityTraits key="traits" none="YES" staticText="YES"/>
@@ -195,11 +196,22 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="46"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" bouncesZoom="NO" editable="NO" text="De Postduif Clubnews" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="S8K-rE-5jj">
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="55"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" bouncesZoom="NO" editable="NO" text="De Postduif Berichten" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="s7c-hv-9b1">
+                                <rect key="frame" x="65" y="20" width="897" height="160"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="55"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
                         </subviews>
-                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.50196081399917603" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
                         <connections>
                             <outlet property="messageContent" destination="9oo-Y4-Yoo" id="fTn-4x-9A6"/>
-                            <outlet property="messageTitle" destination="uiD-eP-3ce" id="5X8-h3-kQv"/>
+                            <outlet property="messageTitle" destination="s7c-hv-9b1" id="7e0-t0-5sI"/>
                         </connections>
                     </view>
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
@@ -255,7 +267,7 @@
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                         </subviews>
-                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
                         <connections>
                             <outlet property="clubNewsContent" destination="9nq-E5-mw8" id="EuE-aO-Qeq"/>
                             <outlet property="clubNewsTitle" destination="5B3-7s-aBz" id="AF9-H9-NnP"/>
@@ -311,7 +323,7 @@
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                         </subviews>
-                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
                         <connections>
                             <outlet property="newsMessageContent" destination="cHg-tL-bd8" id="BxK-oB-5Pl"/>
                             <outlet property="newsMessageTitle" destination="sgz-ui-COj" id="IT2-S1-hMm"/>

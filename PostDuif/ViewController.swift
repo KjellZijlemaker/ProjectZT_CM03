@@ -461,7 +461,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                     textToSend.append(String(self.carousel.currentItemIndex+1) + "e " + " Ongelezen bericht")
                     textToSend.append("Onderwerp: " + self.items[self.carousel.currentItemIndex].getSubject())
                     textToSend.append("Tik op het scherm om het bericht te openen")
-
+                    
                     self.speech.speechArray(textToSend)
                 }
                 else if(self.items[self.carousel.currentItemIndex].getType() == "2"){
@@ -583,6 +583,8 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
         case "2":
             pictures.append(UIImage(named:"news.jpg"))
             
+        case "3":
+            pictures.append(UIImage(named:"corp.jpg"))
         default:
             pictures.append(UIImage(named:"message.jpg"))
             
@@ -600,6 +602,8 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
         case "2":
             pictures.insert(UIImage(named:"news.jpg"), atIndex: index)
             println(index)
+        case "3":
+            pictures.insert(UIImage(named:"corp.jpg"), atIndex: index)
         default:
             pictures.insert(UIImage(named:"message.jpg"), atIndex: index)
             
@@ -621,28 +625,44 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
             switch(self.items[index].getType()){
                 
             case "1":
-                if(isHello){
-                    self.categoryView.setCategoryTypeLabel("Persoonlijk bericht")
+                self.categoryView.setCategoryTypeLabel("Persoonlijk bericht")
+                if(self.items[index].getCategory() != ""){
                     self.categoryView.setCategoryTypeCategoryViewLabel("Categorie: " + self.items[index].getCategory())
-                    self.categoryView.nextItemAnimate(UIColor.greenColor())
-                    isHello = false
                 }
+                else{
+                    self.categoryView.setCategoryTypeCategoryViewLabel("")
+                }
+                self.categoryView.nextItemAnimate(UIColor.greenColor())
+                
             case "2":
-                if(isHello){
-                    self.categoryView.setCategoryTypeLabel("Nieuwsbericht")
+                self.categoryView.setCategoryTypeLabel("Nieuwsbericht")
+                if(self.items[index].getCategory() != ""){
                     self.categoryView.setCategoryTypeCategoryViewLabel("Categorie: " + self.items[index].getCategory())
-                    self.categoryView.nextItemAnimate(UIColor.yellowColor())
-                    isHello = false
                 }
+                else{
+                    self.categoryView.setCategoryTypeCategoryViewLabel("")
+                }
+                self.categoryView.nextItemAnimate(UIColor.yellowColor())
+                
             case "3":
                 self.categoryView.setCategoryTypeLabel("Nieuwsbrief")
-                self.categoryView.setCategoryTypeCategoryViewLabel("Categorie: " + self.items[index].getCategory())
+                if(self.items[index].getCategory() != ""){
+                    self.categoryView.setCategoryTypeCategoryViewLabel("Categorie: " + self.items[index].getCategory())
+                }
+                else{
+                    self.categoryView.setCategoryTypeCategoryViewLabel("")
+                }
                 self.categoryView.nextItemAnimate(UIColor.orangeColor())
                 
                 
             default:
                 self.categoryView.setCategoryTypeLabel("Geen berichten")
-                self.categoryView.setCategoryTypeCategoryViewLabel("Categorie: " + self.items[index].getCategory())
+                if(self.items[index].getCategory() != ""){
+                    self.categoryView.setCategoryTypeCategoryViewLabel("Categorie: " + self.items[index].getCategory())
+                }
+                else{
+                    self.categoryView.setCategoryTypeCategoryViewLabel("")
+                }
                 self.categoryView.nextItemAnimate(UIColor.blueColor())
                 break
                 
@@ -1095,49 +1115,69 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                                 // Found new item
                                 if(items[l].getID().toInt() == newIDArray[k]){
                                     
-                                    println(items[k].getType())
-                                    println(items[k].getCategory())
-                                    
-                                    // Function for show the notification in case of Message or news
-                                    func showNotification(){
-                                        // If the animation is not already active, start it
-                                        if(!self.notificationDot.getDotView().isAnimating()){
-                                            self.notificationDot.getDotView().startAnimating()
-                                            self.notificationDot.getDotView().addSubview(self.notificationText.getNotificationTextView())
-                                        }
+                                    // Bug fix for having different counters
+                                    func check(counter: Int) -> Int{
                                         
-                                        self.totalNewItems++ // Append the number of items
-                                        self.notificationText.setNotificationTextView(String(self.totalNewItems)) // Update the text
-                                        self.notificationText.showNotificationTextView()
-                                        self.notificationDot.showDotView() // Show dot
-                                    }
-                                    
-                                    // Check the type and append
-                                    if(items[k].getType() == "1"){
-                                        println("ISONE")
-                                        if(self.messagesCount < self.userSettings.getPrivateMessageLimit()){
-                                            indexHasChanged = true // New item may append
-                                            
-                                            // Show notification if loading screen is set to true
-                                            if(showLoadingScreen){
-                                                showNotification()
+                                        // Function for show the notification in case of Message or news
+                                        func showNotification(){
+                                            // If the animation is not already active, start it
+                                            if(!self.notificationDot.getDotView().isAnimating()){
+                                                self.notificationDot.getDotView().startAnimating()
+                                                self.notificationDot.getDotView().addSubview(self.notificationText.getNotificationTextView())
                                             }
                                             
-                                            self.items.insert(items[k], atIndex: self.messagesCount)
-                                            
-                                            self.appendImage(self.messagesCount)
-                                            self.carousel.insertItemAtIndex(self.messagesCount, animated: true)
-                                            
-                                            //Add the amount of messages or news
-                                            self.messagesCount++
-                                            newMessages++
+                                            self.totalNewItems++ // Append the number of items
+                                            self.notificationText.setNotificationTextView(String(self.totalNewItems)) // Update the text
+                                            self.notificationText.showNotificationTextView()
+                                            self.notificationDot.showDotView() // Show dot
                                         }
-                                        else{
-                                            break
+                                        
+                                        if(items[counter].getType() == "1"){
+                                            if(self.messagesCount < self.userSettings.getPrivateMessageLimit()){
+                                                indexHasChanged = true // New item may append
+                                                
+                                                // Show notification if loading screen is set to true
+                                                if(showLoadingScreen){
+                                                    showNotification()
+                                                }
+                                                
+                                                self.items.insert(items[counter], atIndex: self.messagesCount)
+                                                
+                                                self.appendImage(self.messagesCount)
+                                                self.carousel.insertItemAtIndex(self.messagesCount, animated: true)
+                                                
+                                                //Add the amount of messages or news
+                                                self.messagesCount++
+                                                newMessages++
+                                            }
+                                            else{
+                                                return 0
+                                            }
                                         }
-                                    }
-                                    else if(items[k].getType() == "2"){
-                                        if(self.newsCount < self.userSettings.getNewsMessageLimit()){
+                                        else if(items[counter].getType() == "2"){
+                                            if(self.newsCount < self.userSettings.getNewsMessageLimit()){
+                                                
+                                                indexHasChanged = true
+                                                // Show notification if loading screen is set to true
+                                                if(showLoadingScreen){
+                                                    showNotification()
+                                                }
+                                                
+                                                
+                                                var indexNewsCount = self.messagesCount + self.newsCount
+                                                self.items.insert(items[counter], atIndex: indexNewsCount)
+                                                self.appendImage(indexNewsCount)
+                                                self.carousel.insertItemAtIndex(indexNewsCount, animated: true)
+                                                
+                                                //Add the amount of messages or news
+                                                newNews++
+                                                self.newsCount++
+                                            }
+                                            else{
+                                                return 0
+                                            }
+                                        }
+                                        else if(items[counter].getType() == "3"){
                                             
                                             indexHasChanged = true
                                             // Show notification if loading screen is set to true
@@ -1145,44 +1185,36 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                                                 showNotification()
                                             }
                                             
-                                            
-                                            var indexNewsCount = self.messagesCount + self.newsCount
-                                            self.items.insert(items[k], atIndex: indexNewsCount)
-                                            self.appendImage(indexNewsCount)
-                                            self.carousel.insertItemAtIndex(indexNewsCount, animated: true)
+                                            var indexClubNewsCount = self.messagesCount + self.clubNewsCount
+                                            self.items.insert(items[counter], atIndex: indexClubNewsCount)
+                                            self.appendImage(indexClubNewsCount)
+                                            self.carousel.insertItemAtIndex(indexClubNewsCount, animated: true)
                                             
                                             //Add the amount of messages or news
-                                            newNews++
-                                            self.newsCount++
+                                            newClubNews++
+                                            self.clubNewsCount++
+                                            
                                         }
-                                        else{
+                                        return 1
+                                    }
+                                    
+                                    // If type is 0, counter k must be checked upon
+                                    if(type == "0"){
+                                        var checker = check(k)
+                                        if(checker == 0){
                                             break
                                         }
                                     }
-                                    else if(items[k].getType() == "3"){
                                         
-                                        indexHasChanged = true
-                                        // Show notification if loading screen is set to true
-                                        if(showLoadingScreen){
-                                            showNotification()
+                                    // Else, counter l must be checked upon
+                                    else{
+                                        var checker = check(l)
+                                        if(checker == 0){
+                                            break
                                         }
-                                        
-                                        var indexClubNewsCount = self.messagesCount + self.clubNewsCount
-                                        self.items.insert(items[k], atIndex: indexClubNewsCount)
-                                        self.appendImage(indexClubNewsCount)
-                                        self.carousel.insertItemAtIndex(indexClubNewsCount, animated: true)
-                                        
-                                        //Add the amount of messages or news
-                                        newClubNews++
-                                        self.clubNewsCount++
-                                        
                                     }
-                                    
-                                    
                                     continue
                                 }
-                                
-                                
                             }
                         }
                         
@@ -1226,7 +1258,6 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                     }
                     
                 }
-                
                 // Close loading screen if set to false
                 if(showLoadingScreen){
                     MBProgressHUD.hideAllHUDsForView(self.view, animated: true) // Close notification
