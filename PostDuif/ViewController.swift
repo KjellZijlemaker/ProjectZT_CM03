@@ -807,6 +807,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
             vc.openendMessage = self
             vc.message = self.items[self.carousel.currentItemIndex]
             vc.userSettings = self.userSettings
+            vc.speech = self.speech
             self.speech.stopSpeech()
             self.messageIsOpenend = true
         }
@@ -817,6 +818,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
             vc.delegate = self
             vc.news = self.items[self.carousel.currentItemIndex]
             vc.userSettings = self.userSettings
+            vc.speech = self.speech
             self.speech.stopSpeech()
             self.messageIsOpenend = true
         }
@@ -827,6 +829,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
             vc.delegate = self
             vc.clubNews = self.items[self.carousel.currentItemIndex]
             vc.userSettings = self.userSettings
+            vc.speech = self.speech
             self.speech.stopSpeech()
             self.messageIsOpenend = true
         }

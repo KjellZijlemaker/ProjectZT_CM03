@@ -13,7 +13,7 @@ class ClubNewsViewController: UIViewController, clubNewsDelegate {
     
     var clubNews:Item!
     var userSettings:Settings!
-    var speech:SpeechManager = SpeechManager()
+    var speech:SpeechManager!
     var delegate: deleteMessageItem!
     var openendMessage: messageOpenend!
     var deletingMessage: deleteMessageItem!

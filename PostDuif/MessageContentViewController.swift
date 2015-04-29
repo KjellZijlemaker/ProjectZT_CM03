@@ -11,7 +11,7 @@ import UIKit
 class MessageContentViewController: UIViewController, messagesDelegate {
     var message:Item!
     var userSettings:Settings!
-    var speech:SpeechManager = SpeechManager()
+    var speech:SpeechManager!
     var deletingMessage: deleteMessageItem!
     var openendMessage: messageOpenend!
     
