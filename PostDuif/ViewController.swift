@@ -1095,7 +1095,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                                 }
                             }
                             else{
-                                idArrayOld.append(items[i].getID().toInt()!)
+                                idArrayOld.append(self.items[i].getID().toInt()!)
                             }
                             
                         }
@@ -1134,29 +1134,14 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                                 
                                 // Found new item
                                 if(items[l].getID().toInt() == newIDArray[k]){
-                                    
-                                    // Bug fix for having different counters
-                                    func check(counter: Int) -> Int{
                                         
-                                        // Function for show the notification in case of Message or news
-                                        func showNotification(newItems: Int){
-                                            // If the animation is not already active, start it
-                                            if(!self.notificationDot.getDotView().isAnimating()){
-                                                self.notificationDot.getDotView().startAnimating()
-                                                self.notificationDot.getDotView().addSubview(self.notificationText.getNotificationTextView())
-                                            }
-                                            
-                                            self.totalNewItems++ // Append the number of items
-                                            self.notificationText.setNotificationTextView(String(newItems)) // Update the text
-                                            self.notificationText.showNotificationTextView()
-                                            self.notificationDot.showDotView() // Show dot
-                                        }
-                                        
-                                        if(items[counter].getType() == "1"){
+                                        // Check the type and append
+                                        if(items[l].getType() == "1"){
+                                            println("ISONE")
                                             if(self.messagesCount < self.userSettings.getPrivateMessageLimit()){
                                                 indexHasChanged = true // New item may append
                                                 
-                                                self.items.insert(items[counter], atIndex: self.messagesCount)
+                                                self.items.insert(items[l], atIndex: self.messagesCount)
                                                 
                                                 self.appendImage(self.messagesCount)
                                                 self.carousel.insertItemAtIndex(self.messagesCount, animated: true)
@@ -1164,24 +1149,18 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                                                 //Add the amount of messages or news
                                                 self.messagesCount++
                                                 newMessages++
-                                                
-                                                // Show notification if loading screen is set to true
-                                                if(showLoadingScreen){
-                                                    showNotification(newMessages)
-                                                }
-                                                
                                             }
                                             else{
-                                                return 0
+                                                break
                                             }
                                         }
-                                        else if(items[counter].getType() == "2"){
+                                        else if(items[l].getType() == "2"){
                                             if(self.newsCount < self.userSettings.getNewsMessageLimit()){
                                                 
                                                 indexHasChanged = true
                                                 
                                                 var indexNewsCount = self.messagesCount + self.newsCount
-                                                self.items.insert(items[counter], atIndex: indexNewsCount)
+                                                self.items.insert(items[l], atIndex: indexNewsCount)
                                                 self.appendImage(indexNewsCount)
                                                 self.carousel.insertItemAtIndex(indexNewsCount, animated: true)
                                                 
@@ -1189,55 +1168,64 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                                                 newNews++
                                                 self.newsCount++
                                                 
-                                                // Show notification if loading screen is set to true
-                                                if(showLoadingScreen){
-                                                    showNotification(newNews)
-                                                }
                                             }
                                             else{
-                                                return 0
+                                                break
                                             }
                                         }
-                                        else if(items[counter].getType() == "3"){
+                                        else if(items[l].getType() == "3"){
                                             
                                             indexHasChanged = true
                                             
                                             var indexClubNewsCount = self.messagesCount + self.clubNewsCount
-                                            self.items.insert(items[counter], atIndex: indexClubNewsCount)
+                                            self.items.insert(items[l], atIndex: indexClubNewsCount)
                                             self.appendImage(indexClubNewsCount)
                                             self.carousel.insertItemAtIndex(indexClubNewsCount, animated: true)
                                             
                                             //Add the amount of messages or news
                                             newClubNews++
                                             self.clubNewsCount++
-
-                                            // Show notification if loading screen is set to true
-                                            if(showLoadingScreen){
-                                                showNotification(newClubNews)
-                                            }
                                             
                                         }
-                                        return 1
                                     }
-                                    
-                                    // If type is 0, counter k must be checked upon
-                                    if(type == "0"){
-                                        var checker = check(l)
-                                        if(checker == 0){
-                                            break
-                                        }
-                                    }
-                                        
-                                    // Else, counter l must be checked upon
-                                    else{
-                                        var checker = check(l)
-                                        if(checker == 0){
-                                            break
-                                        }
-                                    }
-                                }
+                                
                             }
                         }
+                        
+                        // Function for show the notification in case of Message or news
+                        func showNotification(totalNewItems: Int){
+                            // If the animation is not already active, start it
+                            if(!self.notificationDot.getDotView().isAnimating()){
+                                self.notificationDot.getDotView().startAnimating()
+                                self.notificationDot.getDotView().addSubview(self.notificationText.getNotificationTextView())
+                            }
+                            
+                            self.totalNewItems++ // Append the number of items
+                            self.notificationText.setNotificationTextView(String(totalNewItems)) // Update the text
+                            self.notificationText.showNotificationTextView()
+                            self.notificationDot.showDotView() // Show dot
+                        }
+                        
+                        
+                        if(newMessages != 0){
+                            // Show notification if loading screen is set to true
+                            if(showLoadingScreen){
+                                showNotification(newMessages)
+                            }
+                        }
+                        else if(newClubNews != 0){
+                            // Show notification if loading screen is set to true
+                            if(showLoadingScreen){
+                                showNotification(newClubNews)
+                            }
+                        }
+                        else if(newNews != 0){
+                            // Show notification if loading screen is set to true
+                            if(showLoadingScreen){
+                                showNotification(newNews)
+                            }
+                        }
+                        
                         
                         // Check if carousel has items
                         if(!self.items.isEmpty){
