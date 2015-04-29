@@ -11,10 +11,10 @@ import UIKit
 class LoginViewController: UIViewController, UITextFieldDelegate {
 
     @IBOutlet weak var loginEmail: LoginEmailTextView!
-    
-    @IBOutlet weak var loginPincode1: LoginPincodeTextView!
-    @IBOutlet weak var loginPincode2: LoginPincodeTextView!
-    @IBOutlet weak var loginPincode3: LoginPincodeTextView!
+
+
+    @IBOutlet weak var loginPincode: LoginPincodeTextView!
+
     var token: Token!
     var settings:Settings!
     var keychain = Keychain(service: "com.visio.postduif")
@@ -24,7 +24,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         super.viewDidLoad()
         
         self.loginEmail.delegate = self
-        self.loginPincode1.delegate = self
+        self.loginPincode.delegate = self
         
         // For putting the view up when having keyboard
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("keyboardWillShow:"), name:UIKeyboardWillShowNotification, object: nil);
@@ -83,8 +83,16 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     func rightSwiped(){
         
         // Making pincode
-        var pincode = self.loginPincode1.text + "-" + self.loginPincode2.text + "-" + self.loginPincode3.text
-        
+        var pincode = self.loginPincode.text
+        for i in 0...countElements(pincode){
+            if(i == 3){
+                pincode.insert("-", atIndex: advance(pincode.startIndex, i))
+            }
+            if(i == 7){
+                pincode.insert("-", atIndex: advance(pincode.startIndex, i))
+            }
+        }
+        println(pincode)
         // Making URL
         var url = "http://84.107.107.169:8080/VisioWebApp/API/authentication?username=" + self.loginEmail.text + "&pincode=" + pincode
         
@@ -132,9 +140,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     // Preparing the seque and send data with ViewController
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
         self.loginEmail.text = ""
-        self.loginPincode1.text = ""
-        self.loginPincode2.text = ""
-        self.loginPincode3.text = ""
+        self.loginPincode.text = ""
         if segue.identifier == "loginSucceed"{            
             let vc = segue.destinationViewController as ViewController
             //vc.keychain = self.keychain // Sending keyChain

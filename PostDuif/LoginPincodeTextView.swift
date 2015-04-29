@@ -26,5 +26,7 @@ class LoginPincodeTextView: UITextField{
         self.view.frame.origin.y += 120
     }
     
-    
+    func addText(text: String){
+        self.text = self.text + text
+    }
 }

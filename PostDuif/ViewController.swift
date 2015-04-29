@@ -683,9 +683,12 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
         self.speech.stopSpeech()
         if sender.state == UIGestureRecognizerState.Began
         {
-            // Sending user back to login phase
-            self.goToLogin()
-            
+            var alert = self.setAlertView("Let op", message: "Weet u zeker dat u wilt uitloggen?")
+            alert.addButtonWithTitle("Ja", type: SIAlertViewButtonType.Default, handler:{ (ACTION :SIAlertView!)in
+                self.goToLogin()
+                })
+            alert.addButtonWithTitle("Nee", type: SIAlertViewButtonType.Cancel, handler: nil)
+            alert.show()
         }
     }
     
@@ -730,15 +733,14 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
     }
     
     // Setting alertView for notification user
-    func setAlertView(title: String, message: String){
+    func setAlertView(title: String, message: String) -> SIAlertView{
         var alert:SIAlertView  = SIAlertView(title: title, andMessage: message)
         alert.titleFont = UIFont(name: "Verdana", size: 30)
         alert.messageFont = UIFont(name: "Verdana", size: 26)
-        alert.addButtonWithTitle("OK", type: SIAlertViewButtonType.Default, handler: nil)
         alert.buttonFont = UIFont(name: "Verdana", size: 30)
         alert.transitionStyle = SIAlertViewTransitionStyle.Bounce
         
-        alert.show()
+        return alert
     }
     
     //# MARK: - UIBackground / Foreground methods
@@ -880,10 +882,13 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                 }
             }
             else{
-                self.setAlertView("Probleem", message: "Kon instellingen niet ophalen")
-                
-                // Send user back to login phase
-                self.goToLogin()
+                var alert = self.setAlertView("Probleem", message: "Kon instellingen niet ophalen")
+                alert.addButtonWithTitle("OK", type: SIAlertViewButtonType.Default, handler:{ (ACTION :SIAlertView!)in
+                    
+                    // Send user back to login phase
+                    self.goToLogin()
+                })
+                alert.show()
             }
         }
         
@@ -988,7 +993,13 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                         
                     }
                     else{
-                        self.setAlertView("Probleem", message: "Kon berichten niet ophalen")
+                        var alert = self.setAlertView("Probleem", message: "Kon berichten niet ophalen")
+                        alert.addButtonWithTitle("OK", type: SIAlertViewButtonType.Default, handler:{ (ACTION :SIAlertView!)in
+                            
+                            // Send user back to login phase
+                            self.goToLogin()
+                        })
+                        alert.show()
                         MBProgressHUD.hideAllHUDsForView(self.view, animated: true) // Close notification
                         
                     }
@@ -1002,7 +1013,13 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                     self.speech.speechString("Er zijn geen berichten op dit moment")
                 }
                 else{
-                    self.setAlertView("Melding", message: "Er zijn geen berichten op dit moment")
+                    var alert = self.setAlertView("Melding", message: "Er zijn geen berichten op dit moment")
+                    alert.addButtonWithTitle("OK", type: SIAlertViewButtonType.Default, handler:{ (ACTION :SIAlertView!)in
+                        
+                        // Send user back to login phase
+                        self.goToLogin()
+                    })
+                    alert.show()
                 }
                 
                 // If there are less then two items, call the timer
@@ -1122,7 +1139,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                                     func check(counter: Int) -> Int{
                                         
                                         // Function for show the notification in case of Message or news
-                                        func showNotification(){
+                                        func showNotification(newItems: Int){
                                             // If the animation is not already active, start it
                                             if(!self.notificationDot.getDotView().isAnimating()){
                                                 self.notificationDot.getDotView().startAnimating()
@@ -1130,7 +1147,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                                             }
                                             
                                             self.totalNewItems++ // Append the number of items
-                                            self.notificationText.setNotificationTextView(String(self.totalNewItems)) // Update the text
+                                            self.notificationText.setNotificationTextView(String(newItems)) // Update the text
                                             self.notificationText.showNotificationTextView()
                                             self.notificationDot.showDotView() // Show dot
                                         }
@@ -1138,11 +1155,6 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                                         if(items[counter].getType() == "1"){
                                             if(self.messagesCount < self.userSettings.getPrivateMessageLimit()){
                                                 indexHasChanged = true // New item may append
-                                                
-                                                // Show notification if loading screen is set to true
-                                                if(showLoadingScreen){
-                                                    showNotification()
-                                                }
                                                 
                                                 self.items.insert(items[counter], atIndex: self.messagesCount)
                                                 
@@ -1152,6 +1164,12 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                                                 //Add the amount of messages or news
                                                 self.messagesCount++
                                                 newMessages++
+                                                
+                                                // Show notification if loading screen is set to true
+                                                if(showLoadingScreen){
+                                                    showNotification(newMessages)
+                                                }
+                                                
                                             }
                                             else{
                                                 return 0
@@ -1161,11 +1179,6 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                                             if(self.newsCount < self.userSettings.getNewsMessageLimit()){
                                                 
                                                 indexHasChanged = true
-                                                // Show notification if loading screen is set to true
-                                                if(showLoadingScreen){
-                                                    showNotification()
-                                                }
-                                                
                                                 
                                                 var indexNewsCount = self.messagesCount + self.newsCount
                                                 self.items.insert(items[counter], atIndex: indexNewsCount)
@@ -1175,6 +1188,11 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                                                 //Add the amount of messages or news
                                                 newNews++
                                                 self.newsCount++
+                                                
+                                                // Show notification if loading screen is set to true
+                                                if(showLoadingScreen){
+                                                    showNotification(newNews)
+                                                }
                                             }
                                             else{
                                                 return 0
@@ -1183,10 +1201,6 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                                         else if(items[counter].getType() == "3"){
                                             
                                             indexHasChanged = true
-                                            // Show notification if loading screen is set to true
-                                            if(showLoadingScreen){
-                                                showNotification()
-                                            }
                                             
                                             var indexClubNewsCount = self.messagesCount + self.clubNewsCount
                                             self.items.insert(items[counter], atIndex: indexClubNewsCount)
@@ -1196,6 +1210,11 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                                             //Add the amount of messages or news
                                             newClubNews++
                                             self.clubNewsCount++
+
+                                            // Show notification if loading screen is set to true
+                                            if(showLoadingScreen){
+                                                showNotification(newClubNews)
+                                            }
                                             
                                         }
                                         return 1
@@ -1203,7 +1222,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                                     
                                     // If type is 0, counter k must be checked upon
                                     if(type == "0"){
-                                        var checker = check(k)
+                                        var checker = check(l)
                                         if(checker == 0){
                                             break
                                         }
@@ -1216,7 +1235,6 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                                             break
                                         }
                                     }
-                                    continue
                                 }
                             }
                         }

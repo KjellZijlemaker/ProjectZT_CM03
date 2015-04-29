@@ -11,7 +11,10 @@ import Foundation
 class NewsMessageView: UIView{
     @IBOutlet weak var newsMessageTitle: UITextView!
     @IBOutlet weak var newsMessageContent: UITextView!
-    
+    @IBOutlet weak var normal: UIButton!
+
+    @IBOutlet weak var big: UIButton!
+    @IBOutlet weak var bigger: UIButton!
     var delegate: newsMessagesDelegate!
     
     func setTitleText(text: String){
@@ -26,6 +29,19 @@ class NewsMessageView: UIView{
         self.backgroundColor = ColorHelper.UIColorFromRGB(color, alpha: 1)
     }
     
+    @IBAction func normalText(sender: AnyObject) {
+        self.newsMessageTitle.font = UIFont(name: "Verdana-Bold", size: 50)
+        self.newsMessageContent.font = UIFont(name: "Verdana", size: 41)
+    }
+    @IBAction func bigText(sender: AnyObject) {
+        self.newsMessageTitle.font = UIFont(name: "Verdana-Bold", size: 57)
+        self.newsMessageContent.font = UIFont(name: "Verdana", size: 48)
+    }
+    
+    @IBAction func biggerText(sender: AnyObject) {
+        self.newsMessageTitle.font = UIFont(name: "Verdana-Bold", size: 62)
+        self.newsMessageContent.font = UIFont(name: "Verdana", size: 53)
+    }
     
     func setupTitle(){
         var borderColor : UIColor = UIColor.grayColor()

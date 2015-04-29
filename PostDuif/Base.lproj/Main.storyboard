@@ -26,32 +26,20 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="60"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="bezel" placeholder="123" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="uz1-FU-xQk">
-                                        <rect key="frame" x="65" y="430" width="172" height="70"/>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="bezel" placeholder="738201843" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="uz1-FU-xQk">
+                                        <rect key="frame" x="202" y="420" width="410" height="70"/>
                                         <accessibility key="accessibilityConfiguration" label="Typ de eerste drie cijfers van uw pincode in"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="67"/>
                                         <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
                                     </textField>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="bezel" placeholder="456" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="lwe-kb-3T7">
-                                        <rect key="frame" x="315" y="430" width="172" height="70"/>
-                                        <accessibility key="accessibilityConfiguration" label="Typ de tweede drie cijfers van uw pincode in"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="67"/>
-                                        <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
-                                    </textField>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="bezel" placeholder="789" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="hfK-Gh-hSZ">
-                                        <rect key="frame" x="565" y="430" width="172" height="70"/>
-                                        <accessibility key="accessibilityConfiguration" label="Typ de derde drie cijfers van uw pincode in"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="67"/>
-                                        <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
-                                    </textField>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Uw Pincode" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eSv-cg-3zV">
-                                        <rect key="frame" x="182" y="307" width="481" height="88"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Uw Gebruikersnaam" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oZ9-zQ-5oW">
+                                        <rect key="frame" x="37" y="37" width="740" height="95"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="74"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Uw Gebruikersnaam" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oZ9-zQ-5oW">
-                                        <rect key="frame" x="52" y="37" width="740" height="95"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Uw Pincode" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eSv-cg-3zV">
+                                        <rect key="frame" x="167" y="324" width="481" height="88"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="74"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -72,9 +60,7 @@
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="iPad"/>
                     <connections>
                         <outlet property="loginEmail" destination="hyv-2W-3NG" id="HG0-AW-waD"/>
-                        <outlet property="loginPincode1" destination="uz1-FU-xQk" id="CII-o9-12t"/>
-                        <outlet property="loginPincode2" destination="lwe-kb-3T7" id="fzq-zv-XLV"/>
-                        <outlet property="loginPincode3" destination="hfK-Gh-hSZ" id="QB4-GG-IMD"/>
+                        <outlet property="loginPincode" destination="uz1-FU-xQk" id="Jvu-vg-f86"/>
                         <segue destination="vXZ-lx-hvc" kind="show" identifier="loginSucceed" id="67I-mG-Mat"/>
                     </connections>
                 </viewController>
@@ -186,16 +172,6 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="50"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" indicatorStyle="black" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9oo-Y4-Yoo">
-                                <rect key="frame" x="65" y="171" width="897" height="634"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <accessibility key="accessibilityConfiguration">
-                                    <accessibilityTraits key="traits" none="YES" staticText="YES"/>
-                                </accessibility>
-                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
-                                <fontDescription key="fontDescription" type="system" pointSize="46"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                            </textView>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" bouncesZoom="NO" editable="NO" text="De Postduif Clubnews" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="S8K-rE-5jj">
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="55"/>
@@ -207,7 +183,17 @@
                                 <accessibility key="accessibilityConfiguration">
                                     <accessibilityTraits key="traits" none="YES" staticText="YES"/>
                                 </accessibility>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="55"/>
+                                <fontDescription key="fontDescription" name="Verdana-Bold" family="Verdana" pointSize="50"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" indicatorStyle="black" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9oo-Y4-Yoo">
+                                <rect key="frame" x="65" y="171" width="897" height="634"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <accessibility key="accessibilityConfiguration">
+                                    <accessibilityTraits key="traits" none="YES" staticText="YES"/>
+                                </accessibility>
+                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
+                                <fontDescription key="fontDescription" name="Verdana" family="Verdana" pointSize="41"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                         </subviews>
@@ -259,7 +245,7 @@
                                 <accessibility key="accessibilityConfiguration">
                                     <accessibilityTraits key="traits" none="YES" staticText="YES"/>
                                 </accessibility>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="55"/>
+                                <fontDescription key="fontDescription" name="Verdana-Bold" family="Verdana" pointSize="50"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" indicatorStyle="black" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9nq-E5-mw8">
@@ -269,7 +255,7 @@
                                     <accessibilityTraits key="traits" none="YES" staticText="YES"/>
                                 </accessibility>
                                 <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
-                                <fontDescription key="fontDescription" type="system" pointSize="46"/>
+                                <fontDescription key="fontDescription" name="Verdana" family="Verdana" pointSize="41"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                         </subviews>
@@ -314,7 +300,7 @@
                                     <accessibilityTraits key="traits" none="YES" staticText="YES"/>
                                 </accessibility>
                                 <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
-                                <fontDescription key="fontDescription" type="system" pointSize="46"/>
+                                <fontDescription key="fontDescription" name="Verdana" family="Verdana" pointSize="41"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" bouncesZoom="NO" editable="NO" text="De PostDuif Krant" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="LWl-f7-DsQ">
@@ -328,14 +314,44 @@
                                 <accessibility key="accessibilityConfiguration">
                                     <accessibilityTraits key="traits" none="YES" staticText="YES"/>
                                 </accessibility>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="55"/>
+                                <fontDescription key="fontDescription" name="Verdana-Bold" family="Verdana" pointSize="50"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="C1n-9X-WhU">
+                                <rect key="frame" x="136" y="173" width="39" height="30"/>
+                                <state key="normal" title="Groot">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="bigText:" destination="aPe-By-v3p" eventType="touchUpInside" id="YRt-MJ-Zhs"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3CG-qb-gI6">
+                                <rect key="frame" x="70" y="173" width="58" height="30"/>
+                                <state key="normal" title="Normaal">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="normalText:" destination="aPe-By-v3p" eventType="touchUpInside" id="aVC-d9-7SR"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SBK-mW-Kwf">
+                                <rect key="frame" x="183" y="173" width="44" height="30"/>
+                                <state key="normal" title="Groter">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="biggerText:" destination="aPe-By-v3p" eventType="touchUpInside" id="ESm-Yo-JRi"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
                         <connections>
+                            <outlet property="big" destination="C1n-9X-WhU" id="Nih-kl-szq"/>
+                            <outlet property="bigger" destination="SBK-mW-Kwf" id="Bxk-6W-7Yy"/>
                             <outlet property="newsMessageContent" destination="cHg-tL-bd8" id="BxK-oB-5Pl"/>
                             <outlet property="newsMessageTitle" destination="sgz-ui-COj" id="IT2-S1-hMm"/>
+                            <outlet property="normal" destination="3CG-qb-gI6" id="68i-Pp-ukp"/>
                         </connections>
                     </view>
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
