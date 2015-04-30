@@ -88,9 +88,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             if(i == 3){
                 pincode.insert("-", atIndex: advance(pincode.startIndex, i))
             }
-            if(i == 7){
-                pincode.insert("-", atIndex: advance(pincode.startIndex, i))
-            }
         }
         println(pincode)
         // Making URL

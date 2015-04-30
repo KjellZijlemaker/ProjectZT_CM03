@@ -1159,7 +1159,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                                                 
                                                 indexHasChanged = true
                                                 
-                                                var indexNewsCount = self.messagesCount + self.newsCount
+                                                var indexNewsCount = self.messagesCount + self.clubNewsCount + self.newsCount
                                                 self.items.insert(items[l], atIndex: indexNewsCount)
                                                 self.appendImage(indexNewsCount)
                                                 self.carousel.insertItemAtIndex(indexNewsCount, animated: true)
