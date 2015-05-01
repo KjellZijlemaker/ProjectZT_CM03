@@ -458,7 +458,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                 // Check if the item is message or newsitem
                 if(self.items[self.carousel.currentItemIndex].getType() == "1"){
                     
-                    textToSend.append(String(self.carousel.currentItemIndex+1) + "e " + " Ongelezen bericht")
+                    textToSend.append(String(self.carousel.currentItemIndex+1) + "e " + " Ongelezen bericht van: " + self.items[self.carousel.currentItemIndex].getFromUser())
                     textToSend.append("Onderwerp: " + self.items[self.carousel.currentItemIndex].getSubject())
                     textToSend.append("Tik op het scherm om het bericht te openen")
                     
@@ -536,7 +536,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                     
                     var currentItem = self.messagesCount - self.messagesCount + self.carousel.currentItemIndex + 1
                     
-                    textToSend.append(String(currentItem) + "e " + " Ongelezen bericht")
+                    textToSend.append(String(self.carousel.currentItemIndex+1) + "e " + " Ongelezen bericht van: " + self.items[self.carousel.currentItemIndex].getFromUser())
                     textToSend.append("Onderwerp: " + self.items[self.carousel.currentItemIndex].getSubject())
                     textToSend.append("Tik op het scherm om het bericht te openen")
                     
