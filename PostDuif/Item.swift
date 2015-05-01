@@ -8,15 +8,15 @@
 
 import Foundation
 
-class Message{
+class Item{
     
-    var id: String
-    var subject: String
-    var content: String
-    var category: String
-    var returnCode: String
-    var fromUser: String
-    var type: String
+    private var id: String
+    private var subject: String
+    private var content: String
+    private var category: String
+    private var returnCode: String
+    private var fromUser: String
+    private var type: String
 
     init(){
         self.id = ""

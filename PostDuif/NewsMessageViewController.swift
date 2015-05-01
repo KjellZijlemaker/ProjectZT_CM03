@@ -8,63 +8,73 @@
 
 import UIKit
 
-class NewsMessageViewController: UIViewController {
-    var newsMessageContent:String!
-    var speech:SpeechManager = SpeechManager()
+class NewsMessageViewController: UIViewController, newsMessagesDelegate {
+    var news:Item!
+    var userSettings:Settings!
+    var speech:SpeechManager!
     var delegate: deleteMessageItem!
-    var speechEnabled: Bool = false
-
-    @IBOutlet weak var newsMessageTitleText: UITextView!
-    @IBOutlet weak var newsMessageText: UITextView!
+    var openendMessage: messageOpenend!
+    var deletingMessage: deleteMessageItem!
+    
+    
+    @IBOutlet var newsMessagesView: NewsMessageView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //------------right  swipe gestures in view--------------//
-        let swipeRight = UISwipeGestureRecognizer(target: self, action: Selector("rightSwiped"))
-        swipeRight.direction = UISwipeGestureRecognizerDirection.Right
-        self.view.addGestureRecognizer(swipeRight)
+        // Setup view
+        self.newsMessagesView.delegate = self
+        self.newsMessagesView.setupTitle()
+        self.newsMessagesView.setupContent()
+        self.newsMessagesView.setupSwiping()
         
-        self.newsMessageTitleText.layer.cornerRadius = 8
-        self.newsMessageText.layer.cornerRadius = 8
-        self.newsMessageText.text = self.newsMessageContent //Putting back the message inside the controller
+        // Setting the text
+        self.newsMessagesView.setTitleText(self.news.getSubject())
+        self.newsMessagesView.setMessageText(self.news.getContent())//Putting back the message inside the controller
+        
+        // Setting the color and backround
+        if(self.userSettings.getColorType() != "default"){
+            self.newsMessagesView.setViewBackground(self.userSettings.getColorType())
+        }
+        if(self.userSettings.getContrastType() != "default"){
+            
+        }
 
         
         
-       // self.newsMessageText.font = UIFont.systemFontOfSize(26.0)
-        
-        if(self.speechEnabled){
-            // Making new sentence array for speech
-            var sentenceArray: [String] = []
-            sentenceArray.append("Inhoud nieuwsbericht: ")
-            sentenceArray.append(self.newsMessageContent)
-            sentenceArray.append("Einde nieuwsbericht")
-            sentenceArray.append("Veeg naar rechts om het nieuwsbericht te sluiten")
-            
-            self.speech.speechArray(sentenceArray) //Execute speech
+        if(self.userSettings.isSpeechEnabled()){
+            self.speechNewsMessageItem()
         }
         
-        
     }
     
-    override func preferredStatusBarStyle() -> UIStatusBarStyle {
-        return UIStatusBarStyle.LightContent
+    func speechNewsMessageItem(){
+        // Making new sentence array for speech
+        var sentenceArray: [String] = []
+        sentenceArray.append("Titel nieuwsbericht: " + self.news.getSubject())
+        sentenceArray.append("Inhoud nieuwsbericht: ")
+        sentenceArray.append(self.news.getContent())
+        sentenceArray.append("Einde nieuwsbericht")
+        sentenceArray.append("Veeg naar links om het nieuwsbericht te sluiten")
+        self.speech.speechArray(sentenceArray) //Execute speech
     }
     
-    //------------Swipe method to the right--------------//
-    func rightSwiped(){
-        self.speech.stopSpeech() //Stop speech
-      
+    func dismissController(){
         // Dismiss the controller
         self.presentingViewController?.dismissViewControllerAnimated(true, completion: {
             let secondPresentingVC = self.presentingViewController?.presentingViewController;
             secondPresentingVC?.dismissViewControllerAnimated(true, completion: {});
-            if(self.speechEnabled){
+            if(self.userSettings.isSpeechEnabled()){
                 self.speech.speechString("U heeft het nieuwsbericht gelezen") //Little speech for user
             }
-            self.delegate.executeDeletionTimer("0")
+            self.delegate.executeDeletionTimer(self.news.getID(), "2")
         });
+
     }
     
-
+    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return UIStatusBarStyle.BlackOpaque
+    }
+    
+   
 }

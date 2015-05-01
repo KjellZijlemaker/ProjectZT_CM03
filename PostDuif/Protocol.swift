@@ -9,7 +9,7 @@
 import Foundation
 
 protocol deleteMessageItem {
-    func executeDeletionTimer(String)
+    func executeDeletionTimer(String, String)
 }
 
 protocol messageOpenend{
@@ -18,3 +18,28 @@ protocol messageOpenend{
     }
 }
 
+protocol clubNewsDelegate{
+    var speech:SpeechManager!{
+        get set
+    }
+    func dismissController()
+    
+}
+
+protocol messagesDelegate{
+    var speech:SpeechManager!{
+        get set
+    }
+    func dismissController()
+}
+
+protocol newsMessagesDelegate{
+    var speech:SpeechManager!{
+        get set
+    }
+    func dismissController()
+}
+
+protocol loginDelegate{
+    func sendLoginRequest(String)
+}
