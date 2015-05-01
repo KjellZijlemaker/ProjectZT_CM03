@@ -9,6 +9,7 @@
 import UIKit
 
 class LoginViewController: UIViewController, loginDelegate {
+    var notificationSound = SoundManager(resourcePath: "Roekoe", fileType: "m4a") // For the sound
 
     @IBOutlet weak var loginView: LoginView!
     
@@ -19,6 +20,7 @@ class LoginViewController: UIViewController, loginDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.startLoginSound()
         self.loginView.delegate = self
         self.loginView.setupListeners()
     }
@@ -32,7 +34,11 @@ class LoginViewController: UIViewController, loginDelegate {
         // Dispose of any resources that can be recreated.
     }
     
-
+    // Start the sound
+    func startLoginSound(){
+        notificationSound.playSound()
+    }
+    
     func sendLoginRequest(pincode: String){
         // Making URL
         var url = "http://84.107.107.169:8080/VisioWebApp/API/authentication?username=" + self.loginView.loginEmail.text + "&pincode=" + pincode
