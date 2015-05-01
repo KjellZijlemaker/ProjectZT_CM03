@@ -55,7 +55,7 @@ class ClubNewsViewController: UIViewController, clubNewsDelegate {
             sentenceArray.append("Inhoud nieuwsbrief: ")
             sentenceArray.append(self.clubNews.getContent())
             sentenceArray.append("Einde nieuwsbrief")
-            sentenceArray.append("Veeg naar rechts om het nieuwsbrief te sluiten")
+            sentenceArray.append("Veeg naar links om het nieuwsbrief te sluiten")
             
             self.speech.speechArray(sentenceArray) //Execute speech
     }

@@ -59,18 +59,17 @@ class NewsMessageView: UIView{
     
     func setupSwiping(){
         //------------right  swipe gestures in view--------------//
-        let swipeRight = UISwipeGestureRecognizer(target: self, action: Selector("rightSwiped"))
-        swipeRight.direction = UISwipeGestureRecognizerDirection.Right
-        self.addGestureRecognizer(swipeRight)
+        let swipeLeft = UISwipeGestureRecognizer(target: self, action: Selector("leftSwiped"))
+        swipeLeft.direction = UISwipeGestureRecognizerDirection.Left
+        self.addGestureRecognizer(swipeLeft)
     }
     
     
     //------------Swipe method to the right--------------//
-    func rightSwiped(){
+    func leftSwiped(){
         self.delegate.speech.stopSpeech() //Stop speech
         self.delegate.dismissController() // Dismiss the controller
     }
-
     
     
 }

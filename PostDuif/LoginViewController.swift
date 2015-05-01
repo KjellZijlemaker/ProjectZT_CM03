@@ -8,13 +8,10 @@
 
 import UIKit
 
-class LoginViewController: UIViewController, UITextFieldDelegate {
+class LoginViewController: UIViewController, loginDelegate {
 
-    @IBOutlet weak var loginEmail: LoginEmailTextView!
-
-
-    @IBOutlet weak var loginPincode: LoginPincodeTextView!
-
+    @IBOutlet weak var loginView: LoginView!
+    
     var token: Token!
     var settings:Settings!
     var keychain = Keychain(service: "com.visio.postduif")
@@ -22,48 +19,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        self.loginEmail.delegate = self
-        self.loginPincode.delegate = self
-        
-        // For putting the view up when having keyboard
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("keyboardWillShow:"), name:UIKeyboardWillShowNotification, object: nil);
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("keyboardWillHide:"), name:UIKeyboardWillHideNotification, object: nil);
-        
-        //------------right  swipe gestures in view--------------//
-        let swipeRight = UISwipeGestureRecognizer(target: self, action: Selector("rightSwiped"))
-        swipeRight.direction = UISwipeGestureRecognizerDirection.Right
-        self.view.addGestureRecognizer(swipeRight)
-    }
-
-//    func textFieldShouldBeginEditing(textField: UITextField!) -> CBool{
-//        if(self.loginEmail == textField){
-//            // For putting the view up when having keyboard
-//            NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("keyboardWillShow1:"), name:UIKeyboardWillShowNotification, object: nil);
-//
-//        }
-//        if(self.loginPincode1 == textField){
-//            // For putting the view up when having keyboard
-//            NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("keyboardWillShow:"), name:UIKeyboardWillShowNotification, object: nil);
-//            
-//        }
-//        
-//        return true
-//    }
-//    
-//    func textFieldShouldEndEditing(textField: UITextField!) -> Bool {
-//                NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("keyboardWillHide1:"), name:UIKeyboardWillHideNotification, object: nil);
-//        
-//        return true
-//    }
-//    
-    // Functions for putting view to top
-    func keyboardWillShow(sender: NSNotification) {
-        self.view.frame.origin.y -= 200
-    }
-    func keyboardWillHide(sender: NSNotification) {
-        self.view.frame.origin.y += 200
-        
+        self.loginView.delegate = self
+        self.loginView.setupListeners()
     }
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
@@ -75,28 +32,14 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         // Dispose of any resources that can be recreated.
     }
     
-    override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
-        view.endEditing(true)
-        super.touchesBegan(touches, withEvent: event)
-    }
 
-    func rightSwiped(){
-        
-        // Making pincode
-        var pincode = self.loginPincode.text
-        for i in 0...countElements(pincode){
-            if(i == 3){
-                pincode.insert("-", atIndex: advance(pincode.startIndex, i))
-            }
-        }
-        println(pincode)
+    func sendLoginRequest(pincode: String){
         // Making URL
-        var url = "http://84.107.107.169:8080/VisioWebApp/API/authentication?username=" + self.loginEmail.text + "&pincode=" + pincode
+        var url = "http://84.107.107.169:8080/VisioWebApp/API/authentication?username=" + self.loginView.loginEmail.text + "&pincode=" + pincode
         
         let loadingNotification = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
         loadingNotification.mode = MBProgressHUDMode.Indeterminate
         loadingNotification.labelText = "Bezig met inloggen"
-        
         
         // Sending URL and logging in
         UserManager.loginUser(url){(token) in
@@ -110,9 +53,9 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                     
                     self.defaults.setObject(self.token.getToken(), forKey: "token")
                     self.defaults.setObject(self.token.getRefreshToken(), forKey: "refreshToken")
-//                    self.keychain.set(self.token.getToken(), key: "token")
-//                    self.keychain.set(self.token.getRefreshToken(), key: "refreshToken")
-
+                    //                    self.keychain.set(self.token.getToken(), key: "token")
+                    //                    self.keychain.set(self.token.getRefreshToken(), key: "refreshToken")
+                    
                     // For performing the seque inside the storyboard
                     self.performSegueWithIdentifier("loginSucceed", sender: self)
                 }
@@ -131,13 +74,13 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             }
         }
     }
-    
+       
     // Segue methods
     //=================================================================================================
     // Preparing the seque and send data with ViewController
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
-        self.loginEmail.text = ""
-        self.loginPincode.text = ""
+        self.loginView.loginEmail.text = ""
+        self.loginView.loginPincode.text = ""
         if segue.identifier == "loginSucceed"{            
             let vc = segue.destinationViewController as ViewController
             //vc.keychain = self.keychain // Sending keyChain

@@ -549,7 +549,6 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                     
                     textToSend.append(String(currentItem) + "e " + " Ongelezen nieuwsbericht")
                     textToSend.append("Titel: " + self.items[self.carousel.currentItemIndex].getSubject())
-                    textToSend.append("Categorie: " + self.items[self.carousel.currentItemIndex].getCategory())
                     textToSend.append("Tik op het scherm om het nieuwsbericht te openen")
                     
                     self.speech.speechArray(textToSend)
@@ -627,7 +626,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
             case "1":
                 self.categoryView.setCategoryTypeLabel("Persoonlijk bericht")
                 if(self.items[index].getCategory() != ""){
-                    self.categoryView.setCategoryTypeCategoryViewLabel("Categorie: " + self.items[index].getCategory())
+                    self.categoryView.setCategoryTypeCategoryViewLabel(self.items[index].getCategory())
                 }
                 else{
                     self.categoryView.setCategoryTypeCategoryViewLabel("")
@@ -637,7 +636,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
             case "2":
                 self.categoryView.setCategoryTypeLabel("Nieuwsbericht")
                 if(self.items[index].getCategory() != ""){
-                    self.categoryView.setCategoryTypeCategoryViewLabel("Categorie: " + self.items[index].getCategory())
+                    self.categoryView.setCategoryTypeCategoryViewLabel(self.items[index].getCategory())
                 }
                 else{
                     self.categoryView.setCategoryTypeCategoryViewLabel("")
@@ -647,7 +646,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
             case "3":
                 self.categoryView.setCategoryTypeLabel("Nieuwsbrief")
                 if(self.items[index].getCategory() != ""){
-                    self.categoryView.setCategoryTypeCategoryViewLabel("Categorie: " + self.items[index].getCategory())
+                    self.categoryView.setCategoryTypeCategoryViewLabel(self.items[index].getCategory())
                 }
                 else{
                     self.categoryView.setCategoryTypeCategoryViewLabel("")
@@ -658,7 +657,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
             default:
                 self.categoryView.setCategoryTypeLabel("Geen berichten")
                 if(self.items[index].getCategory() != ""){
-                    self.categoryView.setCategoryTypeCategoryViewLabel("Categorie: " + self.items[index].getCategory())
+                    self.categoryView.setCategoryTypeCategoryViewLabel(self.items[index].getCategory())
                 }
                 else{
                     self.categoryView.setCategoryTypeCategoryViewLabel("")
@@ -671,7 +670,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
             
         else{
             self.categoryView.setCategoryTypeLabel("Geen berichten")
-            self.categoryView.nextItemAnimate(UIColor.blueColor())
+            self.categoryView.nextItemAnimate(UIColor.yellowColor())
         }
         
     }
@@ -1253,7 +1252,8 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate, 
                                     self.notificationSound.playSound() // Play the ROEKOE sound
 
                                 }
-                                //self.speech.stopSpeech()
+                                self.carouselCurrentItemIndexDidChange(self.carousel) // Refresh the item
+
                                 
                                 
                             }

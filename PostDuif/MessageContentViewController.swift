@@ -53,7 +53,7 @@ class MessageContentViewController: UIViewController, messagesDelegate {
         sentenceArray.append("Inhoud bericht: ")
         sentenceArray.append(self.message.getContent())
         sentenceArray.append("Einde bericht")
-        sentenceArray.append("Veeg naar rechts om het bericht te sluiten")
+        sentenceArray.append("Veeg naar links om het bericht te sluiten")
         
         self.speech.speechArray(sentenceArray) //Execute speech
     }

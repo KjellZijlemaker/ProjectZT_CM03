@@ -39,3 +39,7 @@ protocol newsMessagesDelegate{
     }
     func dismissController()
 }
+
+protocol loginDelegate{
+    func sendLoginRequest(String)
+}

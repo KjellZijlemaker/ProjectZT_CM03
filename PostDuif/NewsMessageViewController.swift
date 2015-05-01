@@ -55,7 +55,7 @@ class NewsMessageViewController: UIViewController, newsMessagesDelegate {
         sentenceArray.append("Inhoud nieuwsbericht: ")
         sentenceArray.append(self.news.getContent())
         sentenceArray.append("Einde nieuwsbericht")
-        sentenceArray.append("Veeg naar rechts om het nieuwsbericht te sluiten")
+        sentenceArray.append("Veeg naar links om het nieuwsbericht te sluiten")
         self.speech.speechArray(sentenceArray) //Execute speech
     }
     
