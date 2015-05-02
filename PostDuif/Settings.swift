@@ -18,8 +18,9 @@ class Settings{
     private var colorType: String
     private var userAccessibility: Bool
     private var returnCode: String
-    
-    
+    private var messagesStoreMaxSeconds: String
+    private var clubMessagesStoreMaxSeconds: String
+    private var newsMessagesStoreMaxSeconds: String
     
    // init
     init(){
@@ -31,6 +32,9 @@ class Settings{
         self.colorType = "default"
         self.userAccessibility = true
         self.returnCode = ""
+        self.messagesStoreMaxSeconds = ""
+        self.clubMessagesStoreMaxSeconds = ""
+        self.newsMessagesStoreMaxSeconds = ""
     }
     
     func hasNotificationSoundEnabled(notificationSound: Bool){
@@ -97,6 +101,27 @@ class Settings{
         return returnCode
     }
 
+    func setMessagesStoreMaxSeconds(maxSeconds: String){
+        self.messagesStoreMaxSeconds = maxSeconds
+    }
+    func getMessagesStoreMaxSeconds() -> String{
+        return self.messagesStoreMaxSeconds
+    }
     
+    func setClubNewsStoreMaxSeconds(maxSeconds: String){
+        self.clubMessagesStoreMaxSeconds = maxSeconds
+    }
+    
+    func getClubNewsStoreMaxSeconds() -> String{
+        return self.clubMessagesStoreMaxSeconds
+    }
+    
+    func setNewsStoreMaxSeconds(maxSeconds: String){
+        self.newsMessagesStoreMaxSeconds = maxSeconds
+    }
+    
+    func getNewsStoreMaxSeconds() -> String{
+        return self.newsMessagesStoreMaxSeconds
+    }
 
 }

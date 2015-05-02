@@ -46,6 +46,10 @@ class MessagesView: UIView{
         //------------right  swipe gestures in view--------------//
         let swipeLeft = UISwipeGestureRecognizer(target: self, action: Selector("leftSwiped"))
         swipeLeft.direction = UISwipeGestureRecognizerDirection.Left
+        swipeLeft.isAccessibilityElement = true
+        if(isAccessibilityElement){
+            swipeLeft.numberOfTouchesRequired = 3
+        }
         self.addGestureRecognizer(swipeLeft)
     }
     

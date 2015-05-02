@@ -71,8 +71,6 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
     var notificationSound = SoundManager(resourcePath: "Roekoe", fileType: "m4a") // For the sounds
     var carouselEndSound = SoundManager(resourcePath: "CarouselEnding", fileType: "m4a") // For the sounds
     
-    var oldID: String!
-    
     //# MARK: - Outlets for displaying labels / carousel
     @IBOutlet var carousel : iCarousel!
     @IBOutlet weak var categoryView: CategoryTypeView!
@@ -459,7 +457,6 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
     
     // Function for checking if the index from the carousel changed
     func carouselCurrentItemIndexDidChange(carousel: iCarousel!){
-        self.oldID = self.items[self.carousel.currentItemIndex].getID()
         
         self.carouselCheckForAppendingItems() // Check for appending items and decrement notification counter if needed
         
@@ -1075,7 +1072,7 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                             }
                             
                             self.totalNewItems++ // Append the number of items
-                            self.notificationText.setNotificationTextView(String(4)) // Update the text
+                            self.notificationText.setNotificationTextView(String(totalNewItems)) // Update the text
                             self.notificationText.showNotificationTextView()
                             println("SHOWDOT")
                             self.notificationDot.showDotView() // Show dot
@@ -1190,8 +1187,19 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
         var userInfoArray = Array<String>()
         userInfoArray.append(carouselMessageNumber)
         userInfoArray.append(type)
-        
-        var newTimer = timerManager.startTimer(self, selector: Selector("checkIDForDeletion:"), userInfo: userInfoArray, interval: 10) // Start timer
+
+        // Getting the max seconds upon checking the type
+        var interval:NSTimeInterval!
+        if(type == "1"){
+             interval = NSTimeInterval(self.userSettings.getMessagesStoreMaxSeconds().toInt()!)
+        }
+        else if(type == "2"){
+             interval = NSTimeInterval(self.userSettings.getNewsStoreMaxSeconds().toInt()!)
+        }
+        else if(type == "3"){
+             interval = NSTimeInterval(self.userSettings.getClubNewsStoreMaxSeconds().toInt()!)
+        }
+        var newTimer = timerManager.startTimer(self, selector: Selector("checkIDForDeletion:"), userInfo: userInfoArray, interval: interval) // Start timer
     }
     
     

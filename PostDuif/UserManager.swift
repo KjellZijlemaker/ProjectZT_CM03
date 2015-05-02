@@ -129,6 +129,17 @@ class UserManager{
                                 newSettings.hasAccessibilityEnabled(false)
                             }
                             
+                            // Store seconds message
+                            var messagesStoreMaxSeconds: String = settings["privateMessageStoreTimeSeconds"].stringValue
+                            newSettings.setMessagesStoreMaxSeconds(messagesStoreMaxSeconds)
+                           
+                            // Store seconds clubnews seconds
+                            var clubNewsStoreMaxSeconds: String = settings["clubMessageStoreTimeSeconds"].stringValue
+                            newSettings.setClubNewsStoreMaxSeconds(clubNewsStoreMaxSeconds)
+                           
+                            // Store seconds news seconds
+                            var newsStoreMaxSeconds: String = settings["newsFeedMessageStoreTimeSeconds"].stringValue
+                            newSettings.setNewsStoreMaxSeconds(newsStoreMaxSeconds)
                             
                             /* Code snippet for getting single item out of JSON array
                             if let appName = jsonObj["feed"]["entry"][1]["im:name"]["label"].string{
