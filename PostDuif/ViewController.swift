@@ -222,7 +222,7 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
             self.notificationDot.hideDotView()
             
         }
-
+        
     }
     
     //------------Swipe method to the left--------------//
@@ -394,7 +394,6 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
             label.numberOfLines = 2
             label.textAlignment = .Center
             label.font = label.font.fontWithSize(45)
-            label.textColor = UIColor.blackColor()
             label.tag = 1
             label.layoutIfNeeded()
             
@@ -429,21 +428,21 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
         if(self.carousel.numberOfItems >= 2){
             
             // self.deleteTimer(self.appendDataTimer) // Delete old timer before making new one
-                
-                if (self.carousel.currentItemIndex == self.messagesCount-1){
-                    if(self.messagesCount < self.userSettings.getPrivateMessageLimit()){
-                        self.appendAppData("1", showLoadingScreen: true)
-                    }
-                }
-                else if (self.carousel.currentItemIndex == self.messagesCount + self.clubNewsCount + self.newsCount-1) {
-                    if(self.newsCount < self.userSettings.getNewsMessageLimit()){
-                        self.appendAppData("2", showLoadingScreen: true)
-                    }
-                }
-                else if(self.carousel.currentItemIndex == self.messagesCount + self.clubNewsCount-1){
-                    self.appendAppData("3", showLoadingScreen: true)
+            
+            if (self.carousel.currentItemIndex == self.messagesCount-1){
+                if(self.messagesCount < self.userSettings.getPrivateMessageLimit()){
+                    self.appendAppData("1", showLoadingScreen: true)
                 }
             }
+            else if (self.carousel.currentItemIndex == self.messagesCount + self.clubNewsCount + self.newsCount-1) {
+                if(self.newsCount < self.userSettings.getNewsMessageLimit()){
+                    self.appendAppData("2", showLoadingScreen: true)
+                }
+            }
+            else if(self.carousel.currentItemIndex == self.messagesCount + self.clubNewsCount-1){
+                self.appendAppData("3", showLoadingScreen: true)
+            }
+        }
             
         else{
             if(self.carousel.currentItemIndex == self.carousel.numberOfItems - self.totalNewItems && self.totalNewItems > 0){
@@ -460,13 +459,21 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
         
         self.carouselCheckForAppendingItems() // Check for appending items and decrement notification counter if needed
         
-        // Setting category per item inside the array
-        self.setCategoryType(self.carousel.currentItemIndex, isEmpty: false) // Setting the category type
+        if(!self.items.isEmpty){
+            // Setting category per item inside the array
+            self.setCategoryType(self.carousel.currentItemIndex, isEmpty: false) // Setting the category type
+        }
+        else{
+            // Setting category per item inside the array
+            self.setCategoryType(self.carousel.currentItemIndex, isEmpty: true) // Setting the category type
+            self.carouselSpeechHelper.speechNoItemsAvailable()
+        }
+        
         
         
         if(!self.isAppending){
-        // Speech the item
-        self.carouselSpeechHelper.carouselSpeechItem()
+            // Speech the item
+            self.carouselSpeechHelper.carouselSpeechItem()
         }
         
     }
@@ -484,7 +491,7 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
         }
         return value
     }
-        
+    
     
     //# MARK: - Methods for setting images and category
     //=================================================================================================
@@ -602,7 +609,7 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
             var alert = self.setAlertView("Let op", message: "Weet u zeker dat u wilt uitloggen?")
             alert.addButtonWithTitle("Ja", type: SIAlertViewButtonType.Default, handler:{ (ACTION :SIAlertView!)in
                 self.goToLogin()
-                })
+            })
             alert.addButtonWithTitle("Nee", type: SIAlertViewButtonType.Cancel, handler: nil)
             alert.show()
         }
@@ -662,6 +669,64 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
     //# MARK: - UIBackground / Foreground methods
     //=================================================================================================
     func totalNewItemsToForeground(){
+        var itemsIndexArray = [Int]()
+        
+        // Getting the date
+        var dateFormatter = NSDateFormatter()
+        var date = NSDate()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        
+        var currentdateString = dateFormatter.stringFromDate(date)
+        currentdateString.substringToIndex(advance(currentdateString.startIndex, 10)) // Getting only the year, month day
+        
+        for i in 0...self.items.count-1{
+
+                println(self.items[i].getPublishDate())
+                var publishedDateString = self.items[i].getPublishDate()
+                println(publishedDateString)
+                
+                if(currentdateString != publishedDateString){
+                    for o in 0...self.items.count-1{
+                        if(self.items[i].getID() == self.items[o].getID()){
+                            self.carousel.removeItemAtIndex(i, animated: false) // From carousel
+                            if(self.items[i].getType() == "1"){
+                                self.messagesCount--
+                            }
+                            else if(self.items[i].getType() == "2"){
+                                self.newsCount--
+                            }
+                            else if(self.items[i].getType() == "3"){
+                                self.clubNewsCount--
+                            }
+                            itemsIndexArray.append(i)
+                        }
+                    }
+                }
+            }
+        println(self.items.count-1)
+        println(itemsIndexArray)
+        
+        if(!itemsIndexArray.isEmpty){
+            for j in reverse(0...itemsIndexArray.count-1){
+                self.items.removeAtIndex(itemsIndexArray[j])
+                self.removeImage(itemsIndexArray[j])
+            }
+        }
+        println(self.items.count)
+        println("NIEUWS" + String(self.newsCount))
+        println("CLUB" + String(self.clubNewsCount))
+
+        // If there are no more items,
+        if(self.items.isEmpty){
+            self.firstItem = true
+        }
+        
+       self.carousel.reloadData()
+        
+        if(self.items.isEmpty){
+            self.carouselCurrentItemIndexDidChange(self.carousel)
+        }
+        
         if(totalNewItems >= 0){
             self.carouselSpeechHelper.getSpeech().stopSpeech()
             //            self.newItemsToSpeech(self.totalNewItems, "0")
@@ -730,14 +795,17 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                 // Transfering array to global array
                 self.userSettings = settings
                 
-                // Setting the color and backround
-                if(self.userSettings.getColorType() != "default"){
-                    self.carousel.backgroundColor = ColorHelper.UIColorFromRGB(self.userSettings.getColorType())
+                // If the background is white, the carousel should be black. Otherwise
+                // the contrast is too weak
+                if(self.userSettings.getSecondaryColorType() == "FFFFFF"){
+                    // Setting the color and backround
+                    self.carousel.backgroundColor = ColorHelper.UIColorFromRGB("000000")
                 }
-                if(self.userSettings.getContrastType() != "default"){
-                    
+                else{
+                    // Setting the color and backround
+                    self.carousel.backgroundColor = ColorHelper.UIColorFromRGB(self.userSettings.getSecondaryColorType())
                 }
-                
+
                 self.token.hasRefreshToken(true) // For getting the messages
                 
                 // Getting the app data and fill it in the global array
@@ -926,7 +994,7 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
             DataManager.getItems(url){(items) in
                 
                 // If not empty, enable appending data
-                if(!items.isEmpty){
+                if(!items.isEmpty && items[0].getReturnCode() == "200"){
                     
                     var idArrayOld: [Int] = []
                     var idArrayNew: [Int] = []
@@ -934,26 +1002,24 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                     var newArray: [AnyObject] = []
                     
                     // Getting all the ID's for new ID array
-                    if(!items.isEmpty){
-                        for j in 0...items.count-1{
-                            
-                            // If 0, also the news should be appended because there is none yet
-                            if(type != "0"){
-                                // Check if the type is the same (for appending at the according index)
-                                if(items[j].getType() == type){
-                                    idArrayNew.append(items[j].getID().toInt()!)
-                                    
-                                }
-                            }
-                            else{
+                    for j in 0...items.count-1{
+                        
+                        // If 0, also the news should be appended because there is none yet
+                        if(type != "0"){
+                            // Check if the type is the same (for appending at the according index)
+                            if(items[j].getType() == type){
                                 idArrayNew.append(items[j].getID().toInt()!)
+                                
                             }
-                            
                         }
+                        else{
+                            idArrayNew.append(items[j].getID().toInt()!)
+                        }
+                        
                     }
                     
-                    // Getting all the ID's for old ID array
                     if(!self.items.isEmpty){
+                        // Getting all the ID's for old ID array
                         for i in 0...self.items.count-1{
                             
                             // If 0, also the news should be appended because there is none yet
@@ -970,6 +1036,7 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                             
                         }
                     }
+                    
                     
                     // Making sets
                     var set1 = NSMutableSet(array: idArrayOld)
@@ -1004,61 +1071,61 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                                 
                                 // Found new item
                                 if(items[l].getID().toInt() == newIDArray[k]){
-                                        self.isAppending = true // Now appending data, so speech may not execute
+                                    self.isAppending = true // Now appending data, so speech may not execute
                                     
-                                        // Check the type and append
-                                        if(items[l].getType() == "1"){
-                                            println("ISONE")
-                                            if(self.messagesCount < self.userSettings.getPrivateMessageLimit()){
-                                                indexHasChanged = true // New item may append
-                                                
-                                                self.items.insert(items[l], atIndex: self.messagesCount)
-                                                
-                                                self.appendImage(self.messagesCount)
-                                                self.carousel.insertItemAtIndex(self.messagesCount, animated: true)
-                                                
-                                                //Add the amount of messages or news
-                                                self.messagesCount++
-                                                newMessages++
-                                            }
-                                            else{
-                                                break
-                                            }
+                                    // Check the type and append
+                                    if(items[l].getType() == "1"){
+                                        println("ISONE")
+                                        if(self.messagesCount < self.userSettings.getPrivateMessageLimit()){
+                                            indexHasChanged = true // New item may append
+                                            
+                                            self.items.insert(items[l], atIndex: self.messagesCount)
+                                            
+                                            self.appendImage(self.messagesCount)
+                                            self.carousel.insertItemAtIndex(self.messagesCount, animated: true)
+                                            
+                                            //Add the amount of messages or news
+                                            self.messagesCount++
+                                            newMessages++
                                         }
-                                        else if(items[l].getType() == "2"){
-                                            if(self.newsCount < self.userSettings.getNewsMessageLimit()){
-                                                
-                                                indexHasChanged = true
-                                                
-                                                var indexNewsCount = self.messagesCount + self.clubNewsCount + self.newsCount
-                                                self.items.insert(items[l], atIndex: indexNewsCount)
-                                                self.appendImage(indexNewsCount)
-                                                self.carousel.insertItemAtIndex(indexNewsCount, animated: true)
-                                                
-                                                //Add the amount of messages or news
-                                                newNews++
-                                                self.newsCount++
-                                                
-                                            }
-                                            else{
-                                                break
-                                            }
+                                        else{
+                                            break
                                         }
-                                        else if(items[l].getType() == "3"){
+                                    }
+                                    else if(items[l].getType() == "2"){
+                                        if(self.newsCount < self.userSettings.getNewsMessageLimit()){
                                             
                                             indexHasChanged = true
                                             
-                                            var indexClubNewsCount = self.messagesCount + self.clubNewsCount
-                                            self.items.insert(items[l], atIndex: indexClubNewsCount)
-                                            self.appendImage(indexClubNewsCount)
-                                            self.carousel.insertItemAtIndex(indexClubNewsCount, animated: true)
+                                            var indexNewsCount = self.messagesCount + self.clubNewsCount + self.newsCount
+                                            self.items.insert(items[l], atIndex: indexNewsCount)
+                                            self.appendImage(indexNewsCount)
+                                            self.carousel.insertItemAtIndex(indexNewsCount, animated: true)
                                             
                                             //Add the amount of messages or news
-                                            newClubNews++
-                                            self.clubNewsCount++
+                                            newNews++
+                                            self.newsCount++
                                             
                                         }
+                                        else{
+                                            break
+                                        }
                                     }
+                                    else if(items[l].getType() == "3"){
+                                        
+                                        indexHasChanged = true
+                                        
+                                        var indexClubNewsCount = self.messagesCount + self.clubNewsCount
+                                        self.items.insert(items[l], atIndex: indexClubNewsCount)
+                                        self.appendImage(indexClubNewsCount)
+                                        self.carousel.insertItemAtIndex(indexClubNewsCount, animated: true)
+                                        
+                                        //Add the amount of messages or news
+                                        newClubNews++
+                                        self.clubNewsCount++
+                                        
+                                    }
+                                }
                                 
                             }
                         }
@@ -1123,7 +1190,7 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                                 
                                 if(self.userSettings.isNotificationSoundEnabled()){
                                     self.notificationSound.playSound() // Play the ROEKOE sound
-
+                                    
                                 }
                                 self.carouselCurrentItemIndexDidChange(self.carousel) // Refresh the item
                                 
@@ -1140,7 +1207,7 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                                     break
                                 }
                                 else{
-                                     // Not found, at the ending change the index and set appending to false for speech
+                                    // Not found, at the ending change the index and set appending to false for speech
                                     println("NOT FOUND")
                                     if(p == self.items.count-1){
                                         self.isAppending = false
@@ -1148,7 +1215,7 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                                     }
                                 }
                             }
-
+                            
                         }
                     }
                     
@@ -1187,17 +1254,17 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
         var userInfoArray = Array<String>()
         userInfoArray.append(carouselMessageNumber)
         userInfoArray.append(type)
-
+        
         // Getting the max seconds upon checking the type
         var interval:NSTimeInterval!
         if(type == "1"){
-             interval = NSTimeInterval(self.userSettings.getMessagesStoreMaxSeconds().toInt()!)
+            interval = NSTimeInterval(self.userSettings.getMessagesStoreMaxSeconds().toInt()!)
         }
         else if(type == "2"){
-             interval = NSTimeInterval(self.userSettings.getNewsStoreMaxSeconds().toInt()!)
+            interval = NSTimeInterval(self.userSettings.getNewsStoreMaxSeconds().toInt()!)
         }
         else if(type == "3"){
-             interval = NSTimeInterval(self.userSettings.getClubNewsStoreMaxSeconds().toInt()!)
+            interval = NSTimeInterval(self.userSettings.getClubNewsStoreMaxSeconds().toInt()!)
         }
         var newTimer = timerManager.startTimer(self, selector: Selector("checkIDForDeletion:"), userInfo: userInfoArray, interval: interval) // Start timer
     }

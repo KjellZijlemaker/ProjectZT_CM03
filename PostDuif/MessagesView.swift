@@ -27,6 +27,18 @@ class MessagesView: UIView{
         self.backgroundColor = ColorHelper.UIColorFromRGB(color, alpha: 1)
     }
     
+    func setTitleBackground(color: String){
+        self.messageTitle.backgroundColor = ColorHelper.UIColorFromRGB(color, alpha: 1)
+    }
+    
+    func setContentBackground(color: String){
+        self.messageContent.backgroundColor = ColorHelper.UIColorFromRGB(color, alpha: 1)
+    }
+    
+    func setFontColor(color: String){
+        self.messageTitle.textColor = ColorHelper.UIColorFromRGB(color, alpha: 1)
+        self.messageContent.textColor = ColorHelper.UIColorFromRGB(color, alpha: 1)
+    }
     
     func setupTitle(){
         var borderColor : UIColor = UIColor.grayColor()

@@ -29,6 +29,19 @@ class NewsMessageView: UIView{
         self.backgroundColor = ColorHelper.UIColorFromRGB(color, alpha: 1)
     }
     
+    func setTitleBackground(color: String){
+        self.newsMessageTitle.backgroundColor = ColorHelper.UIColorFromRGB(color, alpha: 1)
+    }
+    
+    func setContentBackground(color: String){
+        self.newsMessageContent.backgroundColor = ColorHelper.UIColorFromRGB(color, alpha: 1)
+    }
+    
+    func setFontColor(color: String){
+        self.newsMessageTitle.textColor = ColorHelper.UIColorFromRGB(color, alpha: 1)
+        self.newsMessageContent.textColor = ColorHelper.UIColorFromRGB(color, alpha: 1)
+    }
+    
     @IBAction func normalText(sender: AnyObject) {
         self.newsMessageTitle.font = UIFont(name: "Verdana-Bold", size: 50)
         self.newsMessageContent.font = UIFont(name: "Verdana", size: 41)

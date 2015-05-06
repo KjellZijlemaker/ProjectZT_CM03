@@ -15,26 +15,26 @@ class DataManager{
         
         // Making GET request to the URL
         request(.GET, apiEndPoint).responseJSON { (request, response, json, error) in
-             println(apiEndPoint)
+            println(apiEndPoint)
             
             // Making sure if the JSON is not empty
             if (json != nil) {
-               
+                
                 // Making the JSON object from the JSON
                 var jsonObj = JSON(json!)
                 
                 var messageArray = [Item]()
                 
                 if jsonObj["code"].string == "200"{
-                
                     
-                // Making new array
-                if let dataArray = jsonObj["data"]["entry"].array{
-
-                    for messages in dataArray{
-                        var type: String = messages["type"].stringValue
-                        if(type == "1"){
-  
+                    
+                    // Making new array
+                    if let dataArray = jsonObj["data"]["entry"].array{
+                        
+                        for messages in dataArray{
+                            var type: String = messages["type"].stringValue
+                            if(type == "1"){
+                                
                                 
                                 // Making new Message object
                                 var newMessage = Item()
@@ -62,72 +62,81 @@ class DataManager{
                                 var messageContent: String = messages["message"].stringValue
                                 newMessage.setContent(messageContent)
                                 
+                                var publishDate: String = messages["addedDate"].stringValue
+                                newMessage.setPublishDate(publishDate)
+                                
                                 // Append the app names
                                 messageArray.append(newMessage)
                                 
                             }
-
-                        
-                        else if (type == "2"){
-                            // Making new Message object
-                            var newMessage = Item()
+                                
+                                
+                            else if (type == "2"){
+                                // Making new Message object
+                                var newMessage = Item()
+                                
+                                // Setting returncode
+                                var returnCode = jsonObj["code"].stringValue
+                                newMessage.setReturnCode(returnCode)
+                                
+                                // Setting type
+                                newMessage.setType(type)
+                                
+                                // Setting the message ID
+                                var newsFeedID: String = messages["newsFeedItemMessageId"].stringValue
+                                newMessage.setID(newsFeedID)
+                                
+                                // Set name inside the object
+                                var newsTitle: String = messages["Title"].stringValue
+                                newMessage.setSubject(newsTitle)
+                                
+                                // Set category inside the object
+                                var newsCategory: String = messages["category"].stringValue
+                                newMessage.setCategory(newsCategory)
+                                
+                                // Set the website for the object
+                                var newsContent: String = messages["content"].stringValue
+                                newMessage.setContent(newsContent)
+                                
+                                var publishDate: String = messages["publishedDate"].stringValue
+                                newMessage.setPublishDate(publishDate)
+                                
+                                // Append the app names
+                                messageArray.append(newMessage)
+                            }
+                                
+                            else if(type == "3"){
+                                // Making new Message object
+                                var newMessage = Item()
+                                
+                                // Setting returncode
+                                var returnCode = jsonObj["code"].stringValue
+                                newMessage.setReturnCode(returnCode)
+                                
+                                // Setting type
+                                newMessage.setType(type)
+                                
+                                // Setting the message ID
+                                var clubMessageID: String = messages["clubMessageClientId"].stringValue
+                                newMessage.setID(clubMessageID)
+                                
+                                // Set name inside the object
+                                var clubMessageSubject: String = messages["subject"].stringValue
+                                newMessage.setSubject(clubMessageSubject)
+                                
+                                // Set the website for the object
+                                var clubMessage: String = messages["message"].stringValue
+                                newMessage.setContent(clubMessage)
+                                
+                                var publishDate: String = messages["publishedDate"].stringValue
+                                newMessage.setPublishDate(publishDate)
+                                
+                                // Append the app names
+                                messageArray.append(newMessage)
+                            }
                             
-                            // Setting returncode
-                            var returnCode = jsonObj["code"].stringValue
-                            newMessage.setReturnCode(returnCode)
-                            
-                            // Setting type
-                            newMessage.setType(type)
-                            
-                            // Setting the message ID
-                            var newsFeedID: String = messages["newsFeedItemMessageId"].stringValue
-                            newMessage.setID(newsFeedID)
-                            
-                            // Set name inside the object
-                            var newsTitle: String = messages["Title"].stringValue
-                            newMessage.setSubject(newsTitle)
-                            
-                            // Set category inside the object
-                            var newsCategory: String = messages["category"].stringValue
-                            newMessage.setCategory(newsCategory)
-                            
-                            // Set the website for the object
-                            var newsContent: String = messages["content"].stringValue
-                            newMessage.setContent(newsContent)
-                            
-                            // Append the app names
-                            messageArray.append(newMessage)
                         }
                         
-                        else if(type == "3"){
-                            // Making new Message object
-                            var newMessage = Item()
-                            
-                            // Setting returncode
-                            var returnCode = jsonObj["code"].stringValue
-                            newMessage.setReturnCode(returnCode)
-                            
-                            // Setting type
-                            newMessage.setType(type)
-                            
-                            // Setting the message ID
-                            var clubMessageID: String = messages["clubMessageClientId"].stringValue
-                            newMessage.setID(clubMessageID)
-                            
-                            // Set name inside the object
-                            var clubMessageSubject: String = messages["subject"].stringValue
-                            newMessage.setSubject(clubMessageSubject)
-                            
-                            // Set the website for the object
-                            var clubMessage: String = messages["message"].stringValue
-                            newMessage.setContent(clubMessage)
-
-                            // Append the app names
-                            messageArray.append(newMessage)
-                        }
-                        
-                    }
-                    
                     }
                 }
                 else{
@@ -137,23 +146,23 @@ class DataManager{
                         messageArray.append(newMessage)
                     }
                 }
-                    // Give the array back to the main Thread
-                    completionHandler(response: messageArray)
+                // Give the array back to the main Thread
+                completionHandler(response: messageArray)
                 
-                    
-                    /* Code snippet for getting single item out of JSON array
-                    if let appName = jsonObj["feed"]["entry"][1]["im:name"]["label"].string{
-                    let test1 = Test(age: 9, name: appName)
-                    //self.tableView.reloadData()
-                    completion(response: test1)
-                    }
-                    */
+                
+                /* Code snippet for getting single item out of JSON array
+                if let appName = jsonObj["feed"]["entry"][1]["im:name"]["label"].string{
+                let test1 = Test(age: 9, name: appName)
+                //self.tableView.reloadData()
+                completion(response: test1)
                 }
-                    
-                    
-                    // If there is an error.....
-                else if (error != nil){
-                    println("error!")
+                */
+            }
+                
+                
+                // If there is an error.....
+            else if (error != nil){
+                println("error!")
                 // Making new Message object
                 var newMessage = Item()
                 newMessage.setReturnCode("403")
@@ -162,8 +171,8 @@ class DataManager{
                 
                 // Give the array back to the main Thread
                 completionHandler(response: messageArray)
-                }
             }
+        }
         
         
     }

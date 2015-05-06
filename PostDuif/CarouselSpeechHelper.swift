@@ -154,6 +154,9 @@ class CarouselSpeechHelper{
         
     }
     
+    func speechNoItemsAvailable(){
+        self.speech.speechString("Er zijn geen nieuwe berichten op dit moment.")
+    }
     
     func getSpeech() -> SpeechManager{
         return speech

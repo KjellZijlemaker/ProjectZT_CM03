@@ -17,6 +17,7 @@ class Item{
     private var returnCode: String
     private var fromUser: String
     private var type: String
+    private var publishDate: String
 
     init(){
         self.id = ""
@@ -26,6 +27,7 @@ class Item{
         self.returnCode = ""
         self.fromUser = ""
         self.type = ""
+        self.publishDate = ""
     }
     
     func setID(id: String){
@@ -82,6 +84,14 @@ class Item{
     
     func getType() -> String{
         return self.type
+    }
+    
+    func setPublishDate(date: String){
+        self.publishDate = date
+    }
+    
+    func getPublishDate() -> String{
+        return publishDate
     }
     
 }

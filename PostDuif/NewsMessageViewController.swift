@@ -33,12 +33,10 @@ class NewsMessageViewController: UIViewController, newsMessagesDelegate {
         self.newsMessagesView.setMessageText(self.news.getContent())//Putting back the message inside the controller
         
         // Setting the color and backround
-        if(self.userSettings.getColorType() != "default"){
-            self.newsMessagesView.setViewBackground(self.userSettings.getColorType())
-        }
-        if(self.userSettings.getContrastType() != "default"){
-            
-        }
+        self.newsMessagesView.setFontColor(self.userSettings.getPrimaryColorType())
+        self.newsMessagesView.setViewBackground("000000")
+        self.newsMessagesView.setTitleBackground(self.userSettings.getSecondaryColorType())
+        self.newsMessagesView.setContentBackground(self.userSettings.getSecondaryColorType())
 
         
         

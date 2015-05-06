@@ -26,6 +26,18 @@ class ClubNewsView: UIView{
         self.backgroundColor = ColorHelper.UIColorFromRGB(color, alpha: 1)
     }
     
+    func setTitleBackground(color: String){
+        self.clubNewsTitle.backgroundColor = ColorHelper.UIColorFromRGB(color, alpha: 1)
+    }
+    
+    func setContentBackground(color: String){
+        self.clubNewsContent.backgroundColor = ColorHelper.UIColorFromRGB(color, alpha: 1)
+    }
+    
+    func setFontColor(color: String){
+        self.clubNewsTitle.textColor = ColorHelper.UIColorFromRGB(color, alpha: 1)
+        self.clubNewsContent.textColor = ColorHelper.UIColorFromRGB(color, alpha: 1)
+    }
     
     func setupTitle(){
         var borderColor : UIColor = UIColor.grayColor()

@@ -32,12 +32,10 @@ class MessageContentViewController: UIViewController, messagesDelegate {
         self.messagesView.setMessageText(self.message.getContent())//Putting back the message inside the controller
         
         // Setting the color and backround
-        if(self.userSettings.getColorType() != "default"){
-            self.messagesView.setViewBackground(self.userSettings.getColorType())
-        }
-        if(self.userSettings.getContrastType() != "default"){
-            
-        }
+        self.messagesView.setFontColor(self.userSettings.getPrimaryColorType())
+        self.messagesView.setViewBackground("000000")
+        self.messagesView.setTitleBackground(self.userSettings.getSecondaryColorType())
+        self.messagesView.setContentBackground(self.userSettings.getSecondaryColorType())
         
         if(self.userSettings.isSpeechEnabled()){
             self.speechMessageItem()

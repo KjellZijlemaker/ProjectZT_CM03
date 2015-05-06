@@ -118,7 +118,14 @@ class UserManager{
                             
                             // Set color
                             var colorType: String = settings["colorType"].stringValue
-                            newSettings.setColorType(colorType)
+                            
+                            // Getting the right colors from one String
+                            var primaryColor = colorType.substringToIndex(advance(colorType.startIndex, 6))
+                            var secondaryColor = colorType.substringFromIndex(advance(colorType.startIndex, 7))
+                            
+                            // Setting the colors
+                            newSettings.setPrimaryColorType(primaryColor)
+                            newSettings.setSecondaryColorType(secondaryColor)
                             
                             // Set accessibility
                             var accessibility: String = settings["accessibilityEnabled"].stringValue

@@ -32,12 +32,10 @@ class ClubNewsViewController: UIViewController, clubNewsDelegate {
         self.clubNewsView.setMessageText(self.clubNews.getContent())//Putting back the message inside the controller
         
         // Setting the color and backround
-        if(self.userSettings.getColorType() != "default"){
-            self.clubNewsView.setViewBackground(self.userSettings.getColorType())
-        }
-        if(self.userSettings.getContrastType() != "default"){
-            
-        }
+        self.clubNewsView.setFontColor(self.userSettings.getPrimaryColorType())
+        self.clubNewsView.setViewBackground("000000")
+        self.clubNewsView.setTitleBackground(self.userSettings.getSecondaryColorType())
+        self.clubNewsView.setContentBackground(self.userSettings.getSecondaryColorType())
         
         if(self.userSettings.isSpeechEnabled()){
             // Speech the item

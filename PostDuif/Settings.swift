@@ -15,7 +15,8 @@ class Settings{
     private var userSpeech: Bool
     private var newsMessageLimit: Int
     private var contrastType: String
-    private var colorType: String
+    private var primaryColorType: String
+    private var secondaryColorType: String
     private var userAccessibility: Bool
     private var returnCode: String
     private var messagesStoreMaxSeconds: String
@@ -29,7 +30,8 @@ class Settings{
         self.userSpeech = true
         self.newsMessageLimit = 10
         self.contrastType = "default"
-        self.colorType = "default"
+        self.primaryColorType = "default"
+        self.secondaryColorType = "default"
         self.userAccessibility = true
         self.returnCode = ""
         self.messagesStoreMaxSeconds = ""
@@ -77,12 +79,19 @@ class Settings{
         return self.contrastType
     }
     
-    func setColorType(colorType: String){
-        self.colorType = colorType
+    func setPrimaryColorType(colorType: String){
+        self.primaryColorType = colorType
     }
     
-    func getColorType() -> String{
-        return self.colorType
+    func getPrimaryColorType() -> String{
+        return self.primaryColorType
+    }
+    func setSecondaryColorType(colorType: String){
+        self.secondaryColorType = colorType
+    }
+    
+    func getSecondaryColorType() -> String{
+        return self.secondaryColorType
     }
     
     func hasAccessibilityEnabled(userAccessibility: Bool){
