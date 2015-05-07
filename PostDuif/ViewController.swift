@@ -88,7 +88,7 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
             self.token.setRefreshToken(self.defaults.stringForKey("refreshToken")!)//keychain.get("refreshToken")
             
             // Getting the settings by UserID
-            getUserSettings(self.token.getToken())
+            getUserSettings(self.token.getToken(), updateSettings: false)
             
         }
         
@@ -174,6 +174,16 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return UIStatusBarStyle.LightContent
+    }
+    
+    // Motion gesture
+    override func motionEnded(motion: UIEventSubtype, withEvent event: UIEvent) {
+        if motion == .MotionShake {
+            self.getUserSettings(self.token.getToken(), updateSettings: true)
+            if(self.userSettings.isNotificationSoundEnabled()){
+                self.carouselSpeechHelper.getSpeech().speechString("Instellingen bijgewerkt")
+            }
+        }
     }
     
     //# MARK: - Gesture control methods
@@ -783,7 +793,7 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
     //=================================================================================================
     
     // Function for getting the main app data and filling it into the array
-    func getUserSettings(tokenKey: String){
+    func getUserSettings(tokenKey: String, updateSettings: Bool){
         
         var url = "http://84.107.107.169:8080/VisioWebApp/API/clientSettings?tokenKey=" + tokenKey
         
@@ -805,16 +815,21 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                     // Setting the color and backround
                     self.carousel.backgroundColor = ColorHelper.UIColorFromRGB(self.userSettings.getSecondaryColorType())
                 }
-
-                self.token.hasRefreshToken(true) // For getting the messages
                 
-                // Getting the app data and fill it in the global array
-                self.getAppData(self.token.getToken())
+                // Execute only when getting settings for the first time
+                if(!updateSettings){
+                    self.token.hasRefreshToken(true) // For getting the messages
+ 
+                    // Getting the app data and fill it in the global array
+                    self.getAppData(self.token.getToken())
+                }
+
+                
             }
             else if(settings.getReturnCode() == "400"){
                 if(self.token.isRefreshToken()){
                     self.token.hasRefreshToken(false)
-                    self.getUserSettings("http://84.107.107.169:8080/VisioWebApp/API/clientSettings?tokenKey=" + self.token.getRefreshToken())
+                    self.getUserSettings("http://84.107.107.169:8080/VisioWebApp/API/clientSettings?tokenKey=" + self.token.getRefreshToken(), updateSettings: false)
                 }
                 else{
                     // Send user back to login phase
