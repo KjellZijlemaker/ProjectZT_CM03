@@ -12,10 +12,10 @@ class NewsMessageViewController: UIViewController, newsMessagesDelegate {
     var news:Item!
     var userSettings:Settings!
     var speech:SpeechManager!
-    var delegate: deleteMessageItem!
+    var delegate: newsMessagesDelegate!
     var openendMessage: messageOpenend!
     var deletingMessage: deleteMessageItem!
-    
+    var userDelegate: userManagerDelegate!
     
     @IBOutlet var newsMessagesView: NewsMessageView!
     
@@ -38,40 +38,47 @@ class NewsMessageViewController: UIViewController, newsMessagesDelegate {
         self.newsMessagesView.setTitleBackground(self.userSettings.getSecondaryColorType())
         self.newsMessagesView.setContentBackground(self.userSettings.getSecondaryColorType())
 
-        
-        
-        if(self.userSettings.isSpeechEnabled()){
-            self.speechNewsMessageItem()
+        if(!UIAccessibilityIsVoiceOverRunning() && self.userSettings.isSpeechEnabled()){
+            var carouselSpeechHelper = CarouselSpeechHelper()
+            carouselSpeechHelper.speechNewsMessageItem(self.news)
         }
         
     }
-    
-    func speechNewsMessageItem(){
-        // Making new sentence array for speech
-        var sentenceArray: [String] = []
-        sentenceArray.append("Titel nieuwsbericht: " + self.news.getSubject())
-        sentenceArray.append("Inhoud nieuwsbericht: ")
-        sentenceArray.append(self.news.getContent())
-        sentenceArray.append("Einde nieuwsbericht")
-        sentenceArray.append("Veeg naar links om het nieuwsbericht te sluiten")
-        self.speech.speechArray(sentenceArray) //Execute speech
-    }
+
     
     func dismissController(){
         // Dismiss the controller
         self.presentingViewController?.dismissViewControllerAnimated(true, completion: {
             let secondPresentingVC = self.presentingViewController?.presentingViewController;
             secondPresentingVC?.dismissViewControllerAnimated(true, completion: {});
-            if(self.userSettings.isSpeechEnabled()){
-                self.speech.speechString("U heeft het nieuwsbericht gelezen") //Little speech for user
-            }
-            self.delegate.executeDeletionTimer(self.news.getID(), "2")
+            self.speech.speechString("U heeft het nieuwsbericht gelezen") //Little speech for user
+            self.openendMessage.messageIsOpenend = false
+            self.deletingMessage.executeDeletionTimer(self.news.getID(), "2")
         });
 
     }
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return UIStatusBarStyle.BlackOpaque
+    }
+    
+    
+    // Motion gesture
+    override func motionEnded(motion: UIEventSubtype, withEvent event: UIEvent) {
+        if (motion == .MotionShake) {
+            self.userDelegate.getUserSettings(self.userDelegate.token.getToken(), updateSettings: true)
+            if(self.userSettings.isNotificationSoundEnabled()){
+                var carouselSpeechHelper = CarouselSpeechHelper()
+                
+                // Setting the color and backround again
+                self.newsMessagesView.setFontColor(self.userSettings.getPrimaryColorType())
+                self.newsMessagesView.setViewBackground("000000")
+                self.newsMessagesView.setTitleBackground(self.userSettings.getSecondaryColorType())
+                self.newsMessagesView.setContentBackground(self.userSettings.getSecondaryColorType())
+                
+                carouselSpeechHelper.getSpeech().speechString("Instellingen bijgewerkt")
+            }
+        }
     }
     
    

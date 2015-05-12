@@ -9,8 +9,8 @@
 import Foundation
 
 class CategoryTypeView: UIView{
-    @IBOutlet weak var categoryTypeViewLabel: UILabel!
-     @IBOutlet weak var categoryTypeCategoryViewLabel: UILabel!
+    @IBOutlet weak private var categoryTypeViewLabel: UILabel!
+     @IBOutlet weak private var categoryTypeCategoryViewLabel: UILabel!
     
     // Setting the label inside the view
     func setCategoryTypeLabel(text: String){
@@ -19,6 +19,14 @@ class CategoryTypeView: UIView{
     
     func setCategoryTypeCategoryViewLabel(text: String){
         self.categoryTypeCategoryViewLabel.text = text
+    }
+    
+    func getCategoryLabel() -> String{
+        return self.categoryTypeViewLabel.text!
+    }
+    
+    func getCategoryType() -> String{
+        return self.categoryTypeCategoryViewLabel.text!
     }
     
     // Making animation with transition of type

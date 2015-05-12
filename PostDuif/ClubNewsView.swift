@@ -67,4 +67,14 @@ class ClubNewsView: UIView{
         self.delegate.dismissController() // Dismiss the controller
     }
     
+    
+    override func accessibilityScroll(direction: UIAccessibilityScrollDirection) -> Bool {
+            if (direction == UIAccessibilityScrollDirection.Left) {
+                self.leftSwiped()
+            }
+            
+            UIAccessibilityPostNotification(UIAccessibilityPageScrolledNotification, nil)
+        
+        return true
+    }
 }

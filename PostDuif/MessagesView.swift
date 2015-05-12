@@ -58,10 +58,6 @@ class MessagesView: UIView{
         //------------right  swipe gestures in view--------------//
         let swipeLeft = UISwipeGestureRecognizer(target: self, action: Selector("leftSwiped"))
         swipeLeft.direction = UISwipeGestureRecognizerDirection.Left
-        swipeLeft.isAccessibilityElement = true
-        if(isAccessibilityElement){
-            swipeLeft.numberOfTouchesRequired = 3
-        }
         self.addGestureRecognizer(swipeLeft)
     }
     
@@ -71,6 +67,16 @@ class MessagesView: UIView{
         self.delegate.speech.stopSpeech() //Stop speech
         self.delegate.dismissController() // Dismiss the controller
     }
-
+    
+    override func accessibilityScroll(direction: UIAccessibilityScrollDirection) -> Bool {
+        if (direction == UIAccessibilityScrollDirection.Left) {
+            self.leftSwiped()
+        }
+        
+        UIAccessibilityPostNotification(UIAccessibilityPageScrolledNotification, nil)
+        
+        return true
+    }
+    
 }
 

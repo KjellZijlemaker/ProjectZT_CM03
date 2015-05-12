@@ -13,7 +13,9 @@ class MessageContentViewController: UIViewController, messagesDelegate {
     var userSettings:Settings!
     var speech:SpeechManager!
     var deletingMessage: deleteMessageItem!
+    var delegate: messagesDelegate!
     var openendMessage: messageOpenend!
+    var userDelegate: userManagerDelegate!
     
     @IBOutlet var messagesView: MessagesView!
     
@@ -26,7 +28,7 @@ class MessageContentViewController: UIViewController, messagesDelegate {
         self.messagesView.setupTitle()
         self.messagesView.setupContent()
         self.messagesView.setupSwiping()
-        
+    
         // Setting the text
         self.messagesView.setTitleText(self.message.getSubject())
         self.messagesView.setMessageText(self.message.getContent())//Putting back the message inside the controller
@@ -37,33 +39,19 @@ class MessageContentViewController: UIViewController, messagesDelegate {
         self.messagesView.setTitleBackground(self.userSettings.getSecondaryColorType())
         self.messagesView.setContentBackground(self.userSettings.getSecondaryColorType())
         
-        if(self.userSettings.isSpeechEnabled()){
-            self.speechMessageItem()
+        if(!UIAccessibilityIsVoiceOverRunning() && self.delegate.userSettings.isSpeechEnabled()){
+            var carouselSpeechHelper = CarouselSpeechHelper()
+            carouselSpeechHelper.speechMessageItem(self.message)
         }
-        
-        
     }
-    
-    func speechMessageItem(){
-        // Making new sentence array for speech
-        var sentenceArray: [String] = []
-        sentenceArray.append("Onderwerp bericht: " + self.message.getSubject())
-        sentenceArray.append("Inhoud bericht: ")
-        sentenceArray.append(self.message.getContent())
-        sentenceArray.append("Einde bericht")
-        sentenceArray.append("Veeg naar links om het bericht te sluiten")
-        
-        self.speech.speechArray(sentenceArray) //Execute speech
-    }
+
     
     func dismissController(){
         // Dismiss the controller
         self.presentingViewController?.dismissViewControllerAnimated(true, completion: {
             let secondPresentingVC = self.presentingViewController?.presentingViewController;
             secondPresentingVC?.dismissViewControllerAnimated(true, completion: {});
-            if(self.userSettings.isSpeechEnabled()){
-                self.speech.speechString("U heeft het bericht gelezen") //Little speech for user
-            }
+            self.speech.speechString("U heeft het bericht gelezen") //Little speech for user
             self.openendMessage.messageIsOpenend = false
             self.deletingMessage.executeDeletionTimer(self.message.getID(), "1")
         });
@@ -79,5 +67,22 @@ class MessageContentViewController: UIViewController, messagesDelegate {
         // Dispose of any resources that can be recreated.
     }
     
+    // Motion gesture
+    override func motionEnded(motion: UIEventSubtype, withEvent event: UIEvent) {
+        if (motion == .MotionShake) {
+            self.userDelegate.getUserSettings(self.userDelegate.token.getToken(), updateSettings: true)
+            if(self.userSettings.isNotificationSoundEnabled()){
+                var carouselSpeechHelper = CarouselSpeechHelper()
+                
+                // Setting the color and backround again
+                self.messagesView.setFontColor(self.userSettings.getPrimaryColorType())
+                self.messagesView.setViewBackground("000000")
+                self.messagesView.setTitleBackground(self.userSettings.getSecondaryColorType())
+                self.messagesView.setContentBackground(self.userSettings.getSecondaryColorType())
+                
+                carouselSpeechHelper.getSpeech().speechString("Instellingen bijgewerkt")
+            }
+        }
+    }
     
 }

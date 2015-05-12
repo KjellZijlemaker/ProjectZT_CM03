@@ -32,35 +32,44 @@ class CarouselSpeechHelper{
             
             self.delegate.firstItem = false
             
-            if(self.delegate.userSettings.isSpeechEnabled()){
-                var textToSend:[String] = [] // Array for sending message
+            var textToSend:[String] = [] // Array for sending message
                 
                 // Check if the item is message or newsitem
                 if(self.delegate.items[self.delegate.carousel.currentItemIndex].getType() == "1"){
                     
-                    textToSend.append(String(self.delegate.carousel.currentItemIndex+1) + "e " + " Ongelezen bericht van: " + self.delegate.items[self.delegate.carousel.currentItemIndex].getFromUser())
-                    textToSend.append("Onderwerp: " + self.delegate.items[self.delegate.carousel.currentItemIndex].getSubject())
-                    textToSend.append("Tik op het scherm om het bericht te openen")
+                    if(UIAccessibilityIsVoiceOverRunning() || self.delegate.userSettings.isSpeechEnabled()){
+                        textToSend.append(String(self.delegate.carousel.currentItemIndex+1) + "e " + " Ongelezen bericht van: " + self.delegate.items[self.delegate.carousel.currentItemIndex].getFromUser())
+                    }
+                    
+                    if(!UIAccessibilityIsVoiceOverRunning() && self.delegate.userSettings.isSpeechEnabled()){
+                        textToSend.append("Onderwerp: " + self.delegate.items[self.delegate.carousel.currentItemIndex].getSubject())
+                        textToSend.append("Tik op het scherm om het bericht te openen")
+                    }
                     
                     self.speech.speechArray(textToSend)
                 }
                 else if(self.delegate.items[self.delegate.carousel.currentItemIndex].getType() == "2"){
                     
-                    textToSend.append(String(self.delegate.carousel.currentItemIndex+1) + "e " + " Ongelezen nieuwsbericht")
-                    textToSend.append("Titel: " + self.delegate.items[self.delegate.carousel.currentItemIndex].getSubject())
-                    textToSend.append("Tik op het scherm om het nieuwsbericht te openen")
-                    
+                    if(UIAccessibilityIsVoiceOverRunning() || self.delegate.userSettings.isSpeechEnabled()){
+                        textToSend.append(String(self.delegate.carousel.currentItemIndex+1) + "e " + " Ongelezen nieuwsbericht")
+                    }
+                    if(!UIAccessibilityIsVoiceOverRunning() && self.delegate.userSettings.isSpeechEnabled()){
+                        textToSend.append("Titel: " + self.delegate.items[self.delegate.carousel.currentItemIndex].getSubject())
+                        textToSend.append("Tik op het scherm om het nieuwsbericht te openen")
+                    }
                     self.speech.speechArray(textToSend)
                 }
                 else if(self.delegate.items[self.delegate.carousel.currentItemIndex].getType() == "3"){
-                    
-                    textToSend.append(String(self.delegate.carousel.currentItemIndex+1) + "e " + " Ongelezen nieuwsbrief")
-                    textToSend.append("Titel: " + self.delegate.items[self.delegate.carousel.currentItemIndex].getSubject())
-                    textToSend.append("Tik op het scherm om de nieuwsbrief te openen")
-                    
+                    if(UIAccessibilityIsVoiceOverRunning() || self.delegate.userSettings.isSpeechEnabled()){
+                        textToSend.append(String(self.delegate.carousel.currentItemIndex+1) + "e " + " Ongelezen nieuwsbrief")
+                    }
+                    if(!UIAccessibilityIsVoiceOverRunning() && self.delegate.userSettings.isSpeechEnabled()){
+                        textToSend.append("Titel: " + self.delegate.items[self.delegate.carousel.currentItemIndex].getSubject())
+                        textToSend.append("Tik op het scherm om de nieuwsbrief te openen")
+                    }
                     self.speech.speechArray(textToSend)
                 }
-            }
+            
         }
     }
     
@@ -71,7 +80,7 @@ class CarouselSpeechHelper{
         
         // Will execute when it's not the first item anymore (for speech)
         if(!self.delegate.firstItem){
-            if(self.delegate.userSettings.isSpeechEnabled()){
+            
                 
                 var textToSend:[String] = [] // Array for sending message
                 
@@ -80,9 +89,14 @@ class CarouselSpeechHelper{
                     
                     var currentItem = self.delegate.messagesCount - self.delegate.messagesCount + self.delegate.carousel.currentItemIndex + 1
                     
-                    textToSend.append(String(self.delegate.carousel.currentItemIndex+1) + "e " + " Ongelezen bericht van: " + self.delegate.items[self.delegate.carousel.currentItemIndex].getFromUser())
-                    textToSend.append("Onderwerp: " + self.delegate.items[self.delegate.carousel.currentItemIndex].getSubject())
-                    textToSend.append("Tik op het scherm om het bericht te openen")
+                    if(UIAccessibilityIsVoiceOverRunning() || self.delegate.userSettings.isSpeechEnabled()){
+                        textToSend.append(String(self.delegate.carousel.currentItemIndex+1) + "e " + " Ongelezen bericht van: " + self.delegate.items[self.delegate.carousel.currentItemIndex].getFromUser())
+                    }
+                    
+                    if(!UIAccessibilityIsVoiceOverRunning() && self.delegate.userSettings.isSpeechEnabled()){
+                        textToSend.append("Onderwerp: " + self.delegate.items[self.delegate.carousel.currentItemIndex].getSubject())
+                        textToSend.append("Tik op het scherm om het bericht te openen")
+                    }
                     
                     self.speech.speechArray(textToSend)
                 }
@@ -90,24 +104,30 @@ class CarouselSpeechHelper{
                 else if(self.delegate.items[self.delegate.carousel.currentItemIndex].getType() == "2"){
                     
                     var currentItem = self.delegate.carousel.currentItemIndex - self.delegate.messagesCount - self.delegate.clubNewsCount + 1
-                    
-                    textToSend.append(String(currentItem) + "e " + " Ongelezen nieuwsbericht")
-                    textToSend.append("Titel: " + self.delegate.items[self.delegate.carousel.currentItemIndex].getSubject())
-                    textToSend.append("Tik op het scherm om het nieuwsbericht te openen")
+                    if(UIAccessibilityIsVoiceOverRunning() || self.delegate.userSettings.isSpeechEnabled()){
+                        textToSend.append(String(currentItem) + "e " + " Ongelezen nieuwsbericht")
+                    }
+                    if(!UIAccessibilityIsVoiceOverRunning() && self.delegate.userSettings.isSpeechEnabled()){
+                        textToSend.append("Titel: " + self.delegate.items[self.delegate.carousel.currentItemIndex].getSubject())
+                        textToSend.append("Tik op het scherm om het nieuwsbericht te openen")
+                    }
                     
                     self.speech.speechArray(textToSend)
                 }
                 else if(self.delegate.items[self.delegate.carousel.currentItemIndex].getType() == "3"){
                     
                     var currentItem = self.delegate.carousel.currentItemIndex - self.delegate.messagesCount + 1
-                    
-                    textToSend.append(String(currentItem) + "e " + " Ongelezen nieuwsbrief")
-                    textToSend.append("Titel: " + self.delegate.items[self.delegate.carousel.currentItemIndex].getSubject())
-                    textToSend.append("Tik op het scherm om de nieuwsbrief te openen")
+                    if(UIAccessibilityIsVoiceOverRunning() || self.delegate.userSettings.isSpeechEnabled()){
+                        textToSend.append(String(currentItem) + "e " + " Ongelezen nieuwsbrief")
+                    }
+                    if(!UIAccessibilityIsVoiceOverRunning() && self.delegate.userSettings.isSpeechEnabled()){
+                        textToSend.append("Titel: " + self.delegate.items[self.delegate.carousel.currentItemIndex].getSubject())
+                        textToSend.append("Tik op het scherm om de nieuwsbrief te openen")
+                    }
                     
                     self.speech.speechArray(textToSend)
                 }
-            }
+            
             self.delegate.carousel.reloadItemAtIndex(self.delegate.carousel.currentItemIndex, animated: false)
         }
     }
@@ -156,6 +176,47 @@ class CarouselSpeechHelper{
     
     func speechNoItemsAvailable(){
         self.speech.speechString("Er zijn geen nieuwe berichten op dit moment.")
+    }
+    
+    // Speech club news item
+    func speechClubNewsItem(clubNews: Item){
+        
+        // Making new sentence array for speech
+        var sentenceArray: [String] = []
+        sentenceArray.append("Titel nieuwsbrief: " + clubNews.getSubject())
+        sentenceArray.append("Inhoud nieuwsbrief: ")
+        sentenceArray.append(clubNews.getContent())
+        sentenceArray.append("Einde nieuwsbrief")
+        sentenceArray.append("Veeg naar links om het nieuwsbrief te sluiten")
+        
+        self.speech.speechArray(sentenceArray) //Execute speech
+    }
+    
+    // Speech news item
+    func speechNewsMessageItem(news: Item){
+        
+        // Making new sentence array for speech
+        var sentenceArray: [String] = []
+        sentenceArray.append("Titel nieuwsbericht: " + news.getSubject())
+        sentenceArray.append("Inhoud nieuwsbericht: ")
+        sentenceArray.append(news.getContent())
+        sentenceArray.append("Einde nieuwsbericht")
+        sentenceArray.append("Veeg naar links om het nieuwsbericht te sluiten")
+        
+        self.speech.speechArray(sentenceArray) //Execute speech
+    }
+    
+    // Speech message item
+    func speechMessageItem(message: Item){
+        // Making new sentence array for speech
+        var sentenceArray: [String] = []
+        sentenceArray.append("Onderwerp bericht: " + message.getSubject())
+        sentenceArray.append("Inhoud bericht: ")
+        sentenceArray.append(message.getContent())
+        sentenceArray.append("Einde bericht")
+        sentenceArray.append("Veeg naar links om het bericht te sluiten")
+        
+        self.speech.speechArray(sentenceArray) //Execute speech
     }
     
     func getSpeech() -> SpeechManager{

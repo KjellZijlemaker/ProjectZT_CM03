@@ -44,16 +44,16 @@ class NewsMessageView: UIView{
     
     @IBAction func normalText(sender: AnyObject) {
         self.newsMessageTitle.font = UIFont(name: "Verdana-Bold", size: 50)
-        self.newsMessageContent.font = UIFont(name: "Verdana", size: 41)
+        self.newsMessageContent.font = UIFont(name: "Verdana", size: 42)
     }
     @IBAction func bigText(sender: AnyObject) {
         self.newsMessageTitle.font = UIFont(name: "Verdana-Bold", size: 57)
-        self.newsMessageContent.font = UIFont(name: "Verdana", size: 48)
+        self.newsMessageContent.font = UIFont(name: "Verdana", size: 49)
     }
     
     @IBAction func biggerText(sender: AnyObject) {
         self.newsMessageTitle.font = UIFont(name: "Verdana-Bold", size: 62)
-        self.newsMessageContent.font = UIFont(name: "Verdana", size: 53)
+        self.newsMessageContent.font = UIFont(name: "Verdana", size: 54)
     }
     
     func setupTitle(){
@@ -84,5 +84,13 @@ class NewsMessageView: UIView{
         self.delegate.dismissController() // Dismiss the controller
     }
     
-    
+    override func accessibilityScroll(direction: UIAccessibilityScrollDirection) -> Bool {
+        if (direction == UIAccessibilityScrollDirection.Left) {
+            self.leftSwiped()
+        }
+        
+        UIAccessibilityPostNotification(UIAccessibilityPageScrolledNotification, nil)
+        
+        return true
+    }
 }

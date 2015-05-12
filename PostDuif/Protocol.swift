@@ -18,8 +18,21 @@ protocol messageOpenend{
     }
 }
 
+protocol userManagerDelegate{
+    var token: Token{
+        get set
+    }
+    func getUserSettings(tokenKey: String, updateSettings: Bool)
+}
+
+protocol dataManagerDelegate{
+}
+
 protocol clubNewsDelegate{
     var speech:SpeechManager!{
+        get set
+    }
+    var userSettings: Settings!{
         get set
     }
     func dismissController()
@@ -30,11 +43,17 @@ protocol messagesDelegate{
     var speech:SpeechManager!{
         get set
     }
+    var userSettings: Settings!{
+        get set
+    }
     func dismissController()
 }
 
 protocol newsMessagesDelegate{
     var speech:SpeechManager!{
+        get set
+    }
+    var userSettings: Settings!{
         get set
     }
     func dismissController()

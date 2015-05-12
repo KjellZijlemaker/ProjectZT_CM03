@@ -14,9 +14,10 @@ class ClubNewsViewController: UIViewController, clubNewsDelegate {
     var clubNews:Item!
     var userSettings:Settings!
     var speech:SpeechManager!
-    var delegate: deleteMessageItem!
+    var delegate: clubNewsDelegate!
     var openendMessage: messageOpenend!
     var deletingMessage: deleteMessageItem!
+    var userDelegate: userManagerDelegate!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,26 +38,15 @@ class ClubNewsViewController: UIViewController, clubNewsDelegate {
         self.clubNewsView.setTitleBackground(self.userSettings.getSecondaryColorType())
         self.clubNewsView.setContentBackground(self.userSettings.getSecondaryColorType())
         
-        if(self.userSettings.isSpeechEnabled()){
+        if(!UIAccessibilityIsVoiceOverRunning() && self.delegate.userSettings.isSpeechEnabled()){
+            var speechClubNewsItem = CarouselSpeechHelper()
+            
             // Speech the item
-            self.speechClubNewsItem()
+            speechClubNewsItem.speechClubNewsItem(self.clubNews)
         }
 
     }
 
-    // Speech the item
-    func speechClubNewsItem(){
-        
-            // Making new sentence array for speech
-            var sentenceArray: [String] = []
-            sentenceArray.append("Titel nieuwsbrief: " + self.clubNews.getSubject())
-            sentenceArray.append("Inhoud nieuwsbrief: ")
-            sentenceArray.append(self.clubNews.getContent())
-            sentenceArray.append("Einde nieuwsbrief")
-            sentenceArray.append("Veeg naar links om het nieuwsbrief te sluiten")
-            
-            self.speech.speechArray(sentenceArray) //Execute speech
-    }
     
     // Dismiss the controller
     func dismissController(){
@@ -64,10 +54,9 @@ class ClubNewsViewController: UIViewController, clubNewsDelegate {
         self.presentingViewController?.dismissViewControllerAnimated(true, completion: {
             let secondPresentingVC = self.presentingViewController?.presentingViewController;
             secondPresentingVC?.dismissViewControllerAnimated(true, completion: {});
-            if(self.userSettings.isSpeechEnabled()){
-                self.speech.speechString("U heeft de nieuwsbrief gelezen") //Little speech for user
-            }
-            self.delegate.executeDeletionTimer(self.clubNews.getID(), "3")
+            self.speech.speechString("U heeft de nieuwsbrief gelezen") //Little speech for user
+            self.openendMessage.messageIsOpenend = false
+            self.deletingMessage.executeDeletionTimer(self.clubNews.getID(), "3")
         });
     }
     
@@ -81,15 +70,21 @@ class ClubNewsViewController: UIViewController, clubNewsDelegate {
         // Dispose of any resources that can be recreated.
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    // Motion gesture
+    override func motionEnded(motion: UIEventSubtype, withEvent event: UIEvent) {
+        if (motion == .MotionShake) {
+            self.userDelegate.getUserSettings(self.userDelegate.token.getToken(), updateSettings: true)
+            if(self.userSettings.isNotificationSoundEnabled()){
+                var carouselSpeechHelper = CarouselSpeechHelper()
+                
+                // Setting the color and backround again
+                self.clubNewsView.setFontColor(self.userSettings.getPrimaryColorType())
+                self.clubNewsView.setViewBackground("000000")
+                self.clubNewsView.setTitleBackground(self.userSettings.getSecondaryColorType())
+                self.clubNewsView.setContentBackground(self.userSettings.getSecondaryColorType())
+                
+                carouselSpeechHelper.getSpeech().speechString("Instellingen bijgewerkt")
+            }
+        }
     }
-    */
-
 }

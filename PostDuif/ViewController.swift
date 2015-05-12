@@ -10,7 +10,7 @@
 import UIKit
 import AVFoundation
 
-class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, iCarouselDelegate, deleteMessageItem, messageOpenend
+class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, iCarouselDelegate, deleteMessageItem, messageOpenend, userManagerDelegate, dataManagerDelegate
 {
     //# MARK: - Array for all the items / settings to be loaded inside the carousel
     var pictures: [UIImage!] = []
@@ -66,6 +66,7 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
     
     //# MARK: Helpers
     var carouselSpeechHelper = CarouselSpeechHelper()
+    var carouselAccessibilityHelper = CarouselAccessibilityHelper()
     
     // sounds
     var notificationSound = SoundManager(resourcePath: "Roekoe", fileType: "m4a") // For the sounds
@@ -103,9 +104,11 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
         self.carousel.delegate = self
         self.carousel.type = .Custom
         self.carousel.scrollEnabled = false
+        self.carousel.isAccessibilityElement = false
         self.carouselSpeechHelper.delegate = self
         
         let logoutButton = LogoutButton().showLogoutButton()
+        logoutButton.isAccessibilityElement = false
         self.view.addSubview(logoutButton)
         
         let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: "logoutButtonAction:")
@@ -126,6 +129,8 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
         self.view.addSubview(self.notificationDot.getDotView())
         
         self.categoryView.backgroundColor = UIColor.whiteColor()
+        self.categoryView.isAccessibilityElement = true
+
         
         
         //# MARK: - Gesture methods
@@ -152,9 +157,14 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
         swipeDown.direction = UISwipeGestureRecognizerDirection.Down
         self.view.addGestureRecognizer(swipeDown)
         
-        let singleTap = UITapGestureRecognizer(target: self, action:Selector("singleTapped"))
-        singleTap.numberOfTapsRequired = 1
-        self.view.addGestureRecognizer(singleTap)
+        let doubleTap = UITapGestureRecognizer(target: self, action:Selector("doubleTapped"))
+        if(UIAccessibilityIsVoiceOverRunning()){
+            doubleTap.numberOfTapsRequired = 1
+        }
+        else{
+            doubleTap.numberOfTapsRequired = 2
+        }
+        self.view.addGestureRecognizer(doubleTap)
         
         self.setupBackgroundForegroundInit()
         self.setupAppendingTimer() // Timer for checking new items may execute
@@ -178,10 +188,12 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
     
     // Motion gesture
     override func motionEnded(motion: UIEventSubtype, withEvent event: UIEvent) {
-        if motion == .MotionShake {
-            self.getUserSettings(self.token.getToken(), updateSettings: true)
-            if(self.userSettings.isNotificationSoundEnabled()){
-                self.carouselSpeechHelper.getSpeech().speechString("Instellingen bijgewerkt")
+        if(!self.messageIsOpenend){
+            if (motion == .MotionShake) {
+                self.getUserSettings(self.token.getToken(), updateSettings: true)
+                if(self.userSettings.isNotificationSoundEnabled()){
+                    self.carouselSpeechHelper.getSpeech().speechString("Instellingen bijgewerkt")
+                }
             }
         }
     }
@@ -190,7 +202,7 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
     //=================================================================================================
     
     //------------Dubble tap method for opening new view--------------//
-    func singleTapped(){
+    func doubleTapped(){
         
         if(!self.items.isEmpty){
             self.carouselSpeechHelper.getSpeech().stopSpeech()
@@ -255,6 +267,20 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
             self.notificationDot.hideDotView()
             
         }
+    }
+    
+    override func accessibilityScroll(direction: UIAccessibilityScrollDirection) -> Bool {
+        if(!self.messageIsOpenend){
+            if (direction == UIAccessibilityScrollDirection.Right) {
+                self.rightSwiped()
+            }
+            else if (direction == UIAccessibilityScrollDirection.Left) {
+                self.leftSwiped()
+            }
+        
+        UIAccessibilityPostNotification(UIAccessibilityPageScrolledNotification, nil)
+        }
+        return true
     }
     
     //------------Swipe method to the left--------------//
@@ -407,8 +433,6 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
             label.tag = 1
             label.layoutIfNeeded()
             
-            
-            // view.addSubview(imageViewObject)
             view.addSubview(label)
             
             
@@ -426,10 +450,11 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
         //you'll get weird issues with carousel item content appearing
         //in the wrong place in the carousel
         label.text = "\(self.items[index].getSubject())"
+        label.isAccessibilityElement = false
         (view as UIImageView!).image = self.pictures[index]
-        
         return view
     }
+    
     
     // Checking for new items to append
     func carouselCheckForAppendingItems(){
@@ -466,7 +491,10 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
     
     // Function for checking if the index from the carousel changed
     func carouselCurrentItemIndexDidChange(carousel: iCarousel!){
-        
+        if(UIAccessibilityIsVoiceOverRunning()){
+            var carouselAccessibilityHelper = CarouselAccessibilityHelper()
+            self.categoryView.accessibilityLabel = carouselAccessibilityHelper.checkMessageTypeAccesibility(self.items[self.carousel.currentItemIndex])
+        }
         self.carouselCheckForAppendingItems() // Check for appending items and decrement notification counter if needed
         
         if(!self.items.isEmpty){
@@ -661,6 +689,7 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
     func setLoadingView(title: String){
         // Notification for getting items
         let loadingNotification = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+        loadingNotification.isAccessibilityElement = false
         loadingNotification.mode = MBProgressHUDMode.Indeterminate
         loadingNotification.labelText = title
     }
@@ -668,6 +697,7 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
     // Setting alertView for notification user
     func setAlertView(title: String, message: String) -> SIAlertView{
         var alert:SIAlertView  = SIAlertView(title: title, andMessage: message)
+        alert.isAccessibilityElement = false
         alert.titleFont = UIFont(name: "Verdana", size: 30)
         alert.messageFont = UIFont(name: "Verdana", size: 26)
         alert.buttonFont = UIFont(name: "Verdana", size: 30)
@@ -679,18 +709,19 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
     //# MARK: - UIBackground / Foreground methods
     //=================================================================================================
     func totalNewItemsToForeground(){
-        var itemsIndexArray = [Int]()
-        
-        // Getting the date
-        var dateFormatter = NSDateFormatter()
-        var date = NSDate()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        
-        var currentdateString = dateFormatter.stringFromDate(date)
-        currentdateString.substringToIndex(advance(currentdateString.startIndex, 10)) // Getting only the year, month day
-        
-        for i in 0...self.items.count-1{
-
+        if(!self.messageIsOpenend){
+            var itemsIndexArray = [Int]()
+            
+            // Getting the date
+            var dateFormatter = NSDateFormatter()
+            var date = NSDate()
+            dateFormatter.dateFormat = "yyyy-MM-dd"
+            
+            var currentdateString = dateFormatter.stringFromDate(date)
+            currentdateString.substringToIndex(advance(currentdateString.startIndex, 10)) // Getting only the year, month day
+            
+            for i in 0...self.items.count-1{
+                
                 println(self.items[i].getPublishDate())
                 var publishedDateString = self.items[i].getPublishDate()
                 println(publishedDateString)
@@ -713,36 +744,33 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                     }
                 }
             }
-        println(self.items.count-1)
-        println(itemsIndexArray)
-        
-        if(!itemsIndexArray.isEmpty){
-            for j in reverse(0...itemsIndexArray.count-1){
-                self.items.removeAtIndex(itemsIndexArray[j])
-                self.removeImage(itemsIndexArray[j])
+            println(self.items.count-1)
+            println(itemsIndexArray)
+            
+            if(!itemsIndexArray.isEmpty){
+                for j in reverse(0...itemsIndexArray.count-1){
+                    self.items.removeAtIndex(itemsIndexArray[j])
+                    self.removeImage(itemsIndexArray[j])
+                }
+            }
+            
+            // If there are no more items,
+            if(self.items.isEmpty){
+                self.firstItem = true
+            }
+            
+            self.carousel.reloadData()
+            
+            if(self.items.isEmpty){
+                self.carouselCurrentItemIndexDidChange(self.carousel)
+            }
+            
+            if(totalNewItems >= 0){
+                self.carouselSpeechHelper.getSpeech().stopSpeech()
+                //            self.newItemsToSpeech(self.totalNewItems, "0")
+                //            self.carousel.scrollToItemAtIndex(self.items.count-1-self.totalNewItems, animated: true) // Scroll to the section of last items
             }
         }
-        println(self.items.count)
-        println("NIEUWS" + String(self.newsCount))
-        println("CLUB" + String(self.clubNewsCount))
-
-        // If there are no more items,
-        if(self.items.isEmpty){
-            self.firstItem = true
-        }
-        
-       self.carousel.reloadData()
-        
-        if(self.items.isEmpty){
-            self.carouselCurrentItemIndexDidChange(self.carousel)
-        }
-        
-        if(totalNewItems >= 0){
-            self.carouselSpeechHelper.getSpeech().stopSpeech()
-            //            self.newItemsToSpeech(self.totalNewItems, "0")
-            //            self.carousel.scrollToItemAtIndex(self.items.count-1-self.totalNewItems, animated: true) // Scroll to the section of last items
-        }
-        
     }
     
     // //# MARK: - Seque methods
@@ -754,6 +782,7 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
             let vc = segue.destinationViewController as MessageContentViewController
             vc.deletingMessage = self
             vc.openendMessage = self
+            vc.userDelegate = self
             vc.message = self.items[self.carousel.currentItemIndex]
             vc.userSettings = self.userSettings
             vc.speech = self.carouselSpeechHelper.getSpeech()
@@ -764,7 +793,7 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
             let vc = segue.destinationViewController as NewsMessageViewController
             vc.deletingMessage = self
             vc.openendMessage = self
-            vc.delegate = self
+            vc.userDelegate = self
             vc.news = self.items[self.carousel.currentItemIndex]
             vc.userSettings = self.userSettings
             vc.speech = self.carouselSpeechHelper.getSpeech()
@@ -775,7 +804,7 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
             let vc = segue.destinationViewController as ClubNewsViewController
             vc.deletingMessage = self
             vc.openendMessage = self
-            vc.delegate = self
+            vc.userDelegate = self
             vc.clubNews = self.items[self.carousel.currentItemIndex]
             vc.userSettings = self.userSettings
             vc.speech = self.carouselSpeechHelper.getSpeech()
@@ -1008,8 +1037,7 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
             }
             DataManager.getItems(url){(items) in
                 
-                // If not empty, enable appending data
-                if(!items.isEmpty && items[0].getReturnCode() == "200"){
+                func getAllItemIDs() -> [Int]{
                     
                     var idArrayOld: [Int] = []
                     var idArrayNew: [Int] = []
@@ -1052,7 +1080,6 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                         }
                     }
                     
-                    
                     // Making sets
                     var set1 = NSMutableSet(array: idArrayOld)
                     var set2 = NSMutableSet(array: idArrayNew)
@@ -1069,6 +1096,14 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                             newIDArray.append(newArray[k] as Int)
                         }
                     }
+                    
+                    return newIDArray
+                }
+                
+                // If not empty, enable appending data
+                if(!items.isEmpty && items[0].getReturnCode() == "200"){
+                    
+                    var newIDArray:[Int] = getAllItemIDs() // Getting all the ID's from old and new arrays
                     
                     // Looping through the array to look for new items to append
                     if(newIDArray.count != 0){
@@ -1309,7 +1344,6 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
         
         // Check if index is empty or not for bounds of array
         if(!self.deleteditemIndexes.isEmpty){
-            self.messageIsOpenend = false
             var oldID = self.items[self.carousel.currentItemIndex].getID()
             isAppending = true
             var carouselItemIndex = self.deleteditemIndexes.first?.toInt() // Getting first item from the array

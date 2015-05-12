@@ -98,7 +98,7 @@ class DataManager{
                                 var newsContent: String = messages["content"].stringValue
                                 newMessage.setContent(newsContent)
                                 
-                                var publishDate: String = messages["publishedDate"].stringValue
+                                var publishDate: String = messages["addedDate"].stringValue
                                 newMessage.setPublishDate(publishDate)
                                 
                                 // Append the app names
@@ -128,7 +128,7 @@ class DataManager{
                                 var clubMessage: String = messages["message"].stringValue
                                 newMessage.setContent(clubMessage)
                                 
-                                var publishDate: String = messages["publishedDate"].stringValue
+                                var publishDate: String = messages["addedDate"].stringValue
                                 newMessage.setPublishDate(publishDate)
                                 
                                 // Append the app names
