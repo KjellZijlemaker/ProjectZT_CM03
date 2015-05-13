@@ -39,14 +39,21 @@ class CarouselSpeechHelper{
             
                 
                 var textToSend:[String] = [] // Array for sending message
-                
+            
                 // Check if the item is message or newsitem
                 if(self.delegate.items[self.delegate.carousel.currentItemIndex].getType() == "1"){
-                    
                     var currentItem = self.delegate.messagesCount - self.delegate.messagesCount + self.delegate.carousel.currentItemIndex + 1
+                    var read = "Ongelezen"
+                    var numberOfItems = ""
+                    if(self.delegate.items[self.delegate.carousel.currentItemIndex].isRead()){
+                        read = "Gelezen"
+                    }
+                    else{
+                        numberOfItems = String(self.delegate.carousel.currentItemIndex+1) + "e "
+                    }
                     
                     if(UIAccessibilityIsVoiceOverRunning() || self.delegate.userSettings.isSpeechEnabled()){
-                        textToSend.append(String(self.delegate.carousel.currentItemIndex+1) + "e " + " Ongelezen bericht van: " + self.delegate.items[self.delegate.carousel.currentItemIndex].getFromUser())
+                        textToSend.append(numberOfItems + read + " bericht van: " + self.delegate.items[self.delegate.carousel.currentItemIndex].getFromUser())
                     }
                     
                     if(!UIAccessibilityIsVoiceOverRunning() && self.delegate.userSettings.isSpeechEnabled()){
@@ -58,10 +65,21 @@ class CarouselSpeechHelper{
                 }
                     
                 else if(self.delegate.items[self.delegate.carousel.currentItemIndex].getType() == "2"){
+                   var currentItem = self.delegate.carousel.currentItemIndex - self.delegate.messagesCount - self.delegate.clubNewsCount + 1
                     
-                    var currentItem = self.delegate.carousel.currentItemIndex - self.delegate.messagesCount - self.delegate.clubNewsCount + 1
+                    var read = "Ongelezen"
+                    var numberOfItems = ""
+                    
+                    if(self.delegate.items[self.delegate.carousel.currentItemIndex].isRead()){
+                        read = "Gelezen"
+                    }
+                    else{
+                        numberOfItems = String(currentItem) + "e "
+                    }
+                    
+                    
                     if(UIAccessibilityIsVoiceOverRunning() || self.delegate.userSettings.isSpeechEnabled()){
-                        textToSend.append(String(currentItem) + "e " + " Ongelezen nieuwsbericht")
+                        textToSend.append(numberOfItems + read + " nieuwsbericht")
                     }
                     if(!UIAccessibilityIsVoiceOverRunning() && self.delegate.userSettings.isSpeechEnabled()){
                         textToSend.append("Titel: " + self.delegate.items[self.delegate.carousel.currentItemIndex].getSubject())
@@ -71,10 +89,19 @@ class CarouselSpeechHelper{
                     self.speech.speechArray(textToSend)
                 }
                 else if(self.delegate.items[self.delegate.carousel.currentItemIndex].getType() == "3"){
-                    
                     var currentItem = self.delegate.carousel.currentItemIndex - self.delegate.messagesCount + 1
+                    
+                    var read = "Ongelezen"
+                    var numberOfItems = ""
+                    if(self.delegate.items[self.delegate.carousel.currentItemIndex].isRead()){
+                        read = "Gelezen"
+                    }
+                    else{
+                        numberOfItems = String(currentItem) + "e "
+                    }
+                    
                     if(UIAccessibilityIsVoiceOverRunning() || self.delegate.userSettings.isSpeechEnabled()){
-                        textToSend.append(String(currentItem) + "e " + " Ongelezen club, of organisatiebericht")
+                        textToSend.append(numberOfItems + read + " club, of organisatiebericht")
                     }
                     if(!UIAccessibilityIsVoiceOverRunning() && self.delegate.userSettings.isSpeechEnabled()){
                         textToSend.append("Titel: " + self.delegate.items[self.delegate.carousel.currentItemIndex].getSubject())

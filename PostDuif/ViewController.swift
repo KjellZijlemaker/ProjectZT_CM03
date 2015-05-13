@@ -199,18 +199,19 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
         if(!self.items.isEmpty){
             self.carouselSpeechHelper.getSpeech().stopSpeech()
             
+            // Switch for performing the seque when tapped on item. Will also set a boolean for checking that the message is read
             switch self.items[self.carousel.currentItemIndex].getType(){
             case "1":
-                // For performing the seque inside the storyboard
+                self.items[self.carousel.currentItemIndex].hasRead(true)
                 performSegueWithIdentifier("showMessageContent", sender: self)
-                println("message")
             case "2":
+                self.items[self.carousel.currentItemIndex].hasRead(true)
                 performSegueWithIdentifier("showNewsMessageContent", sender: self)
-                println("news")
             case "3":
+                self.items[self.carousel.currentItemIndex].hasRead(true)
                 performSegueWithIdentifier("showClubNewsContent", sender: self)
             default:
-                // For performing the seque inside the storyboard
+                self.items[self.carousel.currentItemIndex].hasRead(true)
                 performSegueWithIdentifier("showMessageContent", sender: self)
             }
         }
@@ -577,8 +578,8 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                 
             case "1":
                 self.categoryView.setCategoryTypeLabel("Persoonlijk bericht")
-                if(self.items[index].getCategory() != ""){
-                    self.categoryView.setCategoryTypeCategoryViewLabel(self.items[index].getCategory())
+                if(self.items[index].getFromUser() != ""){
+                    self.categoryView.setCategoryTypeCategoryViewLabel("Van: " + self.items[index].getFromUser())
                 }
                 else{
                     self.categoryView.setCategoryTypeCategoryViewLabel("")
@@ -1294,7 +1295,6 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
             DataManager.checkMessageRead(url){(codeFromJSON) in
                 
                 if(codeFromJSON == "200"){
-                    
                     // Checking what kind of message was deleted
                     if(self.items[carouselItemIndex!].getType() == "1"){
                         self.messagesCount--

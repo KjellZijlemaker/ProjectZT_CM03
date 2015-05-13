@@ -18,6 +18,7 @@ class Item{
     private var fromUser: String
     private var type: String
     private var publishDate: String
+    private var read: Bool
 
     init(){
         self.id = ""
@@ -28,6 +29,7 @@ class Item{
         self.fromUser = ""
         self.type = ""
         self.publishDate = ""
+        self.read = false
     }
     
     func setID(id: String){
@@ -93,5 +95,15 @@ class Item{
     func getPublishDate() -> String{
         return publishDate
     }
+    
+    func isRead() -> Bool{
+        return self.read
+    }
+    
+    func hasRead(read: Bool){
+        self.read = read
+    }
+
+
     
 }
