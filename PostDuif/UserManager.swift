@@ -112,12 +112,8 @@ class UserManager{
                             var newsMessageLimit: String = settings["ShowNewsMessageLimit"].stringValue
                             newSettings.setNewsMessageLimit(newsMessageLimit.toInt()!)
                             
-                            // Set contrast
-                            var contrastType: String = settings["contrastType"].stringValue
-                            newSettings.setContrastType(contrastType)
-                            
                             // Set color
-                            var colorType: String = settings["colorType"].stringValue
+                            var colorType: String = settings["contrastType"].stringValue
                             
                             // Getting the right colors from one String
                             var primaryColor = colorType.substringToIndex(advance(colorType.startIndex, 6))

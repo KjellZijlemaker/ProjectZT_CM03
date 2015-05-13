@@ -14,7 +14,6 @@ class Settings{
     private var privateMessageLimit: Int
     private var userSpeech: Bool
     private var newsMessageLimit: Int
-    private var contrastType: String
     private var primaryColorType: String
     private var secondaryColorType: String
     private var userAccessibility: Bool
@@ -29,7 +28,6 @@ class Settings{
         self.privateMessageLimit = 10
         self.userSpeech = true
         self.newsMessageLimit = 10
-        self.contrastType = "default"
         self.primaryColorType = "default"
         self.secondaryColorType = "default"
         self.userAccessibility = true
@@ -69,14 +67,6 @@ class Settings{
     
     func getNewsMessageLimit() -> Int{
         return self.newsMessageLimit
-    }
-    
-    func setContrastType(contrastType: String){
-        self.contrastType = contrastType
-    }
-    
-    func getContrastType() -> String{
-        return self.contrastType
     }
     
     func setPrimaryColorType(colorType: String){

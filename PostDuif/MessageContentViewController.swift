@@ -40,7 +40,7 @@ class MessageContentViewController: UIViewController, messagesDelegate {
         self.messagesView.setContentBackground(self.userSettings.getSecondaryColorType())
         
         if(!UIAccessibilityIsVoiceOverRunning() && self.delegate.userSettings.isSpeechEnabled()){
-            var carouselSpeechHelper = CarouselSpeechHelper()
+            var carouselSpeechHelper = CarouselSpeechHelper(speech: self.speech)
             carouselSpeechHelper.speechMessageItem(self.message)
         }
     }

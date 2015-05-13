@@ -39,7 +39,7 @@ class NewsMessageViewController: UIViewController, newsMessagesDelegate {
         self.newsMessagesView.setContentBackground(self.userSettings.getSecondaryColorType())
 
         if(!UIAccessibilityIsVoiceOverRunning() && self.userSettings.isSpeechEnabled()){
-            var carouselSpeechHelper = CarouselSpeechHelper()
+            var carouselSpeechHelper = CarouselSpeechHelper(speech: self.speech)
             carouselSpeechHelper.speechNewsMessageItem(self.news)
         }
         

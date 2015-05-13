@@ -12,18 +12,19 @@ class CarouselSpeechHelper{
     private var speech:SpeechManager!
     var delegate: carouselDelegate!
     
+    // If speech already exist
+    init(speech: SpeechManager){
+        self.speech = speech
+    }
+    
     // SingleTon speechmanager
     init(){
         self.speech = SpeechManager()
     }
     
-    // If the item is first in the carousel
-    func firstItemInCarousel(){
-        
-        /*
-        First Total of items + first message will be played
-        */
-        
+    // Speech the current item inside the carousel
+    
+    func carouselSpeechItem(){
         if (self.delegate.carousel.currentItemIndex == 0) {
             self.delegate.carousel.reloadData()
             
@@ -31,52 +32,7 @@ class CarouselSpeechHelper{
             self.delegate.setCategoryType(self.delegate.carousel.currentItemIndex, isEmpty: false) // Setting the category type
             
             self.delegate.firstItem = false
-            
-            var textToSend:[String] = [] // Array for sending message
-                
-                // Check if the item is message or newsitem
-                if(self.delegate.items[self.delegate.carousel.currentItemIndex].getType() == "1"){
-                    
-                    if(UIAccessibilityIsVoiceOverRunning() || self.delegate.userSettings.isSpeechEnabled()){
-                        textToSend.append(String(self.delegate.carousel.currentItemIndex+1) + "e " + " Ongelezen bericht van: " + self.delegate.items[self.delegate.carousel.currentItemIndex].getFromUser())
-                    }
-                    
-                    if(!UIAccessibilityIsVoiceOverRunning() && self.delegate.userSettings.isSpeechEnabled()){
-                        textToSend.append("Onderwerp: " + self.delegate.items[self.delegate.carousel.currentItemIndex].getSubject())
-                        textToSend.append("Tik op het scherm om het bericht te openen")
-                    }
-                    
-                    self.speech.speechArray(textToSend)
-                }
-                else if(self.delegate.items[self.delegate.carousel.currentItemIndex].getType() == "2"){
-                    
-                    if(UIAccessibilityIsVoiceOverRunning() || self.delegate.userSettings.isSpeechEnabled()){
-                        textToSend.append(String(self.delegate.carousel.currentItemIndex+1) + "e " + " Ongelezen nieuwsbericht")
-                    }
-                    if(!UIAccessibilityIsVoiceOverRunning() && self.delegate.userSettings.isSpeechEnabled()){
-                        textToSend.append("Titel: " + self.delegate.items[self.delegate.carousel.currentItemIndex].getSubject())
-                        textToSend.append("Tik op het scherm om het nieuwsbericht te openen")
-                    }
-                    self.speech.speechArray(textToSend)
-                }
-                else if(self.delegate.items[self.delegate.carousel.currentItemIndex].getType() == "3"){
-                    if(UIAccessibilityIsVoiceOverRunning() || self.delegate.userSettings.isSpeechEnabled()){
-                        textToSend.append(String(self.delegate.carousel.currentItemIndex+1) + "e " + " Ongelezen nieuwsbrief")
-                    }
-                    if(!UIAccessibilityIsVoiceOverRunning() && self.delegate.userSettings.isSpeechEnabled()){
-                        textToSend.append("Titel: " + self.delegate.items[self.delegate.carousel.currentItemIndex].getSubject())
-                        textToSend.append("Tik op het scherm om de nieuwsbrief te openen")
-                    }
-                    self.speech.speechArray(textToSend)
-                }
-            
         }
-    }
-    
-    
-    // Speech the current item inside the carousel
-    
-    func carouselSpeechItem(){
         
         // Will execute when it's not the first item anymore (for speech)
         if(!self.delegate.firstItem){

@@ -39,7 +39,7 @@ class ClubNewsViewController: UIViewController, clubNewsDelegate {
         self.clubNewsView.setContentBackground(self.userSettings.getSecondaryColorType())
         
         if(!UIAccessibilityIsVoiceOverRunning() && self.delegate.userSettings.isSpeechEnabled()){
-            var speechClubNewsItem = CarouselSpeechHelper()
+            var speechClubNewsItem = CarouselSpeechHelper(speech: self.speech)
             
             // Speech the item
             speechClubNewsItem.speechClubNewsItem(self.clubNews)
