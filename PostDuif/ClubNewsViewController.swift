@@ -38,7 +38,7 @@ class ClubNewsViewController: UIViewController, clubNewsDelegate {
         self.clubNewsView.setTitleBackground(self.userSettings.getSecondaryColorType())
         self.clubNewsView.setContentBackground(self.userSettings.getSecondaryColorType())
         
-        if(!UIAccessibilityIsVoiceOverRunning() && self.delegate.userSettings.isSpeechEnabled()){
+        if(!UIAccessibilityIsVoiceOverRunning() && self.userSettings.isSpeechEnabled()){
             var speechClubNewsItem = CarouselSpeechHelper(speech: self.speech)
             
             // Speech the item
@@ -54,7 +54,7 @@ class ClubNewsViewController: UIViewController, clubNewsDelegate {
         self.presentingViewController?.dismissViewControllerAnimated(true, completion: {
             let secondPresentingVC = self.presentingViewController?.presentingViewController;
             secondPresentingVC?.dismissViewControllerAnimated(true, completion: {});
-            self.speech.speechString("U heeft de nieuwsbrief gelezen") //Little speech for user
+            self.speech.speechString("U heeft het club, of organisatiebericht gelezen") //Little speech for user
             self.openendMessage.messageIsOpenend = false
             self.deletingMessage.executeDeletionTimer(self.clubNews.getID(), "3")
         });

@@ -572,8 +572,6 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
     
     // Set the type of category and show it inside the categoryView
     func setCategoryType(index: Int, isEmpty: Bool){
-        var isHello = true
-        
         if(!isEmpty){
             switch(self.items[index].getType()){
                 
@@ -598,7 +596,7 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                 self.categoryView.nextItemAnimate(UIColor.yellowColor())
                 
             case "3":
-                self.categoryView.setCategoryTypeLabel("Nieuwsbrief")
+                self.categoryView.setCategoryTypeLabel("Club of Organisatiebericht")
                 if(self.items[index].getCategory() != ""){
                     self.categoryView.setCategoryTypeCategoryViewLabel(self.items[index].getCategory())
                 }
@@ -1134,11 +1132,15 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
      
                         // If the index has changed (appended item), speech the total of new items
                         if(indexHasChanged){
+                            var scrollToMessage = false
                             
                             // tell the total of new items
                             if(self.userSettings.isNotificationSoundEnabled()){
                                 if(newMessages > 0){
+                                    scrollToMessage = true
+                                    self.isAppending = false // Set it to false to speech exception
                                     self.carouselSpeechHelper.newItemsToSpeech(newMessages, type: "1")
+                                    self.carousel.scrollToItemAtIndex(self.messagesCount-1, animated: true)
                                 }
                                 if(newNews > 0){
                                     self.carouselSpeechHelper.newItemsToSpeech(newNews, type: "2")
@@ -1152,31 +1154,36 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                                     
                                 }
                                 self.carouselCurrentItemIndexDidChange(self.carousel) // Refresh the item
-                                
+                                self.isAppending = true // Set it to true again
                             }
                             
-                            //Get back to the item carousel where the user was focussed on
-                            for p in 0...self.items.count-1{
+                            // If the item was a message, it should not search for the old ID
+                            if(!scrollToMessage){
                                 
-                                // Old ID found, get back to it
-                                if(oldID == self.items[p].getID()){
-                                    println("FOUND")
-                                    self.carousel.scrollToItemAtIndex(p, animated: false)
-                                    self.carouselCurrentItemIndexDidChange(self.carousel) // Reload the view
-                                    break
-                                }
-                                else{
-                                    // Not found, at the ending change the index and set appending to false for speech
-                                    println("NOT FOUND")
-                                    if(p == self.items.count-1){
-                                        self.isAppending = false
-                                        if(!self.firstItem){
-                                            self.carouselCurrentItemIndexDidChange(self.carousel) // Reload the view
+                                //Get back to the item carousel where the user was focussed on
+                                for p in 0...self.items.count-1{
+                                    
+                                    // Old ID found, get back to it
+                                    if(oldID == self.items[p].getID()){
+                                        println("FOUND")
+                                        self.carousel.scrollToItemAtIndex(p, animated: false)
+                                        self.carouselCurrentItemIndexDidChange(self.carousel) // Reload the view
+                                        break
+                                    }
+                                    else{
+                                        // Not found, at the ending change the index and set appending to false for speech
+                                        println("NOT FOUND")
+                                        if(p == self.items.count-1){
+                                            self.isAppending = false
+                                            if(!self.firstItem){
+                                                self.carouselCurrentItemIndexDidChange(self.carousel) // Reload the view
+                                            }
+                                            
                                         }
-                                      
                                     }
                                 }
                             }
+                            
                             // Check if carousel has items
                             if(!self.items.isEmpty){
                                 if(self.firstItem){

@@ -141,10 +141,10 @@ class CarouselSpeechHelper{
             vocabFixMessages = " nieuw bericht"
         }
         if(clubNewsCount == 1){
-            vocabFixNews = " nieuwe club, of organisatiebericht"
+            vocabFixClubNews = " nieuwe club, of organisatiebericht"
         }
         if(newsCount == 1){
-            vocabFixClubNews = " nieuw nieuwsbericht"
+            vocabFixNews = " nieuw nieuwsbericht"
         }
         
         // Speeching the amount of items
