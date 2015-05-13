@@ -9,6 +9,8 @@
 import Foundation
 
 class LoginView: UIView, UITextViewDelegate{
+    private var loginView: UIView!
+    
     @IBOutlet weak var loginEmail: UITextView!
     @IBOutlet weak var loginPincode: UITextView!
     @IBOutlet weak var loginPincode2: UITextView!
@@ -21,6 +23,11 @@ class LoginView: UIView, UITextViewDelegate{
     }
     var delegate: loginDelegate!
     
+    // Save view context inside viewcontroller
+    func setupView(view: UIView){
+        self.loginView = view
+    }
+    
     func setupListeners(){
         self.loginEmail.delegate = self
         self.loginPincode.delegate = self
@@ -31,6 +38,7 @@ class LoginView: UIView, UITextViewDelegate{
         self.endEditing(true)
         super.touchesBegan(touches, withEvent: event)
     }
+    
     
     // For checking if view is clicked, view must go up for keyboard
     func textFieldDidBeginEditing(textField: UITextField) {
@@ -60,6 +68,30 @@ class LoginView: UIView, UITextViewDelegate{
         }
     }
     
+    // Put view to the top, or down
+    func animateViewMoving (up:Bool, moveValue :CGFloat){
+        var movementDuration:NSTimeInterval = 0.3
+        var movement:CGFloat = ( up ? -moveValue : moveValue)
+        UIView.beginAnimations( "animateView", context: nil)
+        UIView.setAnimationBeginsFromCurrentState(true)
+        UIView.setAnimationDuration(movementDuration )
+        self.loginView.frame = CGRectOffset(self.loginView.frame, 0,  movement)
+        UIView.commitAnimations()
+    }
+
+    // When ticking return button, the other view is activated
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        if textField == self.loginEmail {
+            self.loginPincode.becomeFirstResponder()
+        }
+        if(textField == self.loginPincode){
+            self.loginPincode2.becomeFirstResponder()
+        }
+        if(textField == self.loginPincode2){
+            self.loginPincode2.resignFirstResponder()
+        }
+        return true
+    }
     
     // Function for checking the pincode String
     func textField(textField: UITextField!, shouldChangeCharactersInRange range: NSRange, replacementString string: String!) -> Bool {
@@ -101,19 +133,5 @@ class LoginView: UIView, UITextViewDelegate{
         
         return true
     }
-    
-    
-
-    
-    func animateViewMoving (up:Bool, moveValue :CGFloat){
-        var movementDuration:NSTimeInterval = 0.3
-        var movement:CGFloat = ( up ? -moveValue : moveValue)
-        UIView.beginAnimations( "animateView", context: nil)
-        UIView.setAnimationBeginsFromCurrentState(true)
-        UIView.setAnimationDuration(movementDuration )
-        self.frame = CGRectOffset(self.frame, 0,  movement)
-        UIView.commitAnimations()
-    }
-
     
 }

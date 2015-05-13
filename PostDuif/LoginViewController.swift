@@ -20,6 +20,7 @@ class LoginViewController: UIViewController, loginDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.loginView.setupView(self.view)
         self.startLoginSound()
         self.loginView.delegate = self
         self.loginView.setupListeners()
@@ -68,7 +69,8 @@ class LoginViewController: UIViewController, loginDelegate {
                 
             }
             else{
-                var alert:SIAlertView  = SIAlertView(title: "Fout", andMessage: token.getMessage())
+                var error = "Er is iets misgegaan met uw toeganscode of gebruikersnaam"
+                var alert:SIAlertView  = SIAlertView(title: "Fout", andMessage: error)
                 alert.titleFont = UIFont(name: "Verdana", size: 30)
                 alert.messageFont = UIFont(name: "Verdana", size: 26)
                 alert.addButtonWithTitle("OK", type: SIAlertViewButtonType.Default, handler: nil)
@@ -80,7 +82,7 @@ class LoginViewController: UIViewController, loginDelegate {
             }
         }
     }
-       
+    
     // Segue methods
     //=================================================================================================
     // Preparing the seque and send data with ViewController
