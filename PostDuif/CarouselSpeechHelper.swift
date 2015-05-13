@@ -74,11 +74,11 @@ class CarouselSpeechHelper{
                     
                     var currentItem = self.delegate.carousel.currentItemIndex - self.delegate.messagesCount + 1
                     if(UIAccessibilityIsVoiceOverRunning() || self.delegate.userSettings.isSpeechEnabled()){
-                        textToSend.append(String(currentItem) + "e " + " Ongelezen nieuwsbrief")
+                        textToSend.append(String(currentItem) + "e " + " Ongelezen club, of organisatiebericht")
                     }
                     if(!UIAccessibilityIsVoiceOverRunning() && self.delegate.userSettings.isSpeechEnabled()){
                         textToSend.append("Titel: " + self.delegate.items[self.delegate.carousel.currentItemIndex].getSubject())
-                        textToSend.append("Tik op het scherm om de nieuwsbrief te openen")
+                        textToSend.append("Tik op het scherm om het club, of organisatiebericht te openen")
                     }
                     
                     self.speech.speechArray(textToSend)
@@ -97,36 +97,34 @@ class CarouselSpeechHelper{
         if(type == "1"){
             // Small check for grammar
             if(newItems == 1){
-                typeItem = "bericht"
+                typeItem = " nieuw bericht"
             }
             else{
-                typeItem = "berichten"
+                typeItem = " nieuwe berichten"
             }
         }
         else if(type == "2"){
             // Small check for grammar
             if(newItems == 1){
-                typeItem = "nieuwsbericht"
+                typeItem = " nieuw nieuwsbericht"
             }
             else{
-                typeItem = "nieuwsberichten"
+                typeItem = " nieuwe nieuwsberichten"
             }
         }
         else if(type == "3"){
             // Small check for grammar
             if(newItems == 1){
-                typeItem = "nieuwsbrief"
+                typeItem = " nieuw club, of organisatiebericht"
             }
             else{
-                typeItem = "nieuwsbrieven"
+                typeItem = " nieuwe club, of organisatieberichten"
             }
         }
         
-        newMessageSpeechString = "U heeft: " + String(newItems) + "nieuwe " + typeItem
+        newMessageSpeechString = "U heeft: " + String(newItems) + typeItem
         
         self.getSpeech().speechString(newMessageSpeechString) // Say the speech
-        
-        //self.carousel.reloadItemAtIndex(self.messages.count, animated: true) // Reload only the last item
         
     }
     
@@ -134,16 +132,40 @@ class CarouselSpeechHelper{
         self.speech.speechString("Er zijn geen nieuwe berichten op dit moment.")
     }
     
+    func speechTotalItemsAvailable(messagesCount: Int, clubNewsCount: Int, newsCount: Int){
+        var vocabFixMessages = " nieuwe berichten"
+        var vocabFixClubNews = " nieuwe club, of organisatieberichten"
+        var vocabFixNews = " nieuwe nieuwsberichten"
+
+        if(messagesCount == 1){
+            vocabFixMessages = " nieuw bericht"
+        }
+        if(clubNewsCount == 1){
+            vocabFixNews = " nieuwe club, of organisatiebericht"
+        }
+        if(newsCount == 1){
+            vocabFixClubNews = " nieuw nieuwsbericht"
+        }
+        
+        // Speeching the amount of items
+        var sentenceArray: [String] = []
+        sentenceArray.append("U heeft in totaal: " + String(messagesCount) + vocabFixMessages + ", ")
+        sentenceArray.append(String(clubNewsCount) + vocabFixClubNews)
+        sentenceArray.append(" en" + String(newsCount) + vocabFixNews)
+        
+        self.speech.speechArray(sentenceArray)
+    }
+    
     // Speech club news item
     func speechClubNewsItem(clubNews: Item){
         
         // Making new sentence array for speech
         var sentenceArray: [String] = []
-        sentenceArray.append("Titel nieuwsbrief: " + clubNews.getSubject())
-        sentenceArray.append("Inhoud nieuwsbrief: ")
+        sentenceArray.append("Titel club, of organisatiebericht: " + clubNews.getSubject())
+        sentenceArray.append("Inhoud club, of organisatiebericht: ")
         sentenceArray.append(clubNews.getContent())
-        sentenceArray.append("Einde nieuwsbrief")
-        sentenceArray.append("Veeg naar links om het nieuwsbrief te sluiten")
+        sentenceArray.append("Einde club, of organisatiebericht")
+        sentenceArray.append("Veeg naar links om het club, of organisatiebericht te sluiten")
         
         self.speech.speechArray(sentenceArray) //Execute speech
     }

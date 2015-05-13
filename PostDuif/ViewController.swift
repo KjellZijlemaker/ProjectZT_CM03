@@ -933,8 +933,9 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                     }
                     
                     if(self.userSettings.isSpeechEnabled()){
+                        
                         // Seepching total of items
-                        self.carouselSpeechHelper.getSpeech().speechString("U heeft in totaal: " + String(self.messagesCount) + " nieuwe berichten, " + String(self.clubNewsCount) + " nieuwe nieuwsbrieven, en " + String(self.newsCount) + " nieuwe nieuwsberichten")
+                        self.carouselSpeechHelper.speechTotalItemsAvailable(self.messagesCount, clubNewsCount: self.clubNewsCount, newsCount: self.newsCount)
                     }
                     
                     // Check if carousel has items, if not, there is no first item and method should not be executed
@@ -988,7 +989,7 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                 // Else, there are no new items
             else{
                 if(self.userSettings.isSpeechEnabled()){
-                    self.carouselSpeechHelper.getSpeech().speechString("Er zijn geen berichten op dit moment")
+                    self.carouselSpeechHelper.speechNoItemsAvailable()
                 }
                 else{
                     var alert = self.setAlertView("Melding", message: "Er zijn geen berichten op dit moment")
