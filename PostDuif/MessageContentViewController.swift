@@ -19,7 +19,6 @@ class MessageContentViewController: UIViewController, messagesDelegate {
     
     @IBOutlet var messagesView: MessagesView!
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -39,7 +38,7 @@ class MessageContentViewController: UIViewController, messagesDelegate {
         self.messagesView.setTitleBackground(self.userSettings.getSecondaryColorType())
         self.messagesView.setContentBackground(self.userSettings.getSecondaryColorType())
         
-        if(!UIAccessibilityIsVoiceOverRunning() && self.delegate.userSettings.isSpeechEnabled()){
+        if(!UIAccessibilityIsVoiceOverRunning() && self.userSettings.isSpeechEnabled()){
             var carouselSpeechHelper = CarouselSpeechHelper(speech: self.speech)
             carouselSpeechHelper.speechMessageItem(self.message)
         }

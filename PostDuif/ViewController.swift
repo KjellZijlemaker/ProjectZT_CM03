@@ -121,7 +121,6 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
         self.categoryView.isAccessibilityElement = true
         
         
-        
         //# MARK: - Gesture methods
         //=============================================================================================
         
@@ -164,7 +163,7 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
     // Only when the keys are empty!!
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(false)
-        
+
         if(passToLogin){
             
             // Sending user back to login phase
@@ -302,8 +301,10 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
     
     //# MARK: - Setting up the backround and foreground notifications
     func setupBackgroundForegroundInit(){
-        NSNotificationCenter.defaultCenter().addObserver(self, selector:"totalNewItemsToForeground", name:
+        NSNotificationCenter.defaultCenter().addObserver(self, selector:"deleteAndSpeechItemsToForeground", name:
             UIApplicationWillEnterForegroundNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("stopSpeechItemsToBackground:"), name:UIApplicationDidEnterBackgroundNotification, object: nil)
+
     }
     
     
@@ -484,10 +485,6 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
     
     // Function for checking if the index from the carousel changed
     func carouselCurrentItemIndexDidChange(carousel: iCarousel!){
-        if(UIAccessibilityIsVoiceOverRunning()){
-            var carouselAccessibilityHelper = CarouselAccessibilityHelper()
-            self.categoryView.accessibilityLabel = carouselAccessibilityHelper.checkMessageTypeAccesibility(self.items[self.carousel.currentItemIndex])
-        }
         self.carouselCheckForAppendingItems() // Check for appending items and decrement notification counter if needed
         
         if(!self.items.isEmpty){
@@ -680,10 +677,12 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
     func setLoadingView(title: String){
         // Notification for getting items
         let loadingNotification = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
-        loadingNotification.isAccessibilityElement = false
+        loadingNotification.isAccessibilityElement = true
+        loadingNotification.accessibilityLabel = ""
         loadingNotification.mode = MBProgressHUDMode.Indeterminate
         loadingNotification.labelText = title
     }
+    
     
     // Setting alertView for notification user
     func setAlertView(title: String, message: String) -> SIAlertView{
@@ -699,7 +698,7 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
     
     //# MARK: - UIBackground / Foreground methods
     //=================================================================================================
-    func totalNewItemsToForeground(){
+    func deleteAndSpeechItemsToForeground(){
         if(!self.messageIsOpenend){
             var itemsIndexArray = [Int]()
             
@@ -711,33 +710,32 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
             var currentdateString = dateFormatter.stringFromDate(date)
             currentdateString.substringToIndex(advance(currentdateString.startIndex, 10)) // Getting only the year, month day
             
+            // Looping through all the dates of the corresponding items
             for i in 0...self.items.count-1{
-                
-                println(self.items[i].getPublishDate())
-                var publishedDateString = self.items[i].getPublishDate()
-                println(publishedDateString)
-                
-                if(currentdateString != publishedDateString){
-                    for o in 0...self.items.count-1{
-                        if(self.items[i].getID() == self.items[o].getID()){
-                            self.carousel.removeItemAtIndex(i, animated: false) // From carousel
-                            if(self.items[i].getType() == "1"){
-                                self.messagesCount--
+                if(self.items[i].getType() == "2" || self.items[i].getType() == "3"){
+                    var publishedDateString = self.items[i].getPublishDate()
+                    
+                    if(currentdateString != publishedDateString){
+                        for o in 0...self.items.count-1{
+                            if(self.items[i].getID() == self.items[o].getID()){
+                                self.carousel.removeItemAtIndex(i, animated: false) // Remove from carousel
+                               
+                                // Decrement when removed
+                                if(self.items[i].getType() == "2"){
+                                    self.newsCount--
+                                }
+                                else if(self.items[i].getType() == "3"){
+                                    self.clubNewsCount--
+                                }
+                                itemsIndexArray.append(i) // Append the index
                             }
-                            else if(self.items[i].getType() == "2"){
-                                self.newsCount--
-                            }
-                            else if(self.items[i].getType() == "3"){
-                                self.clubNewsCount--
-                            }
-                            itemsIndexArray.append(i)
                         }
                     }
                 }
+                
             }
-            println(self.items.count-1)
-            println(itemsIndexArray)
             
+            // Loop through the index in reverse and delete the item and image
             if(!itemsIndexArray.isEmpty){
                 for j in reverse(0...itemsIndexArray.count-1){
                     self.items.removeAtIndex(itemsIndexArray[j])
@@ -745,22 +743,34 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                 }
             }
             
-            // If there are no more items,
+            // When there are no more items it should be true
             if(self.items.isEmpty){
                 self.firstItem = true
             }
             
-            self.carousel.reloadData()
+            self.carousel.reloadData() // Reload the carousel
             
+            // Reload the item when empty for categoryview
             if(self.items.isEmpty){
                 self.carouselCurrentItemIndexDidChange(self.carousel)
             }
             
-            if(totalNewItems >= 0){
-                self.carouselSpeechHelper.getSpeech().stopSpeech()
-                //            self.newItemsToSpeech(self.totalNewItems, "0")
-                //            self.carousel.scrollToItemAtIndex(self.items.count-1-self.totalNewItems, animated: true) // Scroll to the section of last items
+            // Speech the new items and make it accessible
+            if(self.userSettings.isSpeechEnabled()){
+                self.carouselSpeechHelper.speechTotalItemsAvailable(self.messagesCount, clubNewsCount: self.clubNewsCount, newsCount: self.newsCount) // Speech total of items
+                UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification,
+                    self.categoryView); // Set the accessibillity view back to the categoryview so user can interact with carousel
+                self.carouselCurrentItemIndexDidChange(self.carousel)
             }
+            
+        }
+    }
+    
+    func stopSpeechItemsToBackground(notification : NSNotification) {
+        
+        // Stop the current speech
+        if(self.userSettings.isSpeechEnabled()){
+            self.carouselSpeechHelper.getSpeech().stopSpeech() // Stop speech
         }
     }
     
@@ -946,6 +956,9 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                     
                     
                     MBProgressHUD.hideAllHUDsForView(self.view, animated: true) // Close notification
+                    
+                    UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification,
+                        self.categoryView); // Set the accessibillity view back to the categoryview so user can interact with carousel
                     
                     viewMayLoad = true
                 }
@@ -1258,7 +1271,12 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
         else if(type == "3"){
             interval = NSTimeInterval(self.userSettings.getClubNewsStoreMaxSeconds().toInt()!)
         }
+        
         var newTimer = timerManager.startTimer(self, selector: Selector("checkIDForDeletion:"), userInfo: userInfoArray, interval: interval) // Start timer
+        
+        
+        UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification,
+            self.categoryView);
     }
     
     

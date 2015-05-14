@@ -8,9 +8,9 @@
 
 import Foundation
 
-class NewsMessageView: UIView{
+class NewsMessageView: UIView, newsMessagesContentTextViewDelegate{
     @IBOutlet weak var newsMessageTitle: UITextView!
-    @IBOutlet weak var newsMessageContent: UITextView!
+    @IBOutlet weak var newsMessageContent: NewsMessagesContentTextView!
 
     var delegate: newsMessagesDelegate!
     
@@ -30,10 +30,6 @@ class NewsMessageView: UIView{
         self.newsMessageTitle.text = text
     }
     
-    func setMessageText(text: String){
-        self.newsMessageContent.text = text
-    }
-    
     func setViewBackground(color: String){
         self.backgroundColor = ColorHelper.UIColorFromRGB(color, alpha: 1)
     }
@@ -42,18 +38,7 @@ class NewsMessageView: UIView{
         self.newsMessageTitle.backgroundColor = ColorHelper.UIColorFromRGB(color, alpha: 1)
     }
     
-    func setContentBackground(color: String){
-        self.newsMessageContent.backgroundColor = ColorHelper.UIColorFromRGB(color, alpha: 1)
-    }
-    
-    func setFontColor(color: String){
-        self.newsMessageTitle.textColor = ColorHelper.UIColorFromRGB(color, alpha: 1)
-        self.newsMessageContent.textColor = ColorHelper.UIColorFromRGB(color, alpha: 1)
-    }
-    
-    func setFontSize(size: CGFloat){
-        self.newsMessageContent.font = UIFont(name: "Verdana", size: size)
-    }
+
     
     func setupTitle(){
         var borderColor : UIColor = UIColor.grayColor()
@@ -62,11 +47,33 @@ class NewsMessageView: UIView{
         self.newsMessageTitle.layer.cornerRadius = 0
     }
     
+    func setMessageText(text: String){
+        newsMessageContent.setMessageText(text)
+    }
+    
+    func setContentBackground(color: String){
+        self.newsMessageContent.setContentBackground(color)
+    }
+    
+    func setFontColor(color: String){
+        self.newsMessageTitle.textColor = ColorHelper.UIColorFromRGB(color, alpha: 1)
+        self.newsMessageContent.setFontColor(color)
+
+    }
+    
+    func setFontSize(size: CGFloat){
+        self.newsMessageContent.setFontSize(size)
+    }
+    
     func setupContent(){
-        var borderColor : UIColor = UIColor.grayColor()
-        self.newsMessageContent.layer.borderWidth = 1
-        self.newsMessageContent.layer.borderColor = borderColor.CGColor
-        self.newsMessageContent.layer.cornerRadius = 0
+        self.newsMessageContent.contentDelegate = self
+        self.newsMessageContent.setupContent()
+        self.setupSwipingContentTextView() // For contentTextView
+    }
+    
+    
+    private func setupSwipingContentTextView(){
+        self.newsMessageContent.setupSwiping()
     }
     
     func setupSwiping(){

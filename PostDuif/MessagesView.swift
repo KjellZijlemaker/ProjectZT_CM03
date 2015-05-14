@@ -8,19 +8,15 @@
 
 import Foundation
 
-class MessagesView: UIView{
+class MessagesView: UIView, messagesContentTextViewDelegate{
     
     @IBOutlet weak private var messageTitle: UITextView!
-    @IBOutlet weak private var messageContent: UITextView!
+    @IBOutlet weak var messageContent: MessagesContentTextView!
     
     var delegate: messagesDelegate!
     
     func setTitleText(text: String){
         self.messageTitle.text = text
-    }
-    
-    func setMessageText(text: String){
-        self.messageContent.text = text
     }
     
     func setViewBackground(color: String){
@@ -31,34 +27,44 @@ class MessagesView: UIView{
         self.messageTitle.backgroundColor = ColorHelper.UIColorFromRGB(color, alpha: 1)
     }
     
-    func setContentBackground(color: String){
-        self.messageContent.backgroundColor = ColorHelper.UIColorFromRGB(color, alpha: 1)
-    }
-    
-    func setFontColor(color: String){
-        self.messageTitle.textColor = ColorHelper.UIColorFromRGB(color, alpha: 1)
-        self.messageContent.textColor = ColorHelper.UIColorFromRGB(color, alpha: 1)
-    }
-    
-    func setFontSize(size: CGFloat){
-        self.messageContent.font = UIFont(name: "Verdana", size: size)
-    }
-    
     func setupTitle(){
         var borderColor : UIColor = UIColor.grayColor()
         self.messageTitle.layer.borderWidth = 1
         self.messageTitle.layer.borderColor = borderColor.CGColor
         self.messageTitle.layer.cornerRadius = 0
     }
-    
-    func setupContent(){
-        var borderColor : UIColor = UIColor.grayColor()
-        self.messageContent.layer.borderWidth = 1
-        self.messageContent.layer.borderColor = borderColor.CGColor
-        self.messageContent.layer.cornerRadius = 0
+
+    func setContentBackground(color: String){
+        self.messageContent.setContentBackground(color)
     }
     
+    func setFontColor(color: String){
+        self.messageTitle.textColor = ColorHelper.UIColorFromRGB(color, alpha: 1)
+        self.messageContent.setFontColor(color)
+    }
+    
+    func setMessageText(text: String){
+        self.messageContent.setMessageText(text)
+    }
+    
+    func setFontSize(size: CGFloat){
+        self.messageContent.setFontSize(size)
+    }
+    
+    func setupContent(){
+        self.messageContent.contentDelegate = self
+        self.messageContent.setupContent()
+        self.setupSwipingContentTextView() // For contentTextView
+        
+    }
+    
+    private func setupSwipingContentTextView(){
+        self.messageContent.setupSwiping()
+    }
+    
+    
     func setupSwiping(){
+        
         //------------right  swipe gestures in view--------------//
         let swipeLeft = UISwipeGestureRecognizer(target: self, action: Selector("leftSwiped"))
         swipeLeft.direction = UISwipeGestureRecognizerDirection.Left
@@ -81,6 +87,7 @@ class MessagesView: UIView{
         
         return true
     }
+    
     
 }
 

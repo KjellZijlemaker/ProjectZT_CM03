@@ -8,19 +8,17 @@
 
 import Foundation
 
-class ClubNewsView: UIView{
+class ClubNewsView: UIView, clubNewsContentTextViewDelegate{
     
     @IBOutlet weak private var clubNewsTitle: UITextView!
-    @IBOutlet weak private var clubNewsContent: UITextView!
+    @IBOutlet weak var clubNewsContent: ClubNewsContentTextView!
     var delegate: clubNewsDelegate!
     
     func setTitleText(text: String){
         self.clubNewsTitle.text = text
     }
     
-    func setMessageText(text: String){
-        self.clubNewsContent.text = text
-    }
+
     
     func setViewBackground(color: String){
         self.backgroundColor = ColorHelper.UIColorFromRGB(color, alpha: 1)
@@ -30,18 +28,7 @@ class ClubNewsView: UIView{
         self.clubNewsTitle.backgroundColor = ColorHelper.UIColorFromRGB(color, alpha: 1)
     }
     
-    func setContentBackground(color: String){
-        self.clubNewsContent.backgroundColor = ColorHelper.UIColorFromRGB(color, alpha: 1)
-    }
-    
-    func setFontColor(color: String){
-        self.clubNewsTitle.textColor = ColorHelper.UIColorFromRGB(color, alpha: 1)
-        self.clubNewsContent.textColor = ColorHelper.UIColorFromRGB(color, alpha: 1)
-    }
-    
-    func setFontSize(size: CGFloat){
-        self.clubNewsContent.font = UIFont(name: "Verdana", size: size)
-    }
+
     
     func setupTitle(){
         var borderColor : UIColor = UIColor.grayColor()
@@ -50,18 +37,39 @@ class ClubNewsView: UIView{
         self.clubNewsTitle.layer.cornerRadius = 0
     }
     
-    func setupContent(){
-        var borderColor : UIColor = UIColor.grayColor()
-        self.clubNewsContent.layer.borderWidth = 1
-        self.clubNewsContent.layer.borderColor = borderColor.CGColor
-        self.clubNewsContent.layer.cornerRadius = 0
-    }
     
     func setupSwiping(){
         //------------right  swipe gestures in view--------------//
         let swipeLeft = UISwipeGestureRecognizer(target: self, action: Selector("leftSwiped"))
         swipeLeft.direction = UISwipeGestureRecognizerDirection.Left
         self.addGestureRecognizer(swipeLeft)
+    }
+    
+    func setMessageText(text: String){
+        self.clubNewsContent.setMessageText(text)
+    }
+    
+    func setContentBackground(color: String){
+        self.clubNewsContent.setContentBackground(color)
+    }
+    
+    func setFontColor(color: String){
+        self.clubNewsTitle.textColor = ColorHelper.UIColorFromRGB(color, alpha: 1)
+        self.clubNewsContent.setFontColor(color)
+    }
+    
+    func setFontSize(size: CGFloat){
+        self.clubNewsContent.setFontSize(size)
+    }
+    
+    func setupContent(){
+        self.clubNewsContent.contentDelegate = self
+        self.clubNewsContent.setupContent()
+        self.setupSwipingContentTextView()
+    }
+    
+    private func setupSwipingContentTextView(){
+        self.clubNewsContent.setupSwiping()
     }
     
     

@@ -51,16 +51,11 @@ class CarouselSpeechHelper{
                     else{
                         numberOfItems = String(self.delegate.carousel.currentItemIndex+1) + "e "
                     }
-                    
-                    if(UIAccessibilityIsVoiceOverRunning() || self.delegate.userSettings.isSpeechEnabled()){
+                    if(self.delegate.userSettings.isSpeechEnabled() || UIAccessibilityIsVoiceOverRunning()){
                         textToSend.append(numberOfItems + read + " bericht van: " + self.delegate.items[self.delegate.carousel.currentItemIndex].getFromUser())
-                    }
-                    
-                    if(!UIAccessibilityIsVoiceOverRunning() && self.delegate.userSettings.isSpeechEnabled()){
                         textToSend.append("Onderwerp: " + self.delegate.items[self.delegate.carousel.currentItemIndex].getSubject())
                         textToSend.append("Tik op het scherm om het bericht te openen")
                     }
-                    
                     self.speech.speechArray(textToSend)
                 }
                     
@@ -76,12 +71,8 @@ class CarouselSpeechHelper{
                     else{
                         numberOfItems = String(currentItem) + "e "
                     }
-                    
-                    
-                    if(UIAccessibilityIsVoiceOverRunning() || self.delegate.userSettings.isSpeechEnabled()){
+                    if(self.delegate.userSettings.isSpeechEnabled() || UIAccessibilityIsVoiceOverRunning()){
                         textToSend.append(numberOfItems + read + " nieuwsbericht")
-                    }
-                    if(!UIAccessibilityIsVoiceOverRunning() && self.delegate.userSettings.isSpeechEnabled()){
                         textToSend.append("Titel: " + self.delegate.items[self.delegate.carousel.currentItemIndex].getSubject())
                         textToSend.append("Tik op het scherm om het nieuwsbericht te openen")
                     }
@@ -100,10 +91,8 @@ class CarouselSpeechHelper{
                         numberOfItems = String(currentItem) + "e "
                     }
                     
-                    if(UIAccessibilityIsVoiceOverRunning() || self.delegate.userSettings.isSpeechEnabled()){
+                    if(self.delegate.userSettings.isSpeechEnabled() || UIAccessibilityIsVoiceOverRunning()){
                         textToSend.append(numberOfItems + read + " club, of organisatiebericht")
-                    }
-                    if(!UIAccessibilityIsVoiceOverRunning() && self.delegate.userSettings.isSpeechEnabled()){
                         textToSend.append("Titel: " + self.delegate.items[self.delegate.carousel.currentItemIndex].getSubject())
                         textToSend.append("Tik op het scherm om het club, of organisatiebericht te openen")
                     }

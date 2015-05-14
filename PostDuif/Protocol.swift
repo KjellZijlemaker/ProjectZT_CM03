@@ -49,6 +49,24 @@ protocol messagesDelegate{
     func dismissController()
 }
 
+protocol messagesContentTextViewDelegate{
+    var delegate: messagesDelegate!{
+        get set
+    }
+}
+
+protocol newsMessagesContentTextViewDelegate{
+    var delegate: newsMessagesDelegate!{
+        get set
+    }
+}
+
+protocol clubNewsContentTextViewDelegate{
+    var delegate: clubNewsDelegate!{
+        get set
+    }
+}
+
 protocol newsMessagesDelegate{
     var speech:SpeechManager!{
         get set

@@ -22,7 +22,7 @@
                                 <subviews>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="bezel" minimumFontSize="32" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="hyv-2W-3NG">
                                         <rect key="frame" x="108" y="238" width="598" height="94"/>
-                                        <accessibility key="accessibilityConfiguration" label="Typ uw email adres in"/>
+                                        <accessibility key="accessibilityConfiguration" label="Typ uw gebruikersnaam in"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="60"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
@@ -40,12 +40,16 @@
                                     </textField>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="bezel" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="qUT-bn-NaI">
                                         <rect key="frame" x="464" y="451" width="129" height="70"/>
-                                        <accessibility key="accessibilityConfiguration" label="Typ de eerste drie cijfers van uw pincode in"/>
+                                        <accessibility key="accessibilityConfiguration" label="Typ de laatste cijfers van uw toegangscode in"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="67"/>
                                         <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
                                     </textField>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="-" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EOK-Nx-Ybs">
                                         <rect key="frame" x="391" y="467" width="33" height="21"/>
+                                        <accessibility key="accessibilityConfiguration">
+                                            <accessibilityTraits key="traits" none="YES" notEnabled="YES"/>
+                                            <bool key="isElement" value="NO"/>
+                                        </accessibility>
                                         <fontDescription key="fontDescription" type="system" pointSize="84"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
@@ -55,6 +59,7 @@
                                     </imageView>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8pK-z8-3wP">
                                         <rect key="frame" x="237" y="564" width="340" height="77"/>
+                                        <accessibility key="accessibilityConfiguration" label=""/>
                                         <fontDescription key="fontDescription" type="system" pointSize="53"/>
                                         <state key="normal" title="Ga verder" image="Login-50">
                                             <color key="titleColor" red="0.0" green="0.0" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
@@ -116,12 +121,18 @@
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oyb-AM-ppw">
                                                 <rect key="frame" x="133" y="15" width="346" height="40"/>
+                                                <accessibility key="accessibilityConfiguration">
+                                                    <bool key="isElement" value="NO"/>
+                                                </accessibility>
                                                 <fontDescription key="fontDescription" type="system" pointSize="35"/>
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="R9Z-mY-3YI">
                                                 <rect key="frame" x="72" y="63" width="468" height="31"/>
+                                                <accessibility key="accessibilityConfiguration">
+                                                    <bool key="isElement" value="NO"/>
+                                                </accessibility>
                                                 <fontDescription key="fontDescription" type="system" pointSize="27"/>
                                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                 <nil key="highlightedColor"/>
@@ -211,7 +222,7 @@
                                 <fontDescription key="fontDescription" name="Verdana-Bold" family="Verdana" pointSize="50"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" indicatorStyle="black" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9oo-Y4-Yoo">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" indicatorStyle="black" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9oo-Y4-Yoo" customClass="MessagesContentTextView" customModule="PostDuif" customModuleProvider="target">
                                 <rect key="frame" x="65" y="171" width="897" height="634"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <accessibility key="accessibilityConfiguration">
@@ -224,7 +235,7 @@
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
                         <connections>
-                            <outlet property="messageContent" destination="9oo-Y4-Yoo" id="fTn-4x-9A6"/>
+                            <outlet property="messageContent" destination="9oo-Y4-Yoo" id="eya-8x-c6j"/>
                             <outlet property="messageTitle" destination="s7c-hv-9b1" id="7e0-t0-5sI"/>
                         </connections>
                     </view>
@@ -273,7 +284,7 @@
                                 <fontDescription key="fontDescription" name="Verdana-Bold" family="Verdana" pointSize="50"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" indicatorStyle="black" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9nq-E5-mw8">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" indicatorStyle="black" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9nq-E5-mw8" customClass="ClubNewsContentTextView" customModule="PostDuif" customModuleProvider="target">
                                 <rect key="frame" x="64" y="180" width="897" height="588"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <accessibility key="accessibilityConfiguration">
@@ -286,7 +297,7 @@
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
                         <connections>
-                            <outlet property="clubNewsContent" destination="9nq-E5-mw8" id="EuE-aO-Qeq"/>
+                            <outlet property="clubNewsContent" destination="9nq-E5-mw8" id="fwB-gO-AGe"/>
                             <outlet property="clubNewsTitle" destination="5B3-7s-aBz" id="AF9-H9-NnP"/>
                         </connections>
                     </view>
@@ -318,7 +329,7 @@
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="55"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" indicatorStyle="black" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cHg-tL-bd8">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" indicatorStyle="black" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cHg-tL-bd8" customClass="NewsMessagesContentTextView" customModule="PostDuif" customModuleProvider="target">
                                 <rect key="frame" x="60" y="201" width="897" height="567"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <accessibility key="accessibilityConfiguration">
@@ -345,7 +356,7 @@
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
                         <connections>
-                            <outlet property="newsMessageContent" destination="cHg-tL-bd8" id="BxK-oB-5Pl"/>
+                            <outlet property="newsMessageContent" destination="cHg-tL-bd8" id="EyB-nb-RTR"/>
                             <outlet property="newsMessageTitle" destination="sgz-ui-COj" id="IT2-S1-hMm"/>
                         </connections>
                     </view>
