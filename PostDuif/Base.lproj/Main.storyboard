@@ -342,41 +342,11 @@
                                 <fontDescription key="fontDescription" name="Verdana-Bold" family="Verdana" pointSize="50"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="C1n-9X-WhU">
-                                <rect key="frame" x="136" y="173" width="39" height="30"/>
-                                <state key="normal" title="Groot">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="bigText:" destination="aPe-By-v3p" eventType="touchUpInside" id="YRt-MJ-Zhs"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3CG-qb-gI6">
-                                <rect key="frame" x="70" y="173" width="58" height="30"/>
-                                <state key="normal" title="Normaal">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="normalText:" destination="aPe-By-v3p" eventType="touchUpInside" id="aVC-d9-7SR"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SBK-mW-Kwf">
-                                <rect key="frame" x="183" y="173" width="44" height="30"/>
-                                <state key="normal" title="Groter">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="biggerText:" destination="aPe-By-v3p" eventType="touchUpInside" id="ESm-Yo-JRi"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
                         <connections>
-                            <outlet property="big" destination="C1n-9X-WhU" id="Nih-kl-szq"/>
-                            <outlet property="bigger" destination="SBK-mW-Kwf" id="Bxk-6W-7Yy"/>
                             <outlet property="newsMessageContent" destination="cHg-tL-bd8" id="BxK-oB-5Pl"/>
                             <outlet property="newsMessageTitle" destination="sgz-ui-COj" id="IT2-S1-hMm"/>
-                            <outlet property="normal" destination="3CG-qb-gI6" id="68i-Pp-ukp"/>
                         </connections>
                     </view>
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>

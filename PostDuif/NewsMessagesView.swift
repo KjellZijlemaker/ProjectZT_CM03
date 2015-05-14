@@ -11,11 +11,20 @@ import Foundation
 class NewsMessageView: UIView{
     @IBOutlet weak var newsMessageTitle: UITextView!
     @IBOutlet weak var newsMessageContent: UITextView!
-    @IBOutlet weak var normal: UIButton!
 
-    @IBOutlet weak var big: UIButton!
-    @IBOutlet weak var bigger: UIButton!
     var delegate: newsMessagesDelegate!
+    
+    //    @IBAction func normalText(sender: AnyObject) {
+    //        self.newsMessageContent.font = UIFont(name: "Verdana", size: 42)
+    //    }
+    //    @IBAction func bigText(sender: AnyObject) {
+    //        self.newsMessageContent.font = UIFont(name: "Verdana", size: 49)
+    //    }
+    //
+    //    @IBAction func biggerText(sender: AnyObject) {
+    //        self.newsMessageContent.font = UIFont(name: "Verdana", size: 54)
+    //    }
+
     
     func setTitleText(text: String){
         self.newsMessageTitle.text = text
@@ -42,18 +51,8 @@ class NewsMessageView: UIView{
         self.newsMessageContent.textColor = ColorHelper.UIColorFromRGB(color, alpha: 1)
     }
     
-    @IBAction func normalText(sender: AnyObject) {
-        self.newsMessageTitle.font = UIFont(name: "Verdana-Bold", size: 50)
-        self.newsMessageContent.font = UIFont(name: "Verdana", size: 42)
-    }
-    @IBAction func bigText(sender: AnyObject) {
-        self.newsMessageTitle.font = UIFont(name: "Verdana-Bold", size: 57)
-        self.newsMessageContent.font = UIFont(name: "Verdana", size: 49)
-    }
-    
-    @IBAction func biggerText(sender: AnyObject) {
-        self.newsMessageTitle.font = UIFont(name: "Verdana-Bold", size: 62)
-        self.newsMessageContent.font = UIFont(name: "Verdana", size: 54)
+    func setFontSize(size: CGFloat){
+        self.newsMessageContent.font = UIFont(name: "Verdana", size: size)
     }
     
     func setupTitle(){

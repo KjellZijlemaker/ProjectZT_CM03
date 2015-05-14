@@ -40,6 +40,10 @@ class MessagesView: UIView{
         self.messageContent.textColor = ColorHelper.UIColorFromRGB(color, alpha: 1)
     }
     
+    func setFontSize(size: CGFloat){
+        self.messageContent.font = UIFont(name: "Verdana", size: size)
+    }
+    
     func setupTitle(){
         var borderColor : UIColor = UIColor.grayColor()
         self.messageTitle.layer.borderWidth = 1

@@ -39,6 +39,10 @@ class ClubNewsView: UIView{
         self.clubNewsContent.textColor = ColorHelper.UIColorFromRGB(color, alpha: 1)
     }
     
+    func setFontSize(size: CGFloat){
+        self.clubNewsContent.font = UIFont(name: "Verdana", size: size)
+    }
+    
     func setupTitle(){
         var borderColor : UIColor = UIColor.grayColor()
         self.clubNewsTitle.layer.borderWidth = 1
