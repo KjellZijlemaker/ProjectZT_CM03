@@ -4,6 +4,21 @@ Only supporting from IOS 8 and futher. Is capable of installing on IOS 7, but no
 
 Pull in Xcode!
 
+##Main features
+- Loginscreen with username and passcode for login in
+- The Carousel itself, where the user can scroll through his own messages, clubnews or news, chosen inside the website
+- The Carousel colors will correspond those from the website settings
+- Notification sounds when getting a new item (when enabled inside website)
+- Automatic speeching every item + when getting a new item (when enabled inside website)
+- When having no messages, clubnews or news, the app will automatically fetch new items of that type. Otherwise, a normal fetch is done when the user is at the end of every type of item.
+- The app will remove all items (except personal messages) when reopening the app that are older then the given time (see report)
+- Opening an item is done with single tapping (whole screen is covered)
+- The item colors will be corresponding those from the website settings
+- Item will be speeched (when enabled inside website)
+- Item can be closed with swiping to the left
+- Item will be deleted after an amount of time (can be edited inside website)
+- Accessibility support
++++ Much more minor features....
 
 ##VoiceOver
 When enabling voice over, the first element will be the categorytypeview. This is necessary, otherwise the carousel scroll does not work.
