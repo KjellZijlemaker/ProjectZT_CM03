@@ -30,7 +30,7 @@ class Settings{
         self.notificationSoundEnabled = true
         self.endOfMessageSoundEffectEnabled = true
         self.totalNewMessageSoundEnabled = true
-        self.hintSupportSoundEnabled = true
+        self.hintSupportSoundEnabled = false
         self.privateMessageLimit = 10
         self.userSpeech = true
         self.newsMessageLimit = 10

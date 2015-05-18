@@ -96,7 +96,7 @@ class UserManager{
                             }
                             
                             // Set endOfMessageSoundEffect
-                            var endOfMessageSoundEffect: String = settings["endOfMessageSoundEffectEnabled"].stringValue
+                            var endOfMessageSoundEffect: String = settings["isEndOfMessageSoundEffectEnabled"].stringValue
                             if(endOfMessageSoundEffect == "true"){
                                 newSettings.hasEndOfMessageSoundEffectEnabled(true)
                             }
@@ -106,7 +106,7 @@ class UserManager{
 
                             
                             // Set totalNewMessageSoundEnabled
-                            var totalNewMessageSoundEnabled: String = settings["totalNewMessageSoundEnabled"].stringValue
+                            var totalNewMessageSoundEnabled: String = settings["isTotalNewMessageSoundEnabled"].stringValue
                             if(totalNewMessageSoundEnabled == "true"){
                                 newSettings.hasTotalNewMessageSoundEnabled(true)
                             }
@@ -122,7 +122,6 @@ class UserManager{
                             else{
                                 newSettings.hasHintSupportSoundEnabled(false)
                             }
-                            println(newSettings.isHintSupportSoundEnabled())
                             // Set message limit
                             var privateMessageLimit: String = settings["ShowPrivateMessageLimit"].stringValue
                             newSettings.setPrivateMessageLimit(privateMessageLimit.toInt()!)

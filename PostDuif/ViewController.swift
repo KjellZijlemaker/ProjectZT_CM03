@@ -94,8 +94,6 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
         self.carousel.type = .Custom
         self.carousel.scrollEnabled = false
         self.carousel.isAccessibilityElement = false
-        self.carouselSpeechHelper = CarouselSpeechHelper(userSettings: self.userSettings) // Singleton carouselSpeechHelper
-        self.carouselSpeechHelper.delegate = self
         
         let logoutButton = LogoutButton().showLogoutButton()
         logoutButton.isAccessibilityElement = false
@@ -709,29 +707,31 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
             var currentdateString = dateFormatter.stringFromDate(date)
             currentdateString.substringToIndex(advance(currentdateString.startIndex, 10)) // Getting only the year, month day
             
-            // Looping through all the dates of the corresponding items
-            for i in 0...self.items.count-1{
-                if(self.items[i].getType() == "2" || self.items[i].getType() == "3"){
-                    var publishedDateString = self.items[i].getPublishDate()
-                    
-                    if(currentdateString != publishedDateString){
-                        for o in 0...self.items.count-1{
-                            if(self.items[i].getID() == self.items[o].getID()){
-                                self.carousel.removeItemAtIndex(i, animated: false) // Remove from carousel
-                               
-                                // Decrement when removed
-                                if(self.items[i].getType() == "2"){
-                                    self.newsCount--
+            if(!self.items.isEmpty){
+                // Looping through all the dates of the corresponding items
+                for i in 0...self.items.count-1{
+                    if(self.items[i].getType() == "2" || self.items[i].getType() == "3"){
+                        var publishedDateString = self.items[i].getPublishDate()
+                        
+                        if(currentdateString != publishedDateString){
+                            for o in 0...self.items.count-1{
+                                if(self.items[i].getID() == self.items[o].getID()){
+                                    self.carousel.removeItemAtIndex(i, animated: false) // Remove from carousel
+                                    
+                                    // Decrement when removed
+                                    if(self.items[i].getType() == "2"){
+                                        self.newsCount--
+                                    }
+                                    else if(self.items[i].getType() == "3"){
+                                        self.clubNewsCount--
+                                    }
+                                    itemsIndexArray.append(i) // Append the index
                                 }
-                                else if(self.items[i].getType() == "3"){
-                                    self.clubNewsCount--
-                                }
-                                itemsIndexArray.append(i) // Append the index
                             }
                         }
                     }
-                }
-                
+
+            }
             }
             
             // Loop through the index in reverse and delete the item and image
@@ -755,7 +755,7 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
             }
             
             // Speech the new items and make it accessible
-            if(self.userSettings.isHintSupportSoundEnabled()){
+            if(self.userSettings.isTotalNewMessageSoundEnabled()){
                 self.carouselSpeechHelper.speechTotalItemsAvailable(self.messagesCount, clubNewsCount: self.clubNewsCount, newsCount: self.newsCount) // Speech total of items
             }
             UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification,
@@ -834,6 +834,10 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                 // Transfering array to global array
                 self.userSettings = settings
                 
+                // Setting the carouselSpeechHelper with settings for speeching
+                self.carouselSpeechHelper = CarouselSpeechHelper(userSettings: self.userSettings) // Singleton carouselSpeechHelper
+                self.carouselSpeechHelper.delegate = self // Setting delegate so it can communicate with the Carousel
+
                 // If the background is white, the carousel should be black. Otherwise
                 // the contrast is too weak
                 if(self.userSettings.getSecondaryColorType() == "FFFFFF"){
@@ -940,7 +944,7 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                         }
                     }
                     
-                    if(self.userSettings.isHintSupportSoundEnabled()){
+                    if(self.userSettings.isTotalNewMessageSoundEnabled()){
                         
                         // Seepching total of items
                         self.carouselSpeechHelper.speechTotalItemsAvailable(self.messagesCount, clubNewsCount: self.clubNewsCount, newsCount: self.newsCount)
@@ -1146,7 +1150,7 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                         // If the index has changed (appended item), speech the total of new items
                         if(indexHasChanged){
                             var scrollToMessage = false
-                            
+                            println(self.userSettings.isNotificationSoundEnabled())
                             // tell the total of new items
                             if(self.userSettings.isNotificationSoundEnabled()){
                                 if(newMessages > 0){

@@ -57,6 +57,7 @@ class CarouselSpeechHelper{
                     if(self.userSettings.isSpeechEnabled() || UIAccessibilityIsVoiceOverRunning()){
                         textToSend.append(numberOfItems + read + " bericht van: " + self.delegate.items[self.delegate.carousel.currentItemIndex].getFromUser())
                         textToSend.append("Onderwerp: " + self.delegate.items[self.delegate.carousel.currentItemIndex].getSubject())
+                        println(self.userSettings.isHintSupportSoundEnabled())
                         if(self.userSettings.isHintSupportSoundEnabled()){
                             textToSend.append("Tik op het scherm om het bericht te openen")
                         }
@@ -159,14 +160,14 @@ class CarouselSpeechHelper{
     
     func speechTotalItemsAvailable(messagesCount: Int, clubNewsCount: Int, newsCount: Int){
         var vocabFixMessages = " nieuwe berichten"
-        var vocabFixClubNews = " nieuwe " + self.delegate.items[self.delegate.carousel.currentItemIndex].getClubType() + "-berichten"
+        var vocabFixClubNews = " nieuwe club, of organisatieberichten"
         var vocabFixNews = " nieuwe nieuwsberichten"
-
+        
         if(messagesCount == 1){
             vocabFixMessages = " nieuw bericht"
         }
         if(clubNewsCount == 1){
-            vocabFixClubNews = " nieuwe " + self.delegate.items[self.delegate.carousel.currentItemIndex].getClubType() + "-bericht"
+            vocabFixClubNews = " nieuwe club, of organisatiebericht"
         }
         if(newsCount == 1){
             vocabFixNews = " nieuw nieuwsbericht"
