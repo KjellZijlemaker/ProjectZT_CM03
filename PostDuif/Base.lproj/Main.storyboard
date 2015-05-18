@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="14C109" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" initialViewController="vXZ-lx-hvc">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
@@ -9,43 +9,45 @@
         <scene sceneID="0dT-5U-xU2">
             <objects>
                 <viewController id="TXV-tG-Vkp" customClass="LoginViewController" customModule="PostDuif" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="tTH-mU-TyB"/>
-                        <viewControllerLayoutGuide type="bottom" id="JBQ-Iv-VQE"/>
-                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="j4J-ZY-Gus">
                         <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="V14-6y-CMs" customClass="LoginView" customModule="PostDuif" customModuleProvider="target">
+                            <view contentMode="scaleToFill" id="V14-6y-CMs" customClass="LoginView" customModule="PostDuif" customModuleProvider="target">
                                 <rect key="frame" x="105" y="47" width="815" height="673"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="bezel" minimumFontSize="32" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="hyv-2W-3NG">
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="bezel" minimumFontSize="32" clearButtonMode="always" id="hyv-2W-3NG">
                                         <rect key="frame" x="108" y="238" width="598" height="94"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <accessibility key="accessibilityConfiguration" label="Typ uw gebruikersnaam in"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="60"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Uw Gebruikersnaam" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oZ9-zQ-5oW">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Uw Gebruikersnaam" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="oZ9-zQ-5oW">
                                         <rect key="frame" x="37" y="135" width="740" height="95"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="74"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="bezel" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="uz1-FU-xQk">
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="bezel" textAlignment="center" minimumFontSize="17" id="uz1-FU-xQk">
                                         <rect key="frame" x="224" y="451" width="131" height="70"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <accessibility key="accessibilityConfiguration" label="Typ de eerste drie cijfers van uw pincode in"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="67"/>
                                         <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
                                     </textField>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="bezel" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="qUT-bn-NaI">
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="bezel" textAlignment="center" minimumFontSize="17" id="qUT-bn-NaI">
                                         <rect key="frame" x="464" y="451" width="129" height="70"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <accessibility key="accessibilityConfiguration" label="Typ de laatste cijfers van uw toegangscode in"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="67"/>
                                         <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
                                     </textField>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="-" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EOK-Nx-Ybs">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="-" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="EOK-Nx-Ybs">
                                         <rect key="frame" x="391" y="467" width="33" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <accessibility key="accessibilityConfiguration">
                                             <accessibilityTraits key="traits" none="YES" notEnabled="YES"/>
                                             <bool key="isElement" value="NO"/>
@@ -54,11 +56,13 @@
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Vliegende_postduif" translatesAutoresizingMaskIntoConstraints="NO" id="Fkq-hO-N6x">
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Vliegende_postduif" id="Fkq-hO-N6x">
                                         <rect key="frame" x="341" y="0.0" width="133" height="146"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     </imageView>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8pK-z8-3wP">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="8pK-z8-3wP">
                                         <rect key="frame" x="237" y="564" width="340" height="77"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <accessibility key="accessibilityConfiguration" label=""/>
                                         <fontDescription key="fontDescription" type="system" pointSize="53"/>
                                         <state key="normal" title="Ga verder" image="Login-50">
@@ -69,8 +73,9 @@
                                             <action selector="loginButton:" destination="V14-6y-CMs" eventType="touchUpInside" id="DVH-yZ-bVK"/>
                                         </connections>
                                     </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Uw Toegangscode" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eSv-cg-3zV">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Uw Toegangscode" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="eSv-cg-3zV">
                                         <rect key="frame" x="53" y="354" width="708" height="89"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="74"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -88,39 +93,38 @@
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="iPad"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                     <connections>
                         <outlet property="loginView" destination="V14-6y-CMs" id="Tnf-kF-LV6"/>
-                        <segue destination="vXZ-lx-hvc" kind="show" identifier="loginSucceed" id="67I-mG-Mat"/>
+                        <segue destination="vXZ-lx-hvc" kind="modal" identifier="loginSucceed" id="67I-mG-Mat"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ojd-TR-BEd" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-667" y="1240"/>
+            <point key="canvasLocation" x="-853.75999999999999" y="2116.2666666666678"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="ufC-wZ-h7g">
             <objects>
                 <viewController id="vXZ-lx-hvc" customClass="ViewController" customModule="PostDuif" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="jyV-Pf-zRb"/>
-                        <viewControllerLayoutGuide type="bottom" id="2fi-mo-0CV"/>
-                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="kh9-bI-dsS">
                         <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ong-qD-mZa">
-                                <rect key="frame" x="0.0" y="-7" width="1024" height="780"/>
+                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="Ong-qD-mZa">
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BbD-YH-2l2" customClass="iCarousel">
+                            <view contentMode="scaleToFill" id="BbD-YH-2l2" customClass="iCarousel">
                                 <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
-                                    <view hidden="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rYb-NQ-ciM" customClass="CategoryTypeView" customModule="PostDuif" customModuleProvider="target">
+                                    <view hidden="YES" contentMode="scaleToFill" id="rYb-NQ-ciM" customClass="CategoryTypeView" customModule="PostDuif" customModuleProvider="target">
                                         <rect key="frame" x="204" y="638" width="613" height="118"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oyb-AM-ppw">
-                                                <rect key="frame" x="133" y="15" width="346" height="40"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="oyb-AM-ppw">
+                                                <rect key="frame" x="72" y="15" width="468" height="40"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <accessibility key="accessibilityConfiguration">
                                                     <bool key="isElement" value="NO"/>
                                                 </accessibility>
@@ -128,8 +132,9 @@
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="R9Z-mY-3YI">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="R9Z-mY-3YI">
                                                 <rect key="frame" x="72" y="63" width="468" height="31"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <accessibility key="accessibilityConfiguration">
                                                     <bool key="isElement" value="NO"/>
                                                 </accessibility>
@@ -139,12 +144,6 @@
                                             </label>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <constraints>
-                                            <constraint firstAttribute="centerY" secondItem="oyb-AM-ppw" secondAttribute="centerY" constant="24" id="9lo-E5-jaN"/>
-                                            <constraint firstAttribute="centerY" secondItem="R9Z-mY-3YI" secondAttribute="centerY" constant="-19.5" id="aFj-yx-HDG"/>
-                                            <constraint firstAttribute="centerX" secondItem="R9Z-mY-3YI" secondAttribute="centerX" constant="0.5" id="hyP-QC-tcn"/>
-                                            <constraint firstAttribute="centerX" secondItem="oyb-AM-ppw" secondAttribute="centerX" constant="0.5" id="iwI-lP-lAC"/>
-                                        </constraints>
                                         <connections>
                                             <outlet property="categoryTypeCategoryViewLabel" destination="R9Z-mY-3YI" id="rbB-Vx-ZAk"/>
                                             <outlet property="categoryTypeViewLabel" destination="oyb-AM-ppw" id="ug5-L7-RIa"/>
@@ -152,10 +151,6 @@
                                     </view>
                                 </subviews>
                                 <color key="backgroundColor" red="0.0" green="0.00033075853692582781" blue="0.4797782512626263" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="centerX" secondItem="rYb-NQ-ciM" secondAttribute="centerX" constant="1.5" id="RV9-CV-PIA"/>
-                                    <constraint firstAttribute="centerY" secondItem="rYb-NQ-ciM" secondAttribute="centerY" constant="-313" id="aoI-gz-aTT"/>
-                                </constraints>
                                 <connections>
                                     <outlet property="dataSource" destination="vXZ-lx-hvc" id="81k-26-bEM"/>
                                     <outlet property="delegate" destination="vXZ-lx-hvc" id="JlC-QR-hSh"/>
@@ -163,58 +158,58 @@
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="Ong-qD-mZa" firstAttribute="leading" secondItem="BbD-YH-2l2" secondAttribute="leading" id="1VL-G2-Xhc"/>
-                            <constraint firstItem="BbD-YH-2l2" firstAttribute="trailing" secondItem="Ong-qD-mZa" secondAttribute="trailing" id="984-lT-xjV"/>
-                            <constraint firstItem="BbD-YH-2l2" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="top" id="BpJ-Vc-Nsz"/>
-                            <constraint firstItem="BbD-YH-2l2" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="Hpu-YS-P4H"/>
-                            <constraint firstAttribute="trailing" secondItem="BbD-YH-2l2" secondAttribute="trailing" id="O0y-HU-dA7"/>
-                            <constraint firstItem="Ong-qD-mZa" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="top" constant="-7" id="SDg-hl-xRh"/>
-                            <constraint firstAttribute="bottom" secondItem="BbD-YH-2l2" secondAttribute="bottom" id="gqH-fQ-Cbb"/>
-                            <constraint firstAttribute="bottom" secondItem="Ong-qD-mZa" secondAttribute="bottom" constant="-5" id="w78-4z-5dB"/>
-                        </constraints>
                     </view>
                     <connections>
                         <outlet property="carousel" destination="BbD-YH-2l2" id="sTF-F8-DQJ"/>
                         <outlet property="categoryView" destination="rYb-NQ-ciM" id="WfG-zG-gBA"/>
-                        <segue destination="GxM-yO-7Ii" kind="show" identifier="showMessageContent" id="nXb-fP-FA4"/>
-                        <segue destination="rnV-cY-8Ma" kind="show" identifier="showNewsMessageContent" id="D2w-G0-hsh"/>
-                        <segue destination="TXV-tG-Vkp" kind="show" identifier="showLogin" id="EGn-ie-D2G"/>
-                        <segue destination="wr6-Jw-M9H" kind="show" identifier="showClubNewsContent" id="QbY-0i-3KB"/>
+                        <segue destination="GxM-yO-7Ii" kind="modal" identifier="showMessageContent" id="nXb-fP-FA4"/>
+                        <segue destination="rnV-cY-8Ma" kind="modal" identifier="showNewsMessageContent" id="D2w-G0-hsh"/>
+                        <segue destination="TXV-tG-Vkp" kind="modal" identifier="showLogin" id="EGn-ie-D2G"/>
+                        <segue destination="wr6-Jw-M9H" kind="modal" identifier="showClubNewsContent" id="QbY-0i-3KB"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="492" y="390"/>
+            <point key="canvasLocation" x="629" y="665"/>
         </scene>
         <!--Message Content View Controller-->
         <scene sceneID="7k3-cF-TZo">
             <objects>
                 <viewController storyboardIdentifier="ContentView" id="GxM-yO-7Ii" customClass="MessageContentViewController" customModule="PostDuif" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="eMF-o8-ROi"/>
-                        <viewControllerLayoutGuide type="bottom" id="kvN-vo-xxk"/>
-                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="NNI-RT-57s" customClass="MessagesView" customModule="PostDuif" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" indicatorStyle="black" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bf0-d9-MCN">
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <accessibility key="accessibilityConfiguration">
-                                    <accessibilityTraits key="traits" none="YES" staticText="YES"/>
-                                </accessibility>
-                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
-                                <fontDescription key="fontDescription" type="system" pointSize="50"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                            </textView>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" bouncesZoom="NO" editable="NO" text="De Postduif Clubnews" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="S8K-rE-5jj">
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="55"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                            </textView>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" bouncesZoom="NO" editable="NO" text="De Postduif Berichten" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="s7c-hv-9b1">
-                                <rect key="frame" x="65" y="20" width="897" height="160"/>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="KRD-zT-0sm">
+                                <rect key="frame" x="53" y="188" width="918" height="580"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" id="SHa-pj-bKg">
+                                        <rect key="frame" x="0.0" y="0.0" width="918" height="580"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <subviews>
+                                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" indicatorStyle="black" editable="NO" id="r0F-hZ-xhR">
+                                                <rect key="frame" x="0.0" y="1" width="918" height="406"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <accessibility key="accessibilityConfiguration">
+                                                    <accessibilityTraits key="traits" none="YES" staticText="YES"/>
+                                                </accessibility>
+                                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
+                                                <fontDescription key="fontDescription" name="Verdana" family="Verdana" pointSize="41"/>
+                                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                            </textView>
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="INK-Md-PxY">
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            </imageView>
+                                        </subviews>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    </view>
+                                </subviews>
+                            </scrollView>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bouncesZoom="NO" editable="NO" text="De Postduif Berichten" textAlignment="center" id="FBb-ye-gUp">
+                                <rect key="frame" x="53" y="20" width="918" height="169"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <accessibility key="accessibilityConfiguration">
                                     <accessibilityTraits key="traits" none="YES" staticText="YES"/>
@@ -222,61 +217,37 @@
                                 <fontDescription key="fontDescription" name="Verdana-Bold" family="Verdana" pointSize="50"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" indicatorStyle="black" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9oo-Y4-Yoo" customClass="MessagesContentTextView" customModule="PostDuif" customModuleProvider="target">
-                                <rect key="frame" x="65" y="171" width="897" height="634"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <accessibility key="accessibilityConfiguration">
-                                    <accessibilityTraits key="traits" none="YES" staticText="YES"/>
-                                </accessibility>
-                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
-                                <fontDescription key="fontDescription" name="Verdana" family="Verdana" pointSize="41"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                            </textView>
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
                         <connections>
-                            <outlet property="messageContent" destination="9oo-Y4-Yoo" id="eya-8x-c6j"/>
-                            <outlet property="messageTitle" destination="s7c-hv-9b1" id="7e0-t0-5sI"/>
+                            <outlet property="contentView" destination="SHa-pj-bKg" id="ZhI-Cv-zLY"/>
+                            <outlet property="messageContent" destination="r0F-hZ-xhR" id="LKI-f2-Jjl"/>
+                            <outlet property="messageTitle" destination="FBb-ye-gUp" id="CZf-N9-f40"/>
+                            <outlet property="personalPicture" destination="INK-Md-PxY" id="kdn-og-g8k"/>
+                            <outlet property="scroller" destination="KRD-zT-0sm" id="6gU-yd-XAq"/>
                         </connections>
                     </view>
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="iPad"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                     <connections>
                         <outlet property="messagesView" destination="NNI-RT-57s" id="Gfi-zy-UVM"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8w3-GO-ya5" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1041" y="2196"/>
+            <point key="canvasLocation" x="-1333" y="3747"/>
         </scene>
         <!--Club News View Controller-->
         <scene sceneID="jv3-FC-hB9">
             <objects>
                 <viewController id="wr6-Jw-M9H" customClass="ClubNewsViewController" customModule="PostDuif" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="ZvY-a6-K53"/>
-                        <viewControllerLayoutGuide type="bottom" id="fCd-md-Wdc"/>
-                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="tFa-R9-zSC" customClass="ClubNewsView" customModule="PostDuif" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" bouncesZoom="NO" editable="NO" text="De PostDuif Krant" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="43E-vF-58H">
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="55"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                            </textView>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" indicatorStyle="black" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="elG-D6-fPn">
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <accessibility key="accessibilityConfiguration">
-                                    <accessibilityTraits key="traits" none="YES" staticText="YES"/>
-                                </accessibility>
-                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
-                                <fontDescription key="fontDescription" type="system" pointSize="46"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                            </textView>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" bouncesZoom="NO" editable="NO" text="De Postduif Clubnews" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="5B3-7s-aBz">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bouncesZoom="NO" editable="NO" text="De Postduif Clubnews" textAlignment="center" id="EW3-gl-2or">
                                 <rect key="frame" x="64" y="20" width="897" height="160"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <accessibility key="accessibilityConfiguration">
                                     <accessibilityTraits key="traits" none="YES" staticText="YES"/>
@@ -284,8 +255,9 @@
                                 <fontDescription key="fontDescription" name="Verdana-Bold" family="Verdana" pointSize="50"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" indicatorStyle="black" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9nq-E5-mw8" customClass="ClubNewsContentTextView" customModule="PostDuif" customModuleProvider="target">
-                                <rect key="frame" x="64" y="180" width="897" height="588"/>
+                            <textView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" scrollEnabled="NO" indicatorStyle="black" editable="NO" id="MxB-E1-d9N" customClass="ClubNewsContentTextView" customModule="PostDuif" customModuleProvider="target">
+                                <rect key="frame" x="64" y="179" width="897" height="602"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <accessibility key="accessibilityConfiguration">
                                     <accessibilityTraits key="traits" none="YES" staticText="YES"/>
@@ -297,12 +269,12 @@
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
                         <connections>
-                            <outlet property="clubNewsContent" destination="9nq-E5-mw8" id="fwB-gO-AGe"/>
-                            <outlet property="clubNewsTitle" destination="5B3-7s-aBz" id="AF9-H9-NnP"/>
+                            <outlet property="clubNewsContent" destination="MxB-E1-d9N" id="gAI-df-F9g"/>
+                            <outlet property="clubNewsTitle" destination="EW3-gl-2or" id="AyP-JH-reD"/>
                         </connections>
                     </view>
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="iPad"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                     <connections>
                         <outlet property="ClubNewsView" destination="tFa-R9-zSC" id="gbv-vp-rmo"/>
                         <outlet property="clubNewsView" destination="tFa-R9-zSC" id="pkK-QU-qmH"/>
@@ -310,27 +282,19 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2A1-hh-LWW" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="492" y="2196"/>
+            <point key="canvasLocation" x="629.75999999999999" y="3747.8400000000001"/>
         </scene>
         <!--News Message View Controller-->
         <scene sceneID="AoU-hG-IqT">
             <objects>
                 <viewController id="rnV-cY-8Ma" customClass="NewsMessageViewController" customModule="PostDuif" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="Fir-aT-SX7"/>
-                        <viewControllerLayoutGuide type="bottom" id="WhL-z7-NLA"/>
-                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="aPe-By-v3p" customClass="NewsMessageView" customModule="PostDuif" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" bouncesZoom="NO" editable="NO" text="De PostDuif Krant" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="M29-2C-fUd">
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="55"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                            </textView>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" indicatorStyle="black" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cHg-tL-bd8" customClass="NewsMessagesContentTextView" customModule="PostDuif" customModuleProvider="target">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" indicatorStyle="black" editable="NO" id="cHg-tL-bd8" customClass="NewsMessagesContentTextView" customModule="PostDuif" customModuleProvider="target">
                                 <rect key="frame" x="60" y="201" width="897" height="567"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <accessibility key="accessibilityConfiguration">
                                     <accessibilityTraits key="traits" none="YES" staticText="YES"/>
@@ -339,13 +303,9 @@
                                 <fontDescription key="fontDescription" name="Verdana" family="Verdana" pointSize="41"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" bouncesZoom="NO" editable="NO" text="De PostDuif Krant" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="LWl-f7-DsQ">
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="55"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                            </textView>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" bouncesZoom="NO" editable="NO" text="De PostDuif Krant" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="sgz-ui-COj">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bouncesZoom="NO" editable="NO" text="De PostDuif Krant" textAlignment="center" id="sgz-ui-COj">
                                 <rect key="frame" x="60" y="20" width="897" height="183"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <accessibility key="accessibilityConfiguration">
                                     <accessibilityTraits key="traits" none="YES" staticText="YES"/>
@@ -361,18 +321,23 @@
                         </connections>
                     </view>
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="iPad"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                     <connections>
                         <outlet property="newsMessagesView" destination="aPe-By-v3p" id="msX-ng-kjA"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yZM-7d-gVd" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1740" y="2196"/>
+            <point key="canvasLocation" x="2227.2000000000003" y="3747.8400000000001"/>
         </scene>
     </scenes>
     <resources>
         <image name="Login-50" width="50" height="50"/>
         <image name="Vliegende_postduif" width="300" height="425"/>
     </resources>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination"/>
+    </simulatedMetricsContainer>
 </document>

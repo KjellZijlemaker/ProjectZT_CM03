@@ -19,6 +19,14 @@ class Item{
     private var type: String
     private var publishDate: String
     private var read: Bool
+    
+    // Only for attachments
+    private var attachment: String
+    private var attachmentDescription: String
+    
+    // Only for clubs
+    private var clubType: String
+    private var clubName: String
 
     init(){
         self.id = ""
@@ -30,6 +38,14 @@ class Item{
         self.type = ""
         self.publishDate = ""
         self.read = false
+        
+        // Only for attachments
+        self.attachment = ""
+        self.attachmentDescription = ""
+        
+        // Only for clubs
+        self.clubType = ""
+        self.clubName = ""
     }
     
     func setID(id: String){
@@ -104,6 +120,37 @@ class Item{
         self.read = read
     }
 
+    func setAttachment(attachment: String){
+        self.attachment = attachment
+    }
+    
+    func getAttachment() -> String{
+        return self.attachment
+    }
+    
+    func setAttachmentDescription(attachmentDescription: String){
+        self.attachmentDescription = attachmentDescription
+    }
+    
+    func getAttachmentDescription() -> String{
+        return self.attachmentDescription
+    }
+    
+    func setClubType(clubType: String){
+        self.clubType = clubType
+    }
+    
+    func getClubType() -> String{
+        return self.clubType
+    }
+    
+    func setClubName(clubName: String){
+        self.clubName = clubName
+    }
+    
+    func getClubName() -> String{
+        return self.clubName
+    }
 
     
 }

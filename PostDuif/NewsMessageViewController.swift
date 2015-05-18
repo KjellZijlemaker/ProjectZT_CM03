@@ -39,7 +39,7 @@ class NewsMessageViewController: UIViewController, newsMessagesDelegate {
         self.newsMessagesView.setContentBackground(self.userSettings.getSecondaryColorType())
 
         if(!UIAccessibilityIsVoiceOverRunning() && self.userSettings.isSpeechEnabled()){
-            var carouselSpeechHelper = CarouselSpeechHelper(speech: self.speech)
+            var carouselSpeechHelper = CarouselSpeechHelper(speech: self.speech, userSettings: self.userSettings)
             carouselSpeechHelper.speechNewsMessageItem(self.news)
         }
         
@@ -68,7 +68,7 @@ class NewsMessageViewController: UIViewController, newsMessagesDelegate {
         if (motion == .MotionShake) {
             self.userDelegate.getUserSettings(self.userDelegate.token.getToken(), updateSettings: true)
             if(self.userSettings.isNotificationSoundEnabled()){
-                var carouselSpeechHelper = CarouselSpeechHelper()
+                var carouselSpeechHelper = CarouselSpeechHelper(speech: self.speech, userSettings: self.userSettings)
                 
                 // Setting the color and backround again
                 self.newsMessagesView.setFontColor(self.userSettings.getPrimaryColorType())

@@ -35,7 +35,6 @@ class DataManager{
                             var type: String = messages["type"].stringValue
                             if(type == "1"){
                                 
-                                
                                 // Making new Message object
                                 var newMessage = Item()
                                 
@@ -64,6 +63,16 @@ class DataManager{
                                 
                                 var publishDate: String = messages["addedDate"].stringValue
                                 newMessage.setPublishDate(publishDate)
+                                
+                                var attachment: String = messages["attachment"]["attachment_0"]["filekey"].stringValue
+                                if(attachment != ""){
+                                    newMessage.setAttachment(attachment)
+                                }
+                                
+                                var attachmentDescription: String = messages["attachment"]["attachment_0"]["fileDescription"].stringValue
+                                if(attachmentDescription != ""){
+                                    newMessage.setAttachmentDescription(attachmentDescription)
+                                }
                                 
                                 // Append the app names
                                 messageArray.append(newMessage)
@@ -130,6 +139,12 @@ class DataManager{
                                 
                                 var publishDate: String = messages["addedDate"].stringValue
                                 newMessage.setPublishDate(publishDate)
+                                
+                                var clubType: String = messages["clubType"].stringValue
+                                newMessage.setClubType(clubType)
+                                
+                                var clubName: String = messages["clubName"].stringValue
+                                newMessage.setClubName(clubName)
                                 
                                 // Append the app names
                                 messageArray.append(newMessage)

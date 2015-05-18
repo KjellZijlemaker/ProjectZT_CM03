@@ -50,7 +50,7 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
     var token: Token = Token()
     
     //# MARK: Helpers for Carousel
-    var carouselSpeechHelper = CarouselSpeechHelper()
+    var carouselSpeechHelper: CarouselSpeechHelper!
     var carouselAccessibilityHelper = CarouselAccessibilityHelper()
     
     //# MARK: Sounds for inside the Carousel
@@ -94,6 +94,7 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
         self.carousel.type = .Custom
         self.carousel.scrollEnabled = false
         self.carousel.isAccessibilityElement = false
+        self.carouselSpeechHelper = CarouselSpeechHelper(userSettings: self.userSettings) // Singleton carouselSpeechHelper
         self.carouselSpeechHelper.delegate = self
         
         let logoutButton = LogoutButton().showLogoutButton()
@@ -145,15 +146,9 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
         swipeDown.direction = UISwipeGestureRecognizerDirection.Down
         self.view.addGestureRecognizer(swipeDown)
         
-        let doubleTap = UITapGestureRecognizer(target: self, action:Selector("doubleTapped"))
-        doubleTap.numberOfTapsRequired = 1
-//
-//        if(UIAccessibilityIsVoiceOverRunning()){
-//        }
-//        else{
-//            doubleTap.numberOfTapsRequired = 2
-//        }
-        self.view.addGestureRecognizer(doubleTap)
+        let singleTap = UITapGestureRecognizer(target: self, action:Selector("singleTapped"))
+        singleTap.numberOfTapsRequired = 1
+        self.view.addGestureRecognizer(singleTap)
         
         self.setupBackgroundForegroundInit()
         self.setupAppendingTimer() // Timer for checking new items may execute
@@ -193,7 +188,7 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
     //=================================================================================================
     
     //------------Dubble tap method for opening new view--------------//
-    func doubleTapped(){
+    func singleTapped(){
         
         if(!self.items.isEmpty){
             self.carouselSpeechHelper.getSpeech().stopSpeech()
@@ -225,7 +220,9 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
         }
         // Last item has been reached
         if(self.carousel.currentItemIndex == 0){
-            self.carouselEndSound.playSound()
+            if(self.userSettings.isEndOfMessageSoundEffectEnabled()){
+                self.carouselEndSound.playSound()
+            }
         }
         // Remove the dot when present
         if(self.notificationDot.isAnimating()){
@@ -248,7 +245,9 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
         }
         // Last item has been reached
         if(self.carousel.currentItemIndex == self.carousel.numberOfItems-1){
-            self.carouselEndSound.playSound()
+            if(self.userSettings.isEndOfMessageSoundEffectEnabled()){
+                self.carouselEndSound.playSound()
+            }
         }
         // Remove the dot when present
         if(self.notificationDot.isAnimating()){
@@ -594,9 +593,9 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                 self.categoryView.nextItemAnimate(UIColor.yellowColor())
                 
             case "3":
-                self.categoryView.setCategoryTypeLabel("Club of Organisatiebericht")
-                if(self.items[index].getCategory() != ""){
-                    self.categoryView.setCategoryTypeCategoryViewLabel(self.items[index].getCategory())
+                self.categoryView.setCategoryTypeLabel(self.items[index].getClubType() + "-bericht")
+                if(self.items[index].getClubName() != ""){
+                    self.categoryView.setCategoryTypeCategoryViewLabel(self.items[index].getClubName())
                 }
                 else{
                     self.categoryView.setCategoryTypeCategoryViewLabel("")
@@ -756,12 +755,12 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
             }
             
             // Speech the new items and make it accessible
-            if(self.userSettings.isSpeechEnabled()){
+            if(self.userSettings.isHintSupportSoundEnabled()){
                 self.carouselSpeechHelper.speechTotalItemsAvailable(self.messagesCount, clubNewsCount: self.clubNewsCount, newsCount: self.newsCount) // Speech total of items
-                UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification,
-                    self.categoryView); // Set the accessibillity view back to the categoryview so user can interact with carousel
-                self.carouselCurrentItemIndexDidChange(self.carousel)
             }
+            UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification,
+                self.categoryView); // Set the accessibillity view back to the categoryview so user can interact with carousel
+            self.carouselCurrentItemIndexDidChange(self.carousel)
             
         }
     }
@@ -941,7 +940,7 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                         }
                     }
                     
-                    if(self.userSettings.isSpeechEnabled()){
+                    if(self.userSettings.isHintSupportSoundEnabled()){
                         
                         // Seepching total of items
                         self.carouselSpeechHelper.speechTotalItemsAvailable(self.messagesCount, clubNewsCount: self.clubNewsCount, newsCount: self.newsCount)

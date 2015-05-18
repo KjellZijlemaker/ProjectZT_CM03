@@ -17,16 +17,17 @@ class MessageContentViewController: UIViewController, messagesDelegate {
     var openendMessage: messageOpenend!
     var userDelegate: userManagerDelegate!
     
+    
     @IBOutlet var messagesView: MessagesView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
         // Setup view
         self.messagesView.delegate = self
         self.messagesView.setupTitle()
         self.messagesView.setupContent()
-        self.messagesView.setupSwiping()
     
         // Setting the text
         self.messagesView.setTitleText(self.message.getSubject())
@@ -34,12 +35,17 @@ class MessageContentViewController: UIViewController, messagesDelegate {
         
         // Setting the color and backround
         self.messagesView.setFontColor(self.userSettings.getPrimaryColorType())
+        self.messagesView.setFontSize(41.0)
         self.messagesView.setViewBackground("000000")
         self.messagesView.setTitleBackground(self.userSettings.getSecondaryColorType())
         self.messagesView.setContentBackground(self.userSettings.getSecondaryColorType())
         
+        self.messagesView.setupPicture(self.message.getAttachment(), attachmentDescription: self.message.getAttachmentDescription())
+        
+        self.messagesView.setupSwiping()
+        
         if(!UIAccessibilityIsVoiceOverRunning() && self.userSettings.isSpeechEnabled()){
-            var carouselSpeechHelper = CarouselSpeechHelper(speech: self.speech)
+            var carouselSpeechHelper = CarouselSpeechHelper(speech: self.speech, userSettings: self.userSettings)
             carouselSpeechHelper.speechMessageItem(self.message)
         }
     }
@@ -71,7 +77,7 @@ class MessageContentViewController: UIViewController, messagesDelegate {
         if (motion == .MotionShake) {
             self.userDelegate.getUserSettings(self.userDelegate.token.getToken(), updateSettings: true)
             if(self.userSettings.isNotificationSoundEnabled()){
-                var carouselSpeechHelper = CarouselSpeechHelper()
+                var carouselSpeechHelper = CarouselSpeechHelper(speech: self.speech, userSettings: self.userSettings)
                 
                 // Setting the color and backround again
                 self.messagesView.setFontColor(self.userSettings.getPrimaryColorType())

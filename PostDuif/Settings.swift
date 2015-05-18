@@ -11,6 +11,9 @@ import Foundation
 class Settings{
     
     private var notificationSoundEnabled: Bool
+    private var endOfMessageSoundEffectEnabled: Bool
+    private var totalNewMessageSoundEnabled: Bool
+    private var hintSupportSoundEnabled: Bool
     private var privateMessageLimit: Int
     private var userSpeech: Bool
     private var newsMessageLimit: Int
@@ -25,6 +28,9 @@ class Settings{
    // init
     init(){
         self.notificationSoundEnabled = true
+        self.endOfMessageSoundEffectEnabled = true
+        self.totalNewMessageSoundEnabled = true
+        self.hintSupportSoundEnabled = true
         self.privateMessageLimit = 10
         self.userSpeech = true
         self.newsMessageLimit = 10
@@ -123,4 +129,28 @@ class Settings{
         return self.newsMessagesStoreMaxSeconds
     }
 
+    func hasEndOfMessageSoundEffectEnabled(endOfMessageSoundEffectEnabled: Bool){
+        self.endOfMessageSoundEffectEnabled = endOfMessageSoundEffectEnabled
+    }
+    
+    func isEndOfMessageSoundEffectEnabled() -> Bool{
+        return self.endOfMessageSoundEffectEnabled
+    }
+    func hasTotalNewMessageSoundEnabled(totalNewMessageSoundEnabled: Bool){
+        self.totalNewMessageSoundEnabled = totalNewMessageSoundEnabled
+    }
+    
+    func isTotalNewMessageSoundEnabled() -> Bool{
+        return self.totalNewMessageSoundEnabled
+    }
+    
+    func hasHintSupportSoundEnabled(hintSupportSoundEnabled: Bool){
+        self.hintSupportSoundEnabled = hintSupportSoundEnabled
+    }
+    
+    func isHintSupportSoundEnabled() -> Bool{
+        return self.hintSupportSoundEnabled
+    }
+    
+    
 }

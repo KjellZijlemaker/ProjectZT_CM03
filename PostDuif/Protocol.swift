@@ -32,9 +32,6 @@ protocol clubNewsDelegate{
     var speech:SpeechManager!{
         get set
     }
-    var userSettings: Settings!{
-        get set
-    }
     func dismissController()
     
 }
@@ -43,7 +40,11 @@ protocol messagesDelegate{
     var speech:SpeechManager!{
         get set
     }
-    var userSettings: Settings!{
+    func dismissController()
+}
+
+protocol newsMessagesDelegate{
+    var speech:SpeechManager!{
         get set
     }
     func dismissController()
@@ -67,16 +68,6 @@ protocol clubNewsContentTextViewDelegate{
     }
 }
 
-protocol newsMessagesDelegate{
-    var speech:SpeechManager!{
-        get set
-    }
-    var userSettings: Settings!{
-        get set
-    }
-    func dismissController()
-}
-
 protocol loginDelegate{
     func sendLoginRequest(String)
 }
@@ -91,9 +82,6 @@ protocol carouselDelegate{
     func setCategoryType(index: Int, isEmpty: Bool)
     func appendAppData(type: String, showLoadingScreen: Bool)
     var firstItem:Bool{
-        get set
-    }
-    var userSettings: Settings{
         get set
     }
     var items:[Item]{

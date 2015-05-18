@@ -11,31 +11,41 @@
             <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="PostDuif" textAlignment="center" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" minimumFontSize="18" translatesAutoresizingMaskIntoConstraints="NO" id="kId-c2-rCX">
-                    <rect key="frame" x="20" y="53" width="985" height="43"/>
-                    <fontDescription key="fontDescription" type="boldSystem" pointSize="36"/>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Vliegende_postduif" translatesAutoresizingMaskIntoConstraints="NO" id="IUQ-zV-K6Q">
+                    <rect key="frame" x="322" y="141" width="380" height="429"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="380" id="R9D-Qx-ndq"/>
+                    </constraints>
+                </imageView>
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="  Copyright Visio (c) 2015 Alle rechten gereserveerd" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="8ie-xW-0ye">
+                    <rect key="frame" x="20" y="726" width="985" height="21"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="21" id="93a-yT-uO0"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="Vliegende_postduif" translatesAutoresizingMaskIntoConstraints="NO" id="IUQ-zV-K6Q">
-                    <rect key="frame" x="322" y="141" width="380" height="429"/>
-                </imageView>
-                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="  Copyright (c) 2015 All rights reserved." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="8ie-xW-0ye">
-                    <rect key="frame" x="20" y="726" width="985" height="20.5"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Visio PostDuif Applicatie" textAlignment="center" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" minimumFontSize="18" translatesAutoresizingMaskIntoConstraints="NO" id="kId-c2-rCX">
+                    <rect key="frame" x="20" y="51" width="985" height="43"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="43" id="t5t-Qq-Po1"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="boldSystem" pointSize="36"/>
                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                     <nil key="highlightedColor"/>
                 </label>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstItem="8ie-xW-0ye" firstAttribute="top" secondItem="IUQ-zV-K6Q" secondAttribute="bottom" constant="156" id="3M7-eo-ZHK"/>
-                <constraint firstItem="IUQ-zV-K6Q" firstAttribute="top" secondItem="kId-c2-rCX" secondAttribute="bottom" constant="18" id="5AI-Oy-TP8"/>
+                <constraint firstItem="IUQ-zV-K6Q" firstAttribute="top" secondItem="kId-c2-rCX" secondAttribute="bottom" constant="47" id="5AI-Oy-TP8"/>
+                <constraint firstItem="8ie-xW-0ye" firstAttribute="trailing" secondItem="kId-c2-rCX" secondAttribute="trailing" id="E1O-hk-h00"/>
                 <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="8ie-xW-0ye" secondAttribute="bottom" constant="20.5" id="EiJ-Xf-rlF"/>
-                <constraint firstAttribute="centerX" secondItem="8ie-xW-0ye" secondAttribute="centerX" constant="-0.5" id="H8N-on-DaF"/>
+                <constraint firstItem="kId-c2-rCX" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="51" id="IGS-us-52t"/>
                 <constraint firstAttribute="centerX" secondItem="kId-c2-rCX" secondAttribute="centerX" id="Koa-jz-hwk"/>
+                <constraint firstAttribute="bottom" secondItem="8ie-xW-0ye" secondAttribute="bottom" constant="21" id="Ksd-6l-y4Q"/>
                 <constraint firstItem="8ie-xW-0ye" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="20" symbolic="YES" id="MfP-vx-nX0"/>
-                <constraint firstAttribute="centerY" secondItem="IUQ-zV-K6Q" secondAttribute="centerY" constant="-16.5" id="WRu-Pf-ISl"/>
+                <constraint firstAttribute="centerY" secondItem="IUQ-zV-K6Q" secondAttribute="centerY" constant="28.5" id="WRu-Pf-ISl"/>
                 <constraint firstItem="kId-c2-rCX" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="20" symbolic="YES" id="fvb-Df-36g"/>
                 <constraint firstAttribute="centerX" secondItem="IUQ-zV-K6Q" secondAttribute="centerX" id="q32-lf-eUT"/>
             </constraints>

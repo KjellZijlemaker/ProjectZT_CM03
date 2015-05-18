@@ -31,10 +31,9 @@
 		21370BCD1AC494DA0063777D /* Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21370BCC1AC494DA0063777D /* Token.swift */; };
 		213CD1421AC815E200B27EA1 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213CD13F1AC815E200B27EA1 /* Keychain.swift */; };
 		214C55DA1AA9E71200555A56 /* MessageContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214C55D91AA9E71200555A56 /* MessageContentViewController.swift */; };
+		2156D89B1B08B117005803AC /* MessagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2156D89A1B08B117005803AC /* MessagesView.swift */; };
 		2163769B1AC34A77004056AC /* Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2163769A1AC34A77004056AC /* Protocol.swift */; };
 		217BF9FF1AF4D0A500206C2D /* CarouselDataHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 217BF9FE1AF4D0A500206C2D /* CarouselDataHelper.swift */; };
-		2184A8E51B04A39B000AD20F /* MessagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2184A8E41B04A39B000AD20F /* MessagesView.swift */; };
-		2184A8E71B04A3B5000AD20F /* MessagesContentTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2184A8E61B04A3B5000AD20F /* MessagesContentTextView.swift */; };
 		2184A8E91B04FE95000AD20F /* ClubNewsContentTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2184A8E81B04FE95000AD20F /* ClubNewsContentTextView.swift */; };
 		2184A8EB1B04FEA4000AD20F /* NewsMessagesContentTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2184A8EA1B04FEA4000AD20F /* NewsMessagesContentTextView.swift */; };
 		2186417E1AC31A430084AE46 /* SpeechManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2186417D1AC31A430084AE46 /* SpeechManager.swift */; };
@@ -99,10 +98,9 @@
 		213CD13F1AC815E200B27EA1 /* Keychain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
 		213CD1401AC815E200B27EA1 /* KeychainAccess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeychainAccess.h; sourceTree = "<group>"; };
 		214C55D91AA9E71200555A56 /* MessageContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageContentViewController.swift; sourceTree = "<group>"; };
+		2156D89A1B08B117005803AC /* MessagesView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessagesView.swift; sourceTree = "<group>"; };
 		2163769A1AC34A77004056AC /* Protocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Protocol.swift; sourceTree = "<group>"; };
 		217BF9FE1AF4D0A500206C2D /* CarouselDataHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarouselDataHelper.swift; sourceTree = "<group>"; };
-		2184A8E41B04A39B000AD20F /* MessagesView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessagesView.swift; sourceTree = "<group>"; };
-		2184A8E61B04A3B5000AD20F /* MessagesContentTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessagesContentTextView.swift; sourceTree = "<group>"; };
 		2184A8E81B04FE95000AD20F /* ClubNewsContentTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClubNewsContentTextView.swift; sourceTree = "<group>"; };
 		2184A8EA1B04FEA4000AD20F /* NewsMessagesContentTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewsMessagesContentTextView.swift; sourceTree = "<group>"; };
 		2186417D1AC31A430084AE46 /* SpeechManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpeechManager.swift; sourceTree = "<group>"; };
@@ -316,8 +314,7 @@
 		21CCF72C1ADD5C1000C64170 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				2184A8E61B04A3B5000AD20F /* MessagesContentTextView.swift */,
-				2184A8E41B04A39B000AD20F /* MessagesView.swift */,
+				2156D89A1B08B117005803AC /* MessagesView.swift */,
 				21CCF72D1ADD5C2B00C64170 /* LogoutButton.swift */,
 				21CCF72F1ADD6F7200C64170 /* NotificationText.swift */,
 				21CCF7311ADD7A9C00C64170 /* NotificationDot.swift */,
@@ -473,6 +470,7 @@
 				2131ECA51AB9801B005F844A /* Settings.swift in Sources */,
 				212AE9101AA9CE4D000255E8 /* ViewController.swift in Sources */,
 				212750181AC979FC005D6A7F /* SoundManager.swift in Sources */,
+				2156D89B1B08B117005803AC /* MessagesView.swift in Sources */,
 				218E07451AED1C6D00FA8B51 /* NewsMessagesView.swift in Sources */,
 				211A74191AC5856C004517E8 /* SIAlertView.m in Sources */,
 				21CCF7301ADD6F7200C64170 /* NotificationText.swift in Sources */,
@@ -482,7 +480,6 @@
 				212AE90E1AA9CE4D000255E8 /* AppDelegate.swift in Sources */,
 				211A74111AC581CB004517E8 /* MBProgressHUD.m in Sources */,
 				21A950541AE3BB03002CF761 /* CategoryTypeView.swift in Sources */,
-				2184A8E51B04A39B000AD20F /* MessagesView.swift in Sources */,
 				2163769B1AC34A77004056AC /* Protocol.swift in Sources */,
 				210310EF1AE76D8100C5AC73 /* ClubNewsViewController.swift in Sources */,
 				2184A8E91B04FE95000AD20F /* ClubNewsContentTextView.swift in Sources */,
@@ -494,7 +491,6 @@
 				211A741A1AC5856C004517E8 /* UIWindow+SIUtils.m in Sources */,
 				213CD1421AC815E200B27EA1 /* Keychain.swift in Sources */,
 				2184A8EB1B04FEA4000AD20F /* NewsMessagesContentTextView.swift in Sources */,
-				2184A8E71B04A3B5000AD20F /* MessagesContentTextView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

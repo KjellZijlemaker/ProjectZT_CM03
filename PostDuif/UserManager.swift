@@ -95,6 +95,34 @@ class UserManager{
                                 newSettings.hasNotificationSoundEnabled(false)
                             }
                             
+                            // Set endOfMessageSoundEffect
+                            var endOfMessageSoundEffect: String = settings["endOfMessageSoundEffectEnabled"].stringValue
+                            if(endOfMessageSoundEffect == "true"){
+                                newSettings.hasEndOfMessageSoundEffectEnabled(true)
+                            }
+                            else{
+                                newSettings.hasEndOfMessageSoundEffectEnabled(false)
+                            }
+
+                            
+                            // Set totalNewMessageSoundEnabled
+                            var totalNewMessageSoundEnabled: String = settings["totalNewMessageSoundEnabled"].stringValue
+                            if(totalNewMessageSoundEnabled == "true"){
+                                newSettings.hasTotalNewMessageSoundEnabled(true)
+                            }
+                            else{
+                                newSettings.hasTotalNewMessageSoundEnabled(false)
+                            }
+                            
+                            // Set HintSupportSoundEnabled
+                            var hintSupportSoundEnabled: String = settings["isHintSupportSoundEnabled"].stringValue
+                            if(hintSupportSoundEnabled == "true"){
+                                newSettings.hasHintSupportSoundEnabled(true)
+                            }
+                            else{
+                                newSettings.hasHintSupportSoundEnabled(false)
+                            }
+                            println(newSettings.isHintSupportSoundEnabled())
                             // Set message limit
                             var privateMessageLimit: String = settings["ShowPrivateMessageLimit"].stringValue
                             newSettings.setPrivateMessageLimit(privateMessageLimit.toInt()!)
@@ -151,6 +179,12 @@ class UserManager{
                             completion(response: test1)
                             }
                             */
+                            
+                            println(newSettings.isEndOfMessageSoundEffectEnabled())
+                            println(newSettings.isTotalNewMessageSoundEnabled())
+                            println(newSettings.isHintSupportSoundEnabled())
+                            
+
                             
                             settingsArray.append(newSettings)
                             
