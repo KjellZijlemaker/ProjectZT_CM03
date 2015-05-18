@@ -442,6 +442,7 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
         //in the wrong place in the carousel
         label.text = "\(self.items[index].getSubject())"
         label.isAccessibilityElement = false
+        
         (view as UIImageView!).image = self.pictures[index]
         return view
     }
@@ -526,7 +527,9 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
         
         switch(self.items[index].getType()){
         case "1":
-            pictures.append(UIImage(named:"message.jpg"))
+            pictures.append(UIImage(named:"emptyField.jpg"))
+            var profilePicture :UIImageView
+            self.setupProfilePicture(index, urlString: self.items[index].getFromUserProfilePictureURL())
             
         case "2":
             pictures.append(UIImage(named:"news.jpg"))
@@ -540,12 +543,43 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
         
     }
     
+    
+    // Setting up new picture and description
+    func setupProfilePicture(index: Int, urlString: String){
+        var newUrlString = "http://84.107.107.169:8080/VisioWebApp/profile/image?fileNameKey=" + urlString
+        var imgURL: NSURL = NSURL(string: newUrlString)!
+        let request: NSURLRequest = NSURLRequest(URL: imgURL)
+        
+        // Make request to get new data (picture)
+        NSURLConnection.sendAsynchronousRequest(
+            request, queue: NSOperationQueue.mainQueue(),
+            completionHandler: {(response: NSURLResponse!,data: NSData!,error: NSError!) -> Void in
+                
+                // Getting the width / height from picture
+                var imageWidth: CGFloat!
+                var imageHeight: CGFloat!
+                if error == nil {
+                    self.removeImage(index)
+                    self.pictures.insert(UIImage(data: data), atIndex: index)
+                    self.carousel.reloadItemAtIndex(index, animated: false)
+                   // profilePicture.image = UIImage(data: data) // Getting picture
+//                    imageWidth = profilePicture.image?.size.width
+//                    imageHeight = profilePicture.image?.size.height
+                    
+                     //profilePicture.frame = CGRectMake(100, 100 , imageWidth, imageHeight) // Making the new size of the picture frame
+                   // self.pictures.append(profilePicture.image)
+
+                }
+        })
+        
+    }
+    
     // Appending the image per index inside the carousel
     func appendImage(index: Int){
         switch(self.items[index].getType()){
             
         case "1":
-            pictures.insert(UIImage(named:"message.jpg"), atIndex: index)
+            pictures.insert(UIImage(named:"emptyField.jpg"), atIndex: index)
             println(index)
         case "2":
             pictures.insert(UIImage(named:"news.jpg"), atIndex: index)
@@ -914,8 +948,9 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                             
                             // Setting the right images for each category
                             self.setImages(i)
-                            
+
                             self.carousel.insertItemAtIndex(i, animated: true) // Insert items at last index
+                            
                             if(self.messagesCount == self.userSettings.getPrivateMessageLimit()){
                                 break
                             }

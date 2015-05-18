@@ -15,10 +15,13 @@ class Item{
     private var content: String
     private var category: String
     private var returnCode: String
-    private var fromUser: String
     private var type: String
     private var publishDate: String
     private var read: Bool
+    
+    // Only for messages
+    private var fromUser: String
+    private var fromUserProfilePictureURL: String
     
     // Only for attachments
     private var attachment: String
@@ -34,10 +37,13 @@ class Item{
         self.content = ""
         self.category = ""
         self.returnCode = ""
-        self.fromUser = ""
         self.type = ""
         self.publishDate = ""
         self.read = false
+        
+        // Only for messages
+        self.fromUser = ""
+        self.fromUserProfilePictureURL = ""
         
         // Only for attachments
         self.attachment = ""
@@ -94,6 +100,14 @@ class Item{
     
     func getFromUser() -> String{
         return self.fromUser
+    }
+    
+    func setFromUserProfilePictureURL(url: String){
+        self.fromUserProfilePictureURL = url
+    }
+    
+    func getFromUserProfilePictureURL() -> String{
+        return self.fromUserProfilePictureURL
     }
     
     func setType(type: String){

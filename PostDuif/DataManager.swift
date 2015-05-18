@@ -74,6 +74,11 @@ class DataManager{
                                     newMessage.setAttachmentDescription(attachmentDescription)
                                 }
                                 
+                                // Set the profile picture
+                                var fromUserProfilePictureURL: String = messages["fromUserProfilePictureURL"].stringValue
+                                newMessage.setFromUserProfilePictureURL(fromUserProfilePictureURL)
+                                
+                                
                                 // Append the app names
                                 messageArray.append(newMessage)
                                 
