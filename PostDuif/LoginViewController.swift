@@ -69,7 +69,7 @@ class LoginViewController: UIViewController, loginDelegate {
                 
             }
             else{
-                var error = "Er is iets misgegaan met uw toeganscode of gebruikersnaam"
+                var error = "Uw toegangscode of gebruikersnaam is onjuist. Probeer het opnieuw!"
                 var alert:SIAlertView  = SIAlertView(title: "Fout", andMessage: error)
                 alert.titleFont = UIFont(name: "Verdana", size: 30)
                 alert.messageFont = UIFont(name: "Verdana", size: 26)

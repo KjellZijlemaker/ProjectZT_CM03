@@ -12,9 +12,13 @@ class DataManager{
     
     
     class func getItems(apiEndPoint: String, completionHandler: (response: [Item]) -> ()) {
+        let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
+        configuration.timeoutIntervalForResource = 10 // seconds
+        
+        var alamofireManager = Manager(configuration: configuration)
         
         // Making GET request to the URL
-        request(.GET, apiEndPoint).responseJSON { (request, response, json, error) in
+        alamofireManager.request(.GET, apiEndPoint).responseJSON { (request, response, json, error) in
             println(apiEndPoint)
             
             // Making sure if the JSON is not empty
@@ -199,9 +203,13 @@ class DataManager{
     
     
     class func checkMessageRead(apiEndPoint: String, completionHandler: (response: String) -> ()) {
+        let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
+        configuration.timeoutIntervalForResource = 10 // seconds
+        
+        var alamofireManager = Manager(configuration: configuration)
         
         // Making GET request to the URL
-        request(.GET, apiEndPoint).responseJSON { (request, response, json, error) in
+        alamofireManager.request(.GET, apiEndPoint).responseJSON { (request, response, json, error) in
             if (json != nil) {
                 
                 // Making the JSON object from the JSON

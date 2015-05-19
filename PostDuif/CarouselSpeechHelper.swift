@@ -13,20 +13,34 @@ class CarouselSpeechHelper{
     private var userSettings:Settings!
     var delegate: carouselDelegate!
     
-    // If speech already exist
+    /**
+    Init for setting the speech and userSettings, when the speech already exists inside any other controller
+    
+    :param: speech Is the manager inside the controller
+    :param: userSettings Are the settings inside the controller
+    */
     init(speech: SpeechManager, userSettings: Settings){
         self.speech = speech
         self.userSettings = userSettings
     }
     
-    // SingleTon speechmanager
+    /**
+    Init for setting the speech and userSettings, when the speech does not exist inside any other controller
+    
+    :param: speech Is the manager inside the controller
+    :param: userSettings Are the settings inside the controller
+    */
     init(userSettings: Settings){
         self.speech = SpeechManager()
         self.userSettings = userSettings
     }
     
-    // Speech the current item inside the carousel
+    /**
+    Init for setting the speech and userSettings, when the speech already exists inside the viewController
     
+    :param: speech Is the manager inside the viewController
+    :param: userSettings Are the settings inside the viewController
+    */
     func carouselSpeechItem(){
         if (self.delegate.carousel.currentItemIndex == 0) {
             self.delegate.carousel.reloadData()

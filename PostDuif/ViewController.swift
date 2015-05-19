@@ -70,7 +70,6 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
         // If both tokens are empty, user has to login
         if(self.defaults.stringForKey("token") == nil || self.defaults.stringForKey("refreshToken") == nil){
             self.passToLogin = true
-            
         }
         else{
             // Getting the tokens
@@ -147,9 +146,6 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
         let singleTap = UITapGestureRecognizer(target: self, action:Selector("singleTapped"))
         singleTap.numberOfTapsRequired = 1
         self.view.addGestureRecognizer(singleTap)
-        
-        self.setupBackgroundForegroundInit()
-        self.setupAppendingTimer() // Timer for checking new items may execute
     }
     
     
@@ -172,12 +168,7 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
     override func motionEnded(motion: UIEventSubtype, withEvent event: UIEvent) {
         if(!self.messageIsOpenend){
             if (motion == .MotionShake) {
-                var isSuccessfullyExecuted = self.getUserSettings(self.token.getToken(), updateSettings: true)
-                if(isSuccessfullyExecuted){
-                    if(self.userSettings.isNotificationSoundEnabled()){
-                        self.carouselSpeechHelper.getSpeech().speechString("Instellingen bijgewerkt")
-                    }
-                }
+                self.getUserSettings(self.token.getToken(), updateSettings: true)
             }
         }
     }
@@ -527,9 +518,11 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
         
         switch(self.items[index].getType()){
         case "1":
-            pictures.append(UIImage(named:"emptyField.jpg"))
-            var profilePicture :UIImageView
-            self.setupProfilePicture(index, urlString: self.items[index].getFromUserProfilePictureURL())
+            pictures.append(UIImage(named:"message.jpg"))
+            
+            if(self.items[index].getFromUserProfilePictureURL() != ""){
+                self.setupProfilePicture(index, urlString: self.items[index].getFromUserProfilePictureURL())
+            }
             
         case "2":
             pictures.append(UIImage(named:"news.jpg"))
@@ -537,7 +530,7 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
         case "3":
             pictures.append(UIImage(named:"corp.jpg"))
         default:
-            pictures.append(UIImage(named:"message.jpg"))
+            pictures.append(UIImage(named:"emptyField.jpg"))
             
         }
         
@@ -856,10 +849,13 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
     //=================================================================================================
     
     // Function for getting the main app data and filling it into the array
-    func getUserSettings(tokenKey: String, updateSettings: Bool) -> Bool{
-        var isSuccessfullyExecuted = false
+    func getUserSettings(tokenKey: String, updateSettings: Bool){
         var url = "http://84.107.107.169:8080/VisioWebApp/API/clientSettings?tokenKey=" + tokenKey
         
+        if(!updateSettings){
+            self.setLoadingView("Gebruikers-instellingen laden...")
+        }
+    
         UserManager.getUserSettings(url){(settings) in
             
             // If the setting has a return code of 200, all went OK
@@ -883,17 +879,23 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                     self.carousel.backgroundColor = ColorHelper.UIColorFromRGB(self.userSettings.getSecondaryColorType())
                 }
                 
+
+                
                 // Execute only when getting settings for the first time
                 if(!updateSettings){
+                    self.setupBackgroundForegroundInit() // Setting the background foreground methods
+                    self.setupAppendingTimer() // Timer for checking new items may execute
                     self.token.hasRefreshToken(true) // For getting the messages
-                    
+                    MBProgressHUD.hideAllHUDsForView(self.view, animated: true) // Close notification
+
                     // Getting the app data and fill it in the global array
                     self.getAppData(self.token.getToken())
                 }
-                
-                isSuccessfullyExecuted = true
             }
             else if(settings.getReturnCode() == "400"){
+                if(!updateSettings){
+                    MBProgressHUD.hideAllHUDsForView(self.view, animated: true) // Close notification
+                }
                 if(self.token.isRefreshToken()){
                     self.token.hasRefreshToken(false)
                     self.getUserSettings("http://84.107.107.169:8080/VisioWebApp/API/clientSettings?tokenKey=" + self.token.getRefreshToken(), updateSettings: false)
@@ -902,12 +904,18 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                     // Send user back to login phase
                     self.goToLogin()
                 }
-                isSuccessfullyExecuted = false
             }
             else{
-                isSuccessfullyExecuted = false
-                var alert = self.setAlertView("Probleem", message: "Kon instellingen niet ophalen")
-                alert.addButtonWithTitle("OK", type: SIAlertViewButtonType.Default, handler:{ (ACTION :SIAlertView!)in
+                if(!updateSettings){
+                    MBProgressHUD.hideAllHUDsForView(self.view, animated: true) // Close notification
+                }
+                var alert = self.setAlertView("Probleem", message: "Kon instellingen niet ophalen. Wil je het opnieuw proberen?")
+                alert.addButtonWithTitle("Ja", type: SIAlertViewButtonType.Default, handler:{ (ACTION :SIAlertView!)in
+                    
+                    // Try it again
+                    self.getUserSettings(self.token.getRefreshToken(), updateSettings: false)
+                })
+                alert.addButtonWithTitle("Nee", type: SIAlertViewButtonType.Cancel, handler:{ (ACTION :SIAlertView!)in
                     
                     // Send user back to login phase
                     self.goToLogin()
@@ -915,8 +923,6 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                 alert.show()
             }
         }
-        return isSuccessfullyExecuted
-
     }
     
     //# MARK: - items and news data methods
@@ -992,7 +998,6 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                         }
                     }
                     
-                    
                     MBProgressHUD.hideAllHUDsForView(self.view, animated: true) // Close notification
                     
                     UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification,
@@ -1022,8 +1027,13 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                         
                     }
                     else{
-                        var alert = self.setAlertView("Probleem", message: "Kon berichten niet ophalen")
-                        alert.addButtonWithTitle("OK", type: SIAlertViewButtonType.Default, handler:{ (ACTION :SIAlertView!)in
+                        var alert = self.setAlertView("Probleem", message: "Kon berichten niet ophalen. Wil je het nog een keer proberen?")
+                        alert.addButtonWithTitle("Ja", type: SIAlertViewButtonType.Default, handler:{ (ACTION :SIAlertView!)in
+                            
+                            // Try again
+                            self.getAppData(self.token.getRefreshToken())
+                        })
+                        alert.addButtonWithTitle("Nee", type: SIAlertViewButtonType.Cancel, handler:{ (ACTION :SIAlertView!)in
                             
                             // Send user back to login phase
                             self.goToLogin()

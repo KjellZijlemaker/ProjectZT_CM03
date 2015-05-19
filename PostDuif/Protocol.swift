@@ -22,7 +22,7 @@ protocol userManagerDelegate{
     var token: Token{
         get set
     }
-    func getUserSettings(tokenKey: String, updateSettings: Bool) -> Bool
+    func getUserSettings(tokenKey: String, updateSettings: Bool)
 }
 
 protocol dataManagerDelegate{

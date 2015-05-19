@@ -9,11 +9,16 @@
 import Foundation
 
 class UserManager{
-    
+   
     class func loginUser(apiEndPoint: String, completionHandler: (response: Token) -> ()) {
+        let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
+        configuration.timeoutIntervalForResource = 10 // seconds
+        
+        var alamofireManager = Manager(configuration: configuration)
+        
         
         // Making GET request to the URL
-        request(.GET, apiEndPoint).responseJSON { (request, response, json, error) in
+        alamofireManager.request(.GET, apiEndPoint).responseJSON { (request, response, json, error) in
             if (json != nil) {
                 
                 var token = Token()
@@ -60,8 +65,13 @@ class UserManager{
     }
     
     class func getUserSettings(apiEndPoint: String, completionHandler: (response: Settings) -> ()) {
+        let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
+        configuration.timeoutIntervalForResource = 10 // seconds
+        
+        var alamofireManager = Manager(configuration: configuration)
+        
         // Making GET request to the URL
-        request(.GET, apiEndPoint).responseJSON { (request, response, json, error) in
+        alamofireManager.request(.GET, apiEndPoint).responseJSON { (request, response, json, error) in
             
             // Making sure if the JSON is not empty
             if (json != nil) {
