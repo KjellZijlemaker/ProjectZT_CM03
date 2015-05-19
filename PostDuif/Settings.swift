@@ -5,6 +5,7 @@
 //  Created by Kjell Zijlemaker on 18-03-15.
 //  Copyright (c) 2015 Kjell Zijlemaker. All rights reserved.
 //
+//  Model for user settings
 
 import Foundation
 
@@ -25,7 +26,6 @@ class Settings{
     private var clubMessagesStoreMaxSeconds: String
     private var newsMessagesStoreMaxSeconds: String
     
-   // init
     init(){
         self.notificationSoundEnabled = true
         self.endOfMessageSoundEffectEnabled = true

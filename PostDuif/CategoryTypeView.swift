@@ -5,31 +5,58 @@
 //  Created by Kjell Zijlemaker on 19-04-15.
 //  Copyright (c) 2015 Kjell Zijlemaker. All rights reserved.
 //
+//  View for the categoryType, labels and view itself
 
 import Foundation
 
 class CategoryTypeView: UIView{
     @IBOutlet weak private var categoryTypeViewLabel: UILabel!
-     @IBOutlet weak private var categoryTypeCategoryViewLabel: UILabel!
+    @IBOutlet weak private var categoryTypeCategoryViewLabel: UILabel!
     
-    // Setting the label inside the view
+    
+    /**
+    Function for setting the categoryLabel
+    
+    :param: text The text for label
+    */
     func setCategoryTypeLabel(text: String){
         self.categoryTypeViewLabel.text = text
     }
     
+    
+    /**
+    Function for setting the categoryTypeLabel (underneath the first label)
+    
+    :param: text The text to be inserted inside the second label
+    */
     func setCategoryTypeCategoryViewLabel(text: String){
         self.categoryTypeCategoryViewLabel.text = text
     }
     
+    
+    /**
+    Function for getting the categoryLabel
+    
+    :returns: String The first label
+    */
     func getCategoryLabel() -> String{
         return self.categoryTypeViewLabel.text!
     }
     
+    /**
+    Function for getting the categoryTypeLabel
+    
+    :returns: String The second label
+    */
     func getCategoryType() -> String{
         return self.categoryTypeCategoryViewLabel.text!
     }
     
-    // Making animation with transition of type
+    /**
+    Function for making a animation when the context of the item changes
+    
+    :param: color Is the color to be changed when animating
+    */
     func nextItemAnimate(color: UIColor){
         self.backgroundColor = color // Set the new color of view
         
@@ -48,10 +75,8 @@ class CategoryTypeView: UIView{
             self.addSubview(views)
             
             }, completion: { finished in
-                // any code entered here will be applied
-                // .once the animation has completed
         })
-
+        
     }
-
+    
 }

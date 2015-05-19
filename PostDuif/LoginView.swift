@@ -5,6 +5,8 @@
 //  Created by Kjell Zijlemaker on 30-04-15.
 //  Copyright (c) 2015 Kjell Zijlemaker. All rights reserved.
 //
+//  View for all the content inside the LoginViewController
+
 
 import Foundation
 
@@ -23,31 +25,47 @@ class LoginView: UIView, UITextViewDelegate{
     }
     var delegate: loginDelegate!
     
-    // Save view context inside viewcontroller
+    /**
+    Function for saving view context inside the view from controller
+    
+    :param: view The view from the controller to be saved
+    */
     func setupView(view: UIView){
         self.loginView = view
     }
     
-    func setupListeners(){
+    /**
+    Function for setting up the delegates for using overridden methods
+    
+    :param: text The text to set inside the content
+    */
+    func setupDelegates(){
         self.loginEmail.delegate = self
         self.loginPincode.delegate = self
         self.loginPincode2.delegate = self
     }
     
+    /**
+    Function for checking if a touch around the view is present. If so, close the keyboard
+    */
     override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
         self.endEditing(true)
         super.touchesBegan(touches, withEvent: event)
     }
     
     
-    // For checking if view is clicked, view must go up for keyboard
+    /**
+    Function for checking if view is clicked. When clicked, view must go up for keyboard
+    
+    :param: textField The textField that will be called by the delegate
+    */
     func textFieldDidBeginEditing(textField: UITextField) {
         if(textField == loginEmail){
             animateViewMoving(true, moveValue: 100)
         }
         else if(textField == loginPincode){
             animateViewMoving(true, moveValue: 200)
-
+            
         }
         else if(textField == loginPincode2){
             animateViewMoving(true, moveValue: 200)
@@ -55,7 +73,11 @@ class LoginView: UIView, UITextViewDelegate{
         
     }
     
-    // For checking if view is clicked, view must go up for keyboard
+    /**
+    Function for checking if the clicked view is dismissed. When dismissed, the view should go down again
+    
+    :param: textField The textField that will be called by the delegate
+    */
     func textFieldDidEndEditing(textField: UITextField) {
         if(textField == loginEmail){
             animateViewMoving(false, moveValue: 100)
@@ -68,7 +90,12 @@ class LoginView: UIView, UITextViewDelegate{
         }
     }
     
-    // Put view to the top, or down
+    /**
+    Function for animating the view going up or down
+    
+    :param: up Is it going up or down?
+    :param: moveValue How much does it needs to go up or down?
+    */
     func animateViewMoving (up:Bool, moveValue :CGFloat){
         var movementDuration:NSTimeInterval = 0.3
         var movement:CGFloat = ( up ? -moveValue : moveValue)
@@ -78,8 +105,13 @@ class LoginView: UIView, UITextViewDelegate{
         self.loginView.frame = CGRectOffset(self.loginView.frame, 0,  movement)
         UIView.commitAnimations()
     }
-
-    // When ticking return button, the other view is activated
+    
+    /**
+    Function for checking if another view should be the responder, when ticking on the return button
+    
+    :param: textField The textField that will be called by the delegate
+    :returns: Bool Returns boolean for indicating that the textfield has been called
+    */
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         if textField == self.loginEmail {
             self.loginPincode.becomeFirstResponder()
@@ -93,7 +125,14 @@ class LoginView: UIView, UITextViewDelegate{
         return true
     }
     
-    // Function for checking the pincode String
+    /**
+    Function for checking the pincode. It should automatically go to the next pincode view when at the end of the first. Also, when going back, the view should automatically call the previous view
+    
+    :param: textField The textField that will be called by the delegate
+    :param: range The range in whitch the observer should change the characters
+    :param: replacementString The String that will be the replaced String for the View
+    :returns: Bool Returns Boolean for indicating that the textfield has been called
+    */
     func textField(textField: UITextField!, shouldChangeCharactersInRange range: NSRange, replacementString string: String!) -> Bool {
         
         var txtAfterUpdate:NSString = textField.text // Setting the initial text

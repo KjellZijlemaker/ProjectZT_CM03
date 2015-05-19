@@ -5,6 +5,7 @@
 //  Created by Kjell Zijlemaker on 25-04-15.
 //  Copyright (c) 2015 Kjell Zijlemaker. All rights reserved.
 //
+//  Helper class for speeching.
 
 import Foundation
 
@@ -36,12 +37,11 @@ class CarouselSpeechHelper{
     }
     
     /**
-    Init for setting the speech and userSettings, when the speech already exists inside the viewController
-    
-    :param: speech Is the manager inside the viewController
-    :param: userSettings Are the settings inside the viewController
+    Function for speeching the item from the position of the Carousel
     */
     func carouselSpeechItem(){
+        
+        // If the currentItemIndex is 0, the categoryView should behave differently
         if (self.delegate.carousel.currentItemIndex == 0) {
             self.delegate.carousel.reloadData()
             
@@ -54,87 +54,100 @@ class CarouselSpeechHelper{
         // Will execute when it's not the first item anymore (for speech)
         if(!self.delegate.firstItem){
             
+            var textToSend:[String] = [] // Array for sending message
+            
+            // Check if the item is message or newsitem
+            if(self.delegate.items[self.delegate.carousel.currentItemIndex].getType() == "1"){
+                var currentItem = self.delegate.messagesCount - self.delegate.messagesCount + self.delegate.carousel.currentItemIndex + 1
+                var read = "Ongelezen"
+                var numberOfItems = ""
                 
-                var textToSend:[String] = [] // Array for sending message
+                // If the item is read, the text should change
+                if(self.delegate.items[self.delegate.carousel.currentItemIndex].isRead()){
+                    read = "Gelezen"
+                }
+                else{
+                    numberOfItems = String(self.delegate.carousel.currentItemIndex+1) + "e "
+                }
+                
+                // Making the text to speech
+                if(self.userSettings.isSpeechEnabled() || UIAccessibilityIsVoiceOverRunning()){
+                    textToSend.append(numberOfItems + read + " bericht van: " + self.delegate.items[self.delegate.carousel.currentItemIndex].getFromUser())
+                    textToSend.append("Onderwerp: " + self.delegate.items[self.delegate.carousel.currentItemIndex].getSubject())
+                    println(self.userSettings.isHintSupportSoundEnabled())
+                    if(self.userSettings.isHintSupportSoundEnabled()){
+                        textToSend.append("Tik op het scherm om het bericht te openen")
+                    }
+                }
+                self.speech.speechArray(textToSend) // Speech the text
+            }
+                
+            else if(self.delegate.items[self.delegate.carousel.currentItemIndex].getType() == "2"){
+                var currentItem = self.delegate.carousel.currentItemIndex - self.delegate.messagesCount - self.delegate.clubNewsCount + 1
+                var read = "Ongelezen"
+                var numberOfItems = ""
+                
+                // If the item is read, the text should change
+                if(self.delegate.items[self.delegate.carousel.currentItemIndex].isRead()){
+                    read = "Gelezen"
+                }
+                else{
+                    numberOfItems = String(currentItem) + "e "
+                }
+                
+                // Making the text to speech
+                if(self.userSettings.isSpeechEnabled() || UIAccessibilityIsVoiceOverRunning()){
+                    textToSend.append(numberOfItems + read + " nieuwsbericht")
+                    textToSend.append("Titel: " + self.delegate.items[self.delegate.carousel.currentItemIndex].getSubject())
+                    if(self.userSettings.isHintSupportSoundEnabled()){
+                        textToSend.append("Tik op het scherm om het nieuwsbericht te openen")
+                    }
+                }
+                
+                self.speech.speechArray(textToSend)// Speech the text
+            }
+            else if(self.delegate.items[self.delegate.carousel.currentItemIndex].getType() == "3"){
+                var currentItem = self.delegate.carousel.currentItemIndex - self.delegate.messagesCount + 1
+                var read = "Ongelezen "
+                var numberOfItems = ""
+                
+                // If the item is read, the text should change
+                if(self.delegate.items[self.delegate.carousel.currentItemIndex].isRead()){
+                    read = "Gelezen "
+                }
+                else{
+                    numberOfItems = String(currentItem) + "e "
+                }
+                
+                // Making the text to speech
+                if(self.userSettings.isSpeechEnabled() || UIAccessibilityIsVoiceOverRunning()){
+                    textToSend.append(numberOfItems + read + self.delegate.items[self.delegate.carousel.currentItemIndex].getClubType() + "-bericht " +  "van: " + self.delegate.items[self.delegate.carousel.currentItemIndex].getClubName())
+                    textToSend.append("Titel: " + self.delegate.items[self.delegate.carousel.currentItemIndex].getSubject())
+                    if(self.userSettings.isHintSupportSoundEnabled()){
+                        textToSend.append("Tik op het scherm om het " + self.delegate.items[self.delegate.carousel.currentItemIndex].getClubName() + " bericht te openen")
+                    }
+                }
+                
+                self.speech.speechArray(textToSend)// Speech the text
+            }
             
-                // Check if the item is message or newsitem
-                if(self.delegate.items[self.delegate.carousel.currentItemIndex].getType() == "1"){
-                    var currentItem = self.delegate.messagesCount - self.delegate.messagesCount + self.delegate.carousel.currentItemIndex + 1
-                    var read = "Ongelezen"
-                    var numberOfItems = ""
-                    if(self.delegate.items[self.delegate.carousel.currentItemIndex].isRead()){
-                        read = "Gelezen"
-                    }
-                    else{
-                        numberOfItems = String(self.delegate.carousel.currentItemIndex+1) + "e "
-                    }
-                    if(self.userSettings.isSpeechEnabled() || UIAccessibilityIsVoiceOverRunning()){
-                        textToSend.append(numberOfItems + read + " bericht van: " + self.delegate.items[self.delegate.carousel.currentItemIndex].getFromUser())
-                        textToSend.append("Onderwerp: " + self.delegate.items[self.delegate.carousel.currentItemIndex].getSubject())
-                        println(self.userSettings.isHintSupportSoundEnabled())
-                        if(self.userSettings.isHintSupportSoundEnabled()){
-                            textToSend.append("Tik op het scherm om het bericht te openen")
-                        }
-                    }
-                    self.speech.speechArray(textToSend)
-                }
-                    
-                else if(self.delegate.items[self.delegate.carousel.currentItemIndex].getType() == "2"){
-                   var currentItem = self.delegate.carousel.currentItemIndex - self.delegate.messagesCount - self.delegate.clubNewsCount + 1
-                    
-                    var read = "Ongelezen"
-                    var numberOfItems = ""
-                    
-                    if(self.delegate.items[self.delegate.carousel.currentItemIndex].isRead()){
-                        read = "Gelezen"
-                    }
-                    else{
-                        numberOfItems = String(currentItem) + "e "
-                    }
-                    if(self.userSettings.isSpeechEnabled() || UIAccessibilityIsVoiceOverRunning()){
-                        textToSend.append(numberOfItems + read + " nieuwsbericht")
-                        textToSend.append("Titel: " + self.delegate.items[self.delegate.carousel.currentItemIndex].getSubject())
-                        if(self.userSettings.isHintSupportSoundEnabled()){
-                            textToSend.append("Tik op het scherm om het nieuwsbericht te openen")
-                        }
-                    }
-                    
-                    self.speech.speechArray(textToSend)
-                }
-                else if(self.delegate.items[self.delegate.carousel.currentItemIndex].getType() == "3"){
-                    var currentItem = self.delegate.carousel.currentItemIndex - self.delegate.messagesCount + 1
-                    
-                    var read = "Ongelezen "
-                    var numberOfItems = ""
-                    if(self.delegate.items[self.delegate.carousel.currentItemIndex].isRead()){
-                        read = "Gelezen "
-                    }
-                    else{
-                        numberOfItems = String(currentItem) + "e "
-                    }
-                    
-                    if(self.userSettings.isSpeechEnabled() || UIAccessibilityIsVoiceOverRunning()){
-                        textToSend.append(numberOfItems + read + self.delegate.items[self.delegate.carousel.currentItemIndex].getClubType() + "-bericht " +  "van: " + self.delegate.items[self.delegate.carousel.currentItemIndex].getClubName())
-                        textToSend.append("Titel: " + self.delegate.items[self.delegate.carousel.currentItemIndex].getSubject())
-                        if(self.userSettings.isHintSupportSoundEnabled()){
-                            textToSend.append("Tik op het scherm om het " + self.delegate.items[self.delegate.carousel.currentItemIndex].getClubName() + " bericht te openen")
-                        }
-                    }
-                    
-                    self.speech.speechArray(textToSend)
-                }
-            
-            self.delegate.carousel.reloadItemAtIndex(self.delegate.carousel.currentItemIndex, animated: false)
+            self.delegate.carousel.reloadItemAtIndex(self.delegate.carousel.currentItemIndex, animated: false) // Reload the item at index for optional updates inside the carousel item
         }
     }
     
-    //# MARK: - Extra speech methods
-    //=================================================================================================
-    //TODO: Make background stop speech
+    /**
+    Function for speeching the total of new items to the user
+    
+    :param: newItems Total of new items to be speeched
+    :param: type The type of message to be speeched
+    */
     func newItemsToSpeech(newItems: Int, type: String){
         var newMessageSpeechString = ""
         var typeItem = ""
-        if(type == "1"){
+        
+        // Checking to type to speech type
+        switch(type){
+        case "1":
             // Small check for grammar
             if(newItems == 1){
                 typeItem = " nieuw bericht"
@@ -142,8 +155,8 @@ class CarouselSpeechHelper{
             else{
                 typeItem = " nieuwe berichten"
             }
-        }
-        else if(type == "2"){
+            break
+        case "2":
             // Small check for grammar
             if(newItems == 1){
                 typeItem = " nieuw nieuwsbericht"
@@ -151,8 +164,8 @@ class CarouselSpeechHelper{
             else{
                 typeItem = " nieuwe nieuwsberichten"
             }
-        }
-        else if(type == "3"){
+            break
+        case "3":
             // Small check for grammar
             if(newItems == 1){
                 typeItem = " nieuw " + self.delegate.items[self.delegate.carousel.currentItemIndex].getClubType() + "-bericht"
@@ -160,23 +173,39 @@ class CarouselSpeechHelper{
             else{
                 typeItem = " nieuwe " + self.delegate.items[self.delegate.carousel.currentItemIndex].getSubject() + "-berichten"
             }
+            break
+        default:
+            break
         }
         
-        newMessageSpeechString = "U heeft: " + String(newItems) + typeItem
-        
+        newMessageSpeechString = "U heeft: " + String(newItems) + typeItem // Making new speech string
         self.getSpeech().speechString(newMessageSpeechString) // Say the speech
         
     }
     
+    /**
+    Function for speeching that there are no more items available inside the Carousel
+    */
     func speechNoItemsAvailable(){
         self.speech.speechString("Er zijn geen nieuwe berichten op dit moment.")
     }
     
+    
+    /**
+    Function for speeching the total of items inside the carousel, per type of item.
+    Different from the newItemsToSpeech is that every typeset of items will be speeched
+    
+    :param: messageCount the total of messages
+    :param: clubNewsCount the total of clubnews
+    :param: newsCount the total of news
+    */
     func speechTotalItemsAvailable(messagesCount: Int, clubNewsCount: Int, newsCount: Int){
+        // default sentences
         var vocabFixMessages = " nieuwe berichten"
         var vocabFixClubNews = " nieuwe club, of organisatieberichten"
         var vocabFixNews = " nieuwe nieuwsberichten"
         
+        // Check if sentences should be corrected
         if(messagesCount == 1){
             vocabFixMessages = " nieuw bericht"
         }
@@ -187,47 +216,20 @@ class CarouselSpeechHelper{
             vocabFixNews = " nieuw nieuwsbericht"
         }
         
-        // Speeching the amount of items
+        // Making new sentence
         var sentenceArray: [String] = []
         sentenceArray.append("U heeft in totaal: " + String(messagesCount) + vocabFixMessages + ", ")
         sentenceArray.append(String(clubNewsCount) + vocabFixClubNews)
         sentenceArray.append(" en" + String(newsCount) + vocabFixNews)
         
-        self.speech.speechArray(sentenceArray)
+        self.speech.speechArray(sentenceArray) // Speech the sentence
     }
     
-    // Speech news item
-    func speechNewsMessageItem(news: Item){
-        
-        // Making new sentence array for speech
-        var sentenceArray: [String] = []
-        sentenceArray.append("Titel nieuwsbericht: " + news.getSubject())
-        sentenceArray.append("Inhoud nieuwsbericht: ")
-        sentenceArray.append(news.getContent())
-        sentenceArray.append("Einde nieuwsbericht")
-        if(self.userSettings.isHintSupportSoundEnabled()){
-            sentenceArray.append("Veeg naar links om het nieuwsbericht te sluiten")
-        }
-        self.speech.speechArray(sentenceArray) //Execute speech
-    }
+    /**
+    Function for speeching the current message to the user from a controller
     
-    
-    // Speech club news item
-    func speechClubNewsItem(clubNews: Item){
-        
-        // Making new sentence array for speech
-        var sentenceArray: [String] = []
-        sentenceArray.append("Titel " + clubNews.getClubType() + "-bericht: " + clubNews.getSubject())
-        sentenceArray.append("Inhoud " + clubNews.getClubType() + "-bericht: ")
-        sentenceArray.append(clubNews.getContent())
-        sentenceArray.append("Einde " + clubNews.getClubType() + "-bericht")
-        if(self.userSettings.isHintSupportSoundEnabled()){
-            sentenceArray.append("Veeg naar links om het " + clubNews.getClubType() + "-bericht te sluiten")
-        }
-        self.speech.speechArray(sentenceArray) //Execute speech
-    }
-
-    // Speech message item
+    :param: message Is the object where all the info is to be speeched
+    */
     func speechMessageItem(message: Item){
         // Making new sentence array for speech
         var sentenceArray: [String] = []
@@ -246,8 +248,54 @@ class CarouselSpeechHelper{
         self.speech.speechArray(sentenceArray) //Execute speech
     }
     
+    
+    /**
+    Function for speeching the current newsItem to the user from a controller
+    
+    :param: news Is the object where all the info is to be speeched
+    */
+    func speechNewsMessageItem(news: Item){
+        
+        // Making new sentence array for speech
+        var sentenceArray: [String] = []
+        sentenceArray.append("Titel nieuwsbericht: " + news.getSubject())
+        sentenceArray.append("Inhoud nieuwsbericht: ")
+        sentenceArray.append(news.getContent())
+        sentenceArray.append("Einde nieuwsbericht")
+        if(self.userSettings.isHintSupportSoundEnabled()){
+            sentenceArray.append("Veeg naar links om het nieuwsbericht te sluiten")
+        }
+        self.speech.speechArray(sentenceArray) //Execute speech
+    }
+    
+    
+    /**
+    Function for speeching the current clubnews to the user from a controller
+    
+    :param: clubNews Is the object where all the info is to be speeched
+    */
+    func speechClubNewsItem(clubNews: Item){
+        
+        // Making new sentence array for speech
+        var sentenceArray: [String] = []
+        sentenceArray.append("Titel " + clubNews.getClubType() + "-bericht: " + clubNews.getSubject())
+        sentenceArray.append("Inhoud " + clubNews.getClubType() + "-bericht: ")
+        sentenceArray.append(clubNews.getContent())
+        sentenceArray.append("Einde " + clubNews.getClubType() + "-bericht")
+        if(self.userSettings.isHintSupportSoundEnabled()){
+            sentenceArray.append("Veeg naar links om het " + clubNews.getClubType() + "-bericht te sluiten")
+        }
+        self.speech.speechArray(sentenceArray) //Execute speech
+    }
+    
+    /**
+    Function for getting speech for manual using the object
+    
+    :param: message Is the object where all the info is to be speeched
+    :returns: speechManager The manager context
+    */
     func getSpeech() -> SpeechManager{
         return speech
     }
-
+    
 }

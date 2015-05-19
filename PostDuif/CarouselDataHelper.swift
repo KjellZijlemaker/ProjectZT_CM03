@@ -5,14 +5,21 @@
 //  Created by Kjell Zijlemaker on 02-05-15.
 //  Copyright (c) 2015 Kjell Zijlemaker. All rights reserved.
 //
+// Helper class for getting data. Will mostly exist from sorting data into the right place
 
 import Foundation
 
 class CarouselDataHelper{
     
-    // For getting all the ID's when appending the Items array
+    /**
+    Function for getting all the ID's and sorting them for getting a new array with non duplicates only. These will be added to the Carousel, inside the viewController
+    
+    :param: items The array of old items that are already inside the Carousel
+    :param: newItems The array of new items that are received by the DataManager
+    :param: type The type of item that should be appended to the Carousel
+    :returns: Array of Integers (ID's) for using to add new items to the Carousel
+    */
     func getAllItemIDs(items: [Item], newItems: [Item], type: String) -> [Int]{
-        
         var idArrayOld: [Int] = []
         var idArrayNew: [Int] = []
         var newIDArray: [Int] = []
@@ -21,12 +28,12 @@ class CarouselDataHelper{
         // Getting all the ID's for new ID array
         for j in 0...newItems.count-1{
             
-            // If 0, also the news should be appended because there is none yet
+            // If 0, also the news and clubNews should be appended because there is none yet
             if(type != "0"){
+                
                 // Check if the type is the same (for appending at the according index)
                 if(newItems[j].getType() == type){
                     idArrayNew.append(newItems[j].getID().toInt()!)
-                    
                 }
             }
             else{
@@ -36,6 +43,7 @@ class CarouselDataHelper{
         }
         
         if(!items.isEmpty){
+            
             // Getting all the ID's for old ID array
             for i in 0...items.count-1{
                 
@@ -70,9 +78,6 @@ class CarouselDataHelper{
                 newIDArray.append(newArray[k] as Int)
             }
         }
-        
         return newIDArray
     }
-    
-    
 }

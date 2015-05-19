@@ -22,7 +22,7 @@ class ClubNewsViewController: UIViewController, clubNewsDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-                // Setup the view
+        // Setup the view
         self.clubNewsView.delegate = self
         self.clubNewsView.setupTitle()
         self.clubNewsView.setupContent()
@@ -38,25 +38,26 @@ class ClubNewsViewController: UIViewController, clubNewsDelegate {
         self.clubNewsView.setTitleBackground(self.userSettings.getSecondaryColorType())
         self.clubNewsView.setContentBackground(self.userSettings.getSecondaryColorType())
         
+        // Speech the item
         if(!UIAccessibilityIsVoiceOverRunning() && self.userSettings.isSpeechEnabled()){
             var speechClubNewsItem = CarouselSpeechHelper(speech: self.speech, userSettings: self.userSettings)
-            
-            // Speech the item
             speechClubNewsItem.speechClubNewsItem(self.clubNews)
         }
-
+        
     }
-
     
-    // Dismiss the controller
+    
+    /**
+    Function for dismissing the controller (called from the ClubNewsView)
+    */
     func dismissController(){
         // Dismiss the controller
         self.presentingViewController?.dismissViewControllerAnimated(true, completion: {
             let secondPresentingVC = self.presentingViewController?.presentingViewController;
             secondPresentingVC?.dismissViewControllerAnimated(true, completion: {});
             self.speech.speechString("U heeft het " + self.clubNews.getClubType() + "-bericht gelezen") //Little speech for user
-            self.openendMessage.messageIsOpenend = false
-            self.deletingMessage.executeDeletionTimer(self.clubNews.getID(), "3")
+            self.openendMessage.messageIsOpenend = false // ClubNews is not openend anymore
+            self.deletingMessage.deleteMessage(self.clubNews.getID(), "3") // Delete the message
         });
     }
     
@@ -70,21 +71,20 @@ class ClubNewsViewController: UIViewController, clubNewsDelegate {
         // Dispose of any resources that can be recreated.
     }
     
-    // Motion gesture
+    /**
+    Function for sensing if the user has shaken the device. It will then check for new settings silently
+    */
     override func motionEnded(motion: UIEventSubtype, withEvent event: UIEvent) {
         if (motion == .MotionShake) {
             self.userDelegate.getUserSettings(self.userDelegate.token.getToken(), updateSettings: true)
-            if(self.userSettings.isNotificationSoundEnabled()){
-                var carouselSpeechHelper = CarouselSpeechHelper(speech: self.speech, userSettings: self.userSettings)
-                
-                // Setting the color and backround again
-                self.clubNewsView.setFontColor(self.userSettings.getPrimaryColorType())
-                self.clubNewsView.setViewBackground("000000")
-                self.clubNewsView.setTitleBackground(self.userSettings.getSecondaryColorType())
-                self.clubNewsView.setContentBackground(self.userSettings.getSecondaryColorType())
-                
-                carouselSpeechHelper.getSpeech().speechString("Instellingen bijgewerkt")
-            }
+            var carouselSpeechHelper = CarouselSpeechHelper(speech: self.speech, userSettings: self.userSettings)
+            
+            // Setting the color and backround again
+            self.clubNewsView.setFontColor(self.userSettings.getPrimaryColorType())
+            self.clubNewsView.setViewBackground("000000")
+            self.clubNewsView.setTitleBackground(self.userSettings.getSecondaryColorType())
+            self.clubNewsView.setContentBackground(self.userSettings.getSecondaryColorType())
+            
         }
     }
 }

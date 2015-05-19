@@ -5,11 +5,11 @@
 //  Created by Kjell Zijlemaker on 14-04-15.
 //  Copyright (c) 2015 Kjell Zijlemaker. All rights reserved.
 //
+//  View for the notification text inside the bubble
 
 import Foundation
 
 class NotificationText: UITextField{
-    
     private var txtField: UITextField!
     
     // For drawing custom textField
@@ -17,6 +17,9 @@ class NotificationText: UITextField{
         
     }
     
+    /**
+    Function for making the notification textView
+    */
     func makeNotificationTextView(){
         
         // Making textfield for new items
@@ -28,22 +31,43 @@ class NotificationText: UITextField{
         self.txtField.borderStyle = UITextBorderStyle.None
     }
     
+    /**
+    Show the notification
+    */
     func showNotificationTextView(){
-       self.txtField.hidden = false
+        self.txtField.hidden = false
     }
     
+    /**
+    Hide the notification
+    */
     func hideNotificationTextView(){
         self.txtField.hidden = true
     }
     
+    /**
+    Function for setting the notficiationText
+    
+    :param: text The text to be inserting inside the notification
+    */
     func setNotificationTextView(text: String){
         self.txtField.text = text
     }
     
+    
+    /**
+    Function for removing the notificationText from the view
+    */
     func removeNotificationTextFromView(){
         self.txtField.removeFromSuperview()
     }
     
+    
+    /**
+    Function getting the textField for adding to view
+    
+    :returns: UITextField The textField for adding to view
+    */
     func getNotificationTextView() -> UITextField{
         return self.txtField
     }

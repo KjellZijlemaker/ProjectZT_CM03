@@ -5,6 +5,7 @@
 //  Created by Kjell Zijlemaker on 26-03-15.
 //  Copyright (c) 2015 Kjell Zijlemaker. All rights reserved.
 //
+//  Model for saving the token
 
 import Foundation
 

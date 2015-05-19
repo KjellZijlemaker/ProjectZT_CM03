@@ -5,6 +5,7 @@
 //  Created by Kjell Zijlemaker on 14-04-15.
 //  Copyright (c) 2015 Kjell Zijlemaker. All rights reserved.
 //
+//  View for logging out button
 
 import Foundation
 
@@ -16,7 +17,11 @@ class LogoutButton: UIButton{
         
     }
     
-    // Making the logout button
+    /**
+    Function for setting the size of the font
+    
+    :returns: UIButton Returns the newly made button
+    */
     func showLogoutButton() -> UIButton{
         let logoutButton   = UIButton.buttonWithType(UIButtonType.System) as UIButton
         
@@ -28,6 +33,6 @@ class LogoutButton: UIButton{
     }
     
     
-
+    
     
 }
