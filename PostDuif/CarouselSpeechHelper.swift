@@ -168,10 +168,10 @@ class CarouselSpeechHelper{
         case "3":
             // Small check for grammar
             if(newItems == 1){
-                typeItem = " nieuw " + self.delegate.items[self.delegate.carousel.currentItemIndex].getClubType() + "-bericht"
+                typeItem = " nieuw club, of organisatiebericht"
             }
             else{
-                typeItem = " nieuwe " + self.delegate.items[self.delegate.carousel.currentItemIndex].getSubject() + "-berichten"
+                typeItem = " nieuwe club, of organisatieberichten"
             }
             break
         default:
@@ -236,8 +236,8 @@ class CarouselSpeechHelper{
         sentenceArray.append("Onderwerp bericht: " + message.getSubject())
         sentenceArray.append("Inhoud bericht: ")
         sentenceArray.append(message.getContent())
-        sentenceArray.append("Beschrijving foto: ")
         if(message.getAttachmentDescription() != ""){
+            sentenceArray.append("Beschrijving foto: ")
             sentenceArray.append(message.getAttachmentDescription())
         }
         sentenceArray.append("Einde bericht")

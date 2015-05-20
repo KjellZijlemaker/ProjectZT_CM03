@@ -72,7 +72,6 @@ class LoginViewController: UIViewController, loginDelegate {
                     self.defaults.setObject(self.token.getRefreshToken(), forKey: "refreshToken")
                     //                    self.keychain.set(self.token.getToken(), key: "token")
                     //                    self.keychain.set(self.token.getRefreshToken(), key: "refreshToken")
-                    
                     // For performing the seque inside the storyboard
                     self.performSegueWithIdentifier("loginSucceed", sender: self)
                 }

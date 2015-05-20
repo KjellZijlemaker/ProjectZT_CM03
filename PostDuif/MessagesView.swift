@@ -145,7 +145,7 @@ class MessagesView: UIView, messagesContentTextViewDelegate{
                     
                     if(self.personalPicture != nil){
                         self.messageContent.sizeToFit() // Make the content size fit (is still minimalheight)
-                        self.personalPicture.frame = CGRectMake(self.frame.size.width/2/2, self.messageContent.frame.size.height + 60, imageWidth, imageHeight) // Making the new size of the picture frame
+                        self.personalPicture.frame = CGRectMake(self.contentView.frame.size.width/2/2, self.messageContent.frame.size.height + 60, self.personalPicture.frame.size.width, self.personalPicture.frame.size.height) // Making the new size of the picture frame
                         self.personalPicture.hidden = false // Show the picture
                         
                         self.setAttachmentDescription(attachmentDescription) // Setting the attachmentDescription

@@ -80,7 +80,7 @@ class MessageContentViewController: UIViewController, messagesDelegate {
     Function for sensing if the user has shaken the device. It will then check for new settings silently
     */
     override func motionEnded(motion: UIEventSubtype, withEvent event: UIEvent) {
-        if (motion == .MotionShake) {a
+        if (motion == .MotionShake) {
             self.userDelegate.getUserSettings(self.userDelegate.token.getToken(), updateSettings: true)
             
             // Setting the color and backround again

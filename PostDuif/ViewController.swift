@@ -547,20 +547,10 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
             request, queue: NSOperationQueue.mainQueue(),
             completionHandler: {(response: NSURLResponse!,data: NSData!,error: NSError!) -> Void in
                 
-                // Getting the width / height from picture
-                var imageWidth: CGFloat!
-                var imageHeight: CGFloat!
                 if error == nil {
                     self.removeImage(index)
                     self.pictures.insert(UIImage(data: data), atIndex: index)
                     self.carousel.reloadItemAtIndex(index, animated: false)
-                    // profilePicture.image = UIImage(data: data) // Getting picture
-                    //                    imageWidth = profilePicture.image?.size.width
-                    //                    imageHeight = profilePicture.image?.size.height
-                    
-                    //profilePicture.frame = CGRectMake(100, 100 , imageWidth, imageHeight) // Making the new size of the picture frame
-                    // self.pictures.append(profilePicture.image)
-                    
                 }
         })
         
@@ -571,15 +561,18 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
         switch(self.items[index].getType()){
             
         case "1":
-            pictures.insert(UIImage(named:"emptyField.jpg"), atIndex: index)
-            println(index)
+            pictures.append(UIImage(named:"message.jpg"))
+            if(self.items[index].getFromUserProfilePictureURL() != ""){
+                self.setupProfilePicture(index, urlString: self.items[index].getFromUserProfilePictureURL())
+            }
+            
         case "2":
             pictures.insert(UIImage(named:"news.jpg"), atIndex: index)
             println(index)
         case "3":
             pictures.insert(UIImage(named:"corp.jpg"), atIndex: index)
         default:
-            pictures.insert(UIImage(named:"message.jpg"), atIndex: index)
+            pictures.insert(UIImage(named:"emptyField.jpg"), atIndex: index)
             
         }
         
@@ -722,73 +715,75 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
     //# MARK: - UIBackground / Foreground methods
     //=================================================================================================
     func deleteAndSpeechItemsToForeground(){
-        if(!self.messageIsOpenend){
-            var itemsIndexArray = [Int]()
-            
-            // Getting the date
-            var dateFormatter = NSDateFormatter()
-            var date = NSDate()
-            dateFormatter.dateFormat = "yyyy-MM-dd"
-            
-            var currentdateString = dateFormatter.stringFromDate(date)
-            currentdateString.substringToIndex(advance(currentdateString.startIndex, 10)) // Getting only the year, month day
-            
-            if(!self.items.isEmpty){
-                // Looping through all the dates of the corresponding items
-                for i in 0...self.items.count-1{
-                    if(self.items[i].getType() == "2" || self.items[i].getType() == "3"){
-                        var publishedDateString = self.items[i].getPublishDate()
-                        
-                        if(currentdateString != publishedDateString){
-                            for o in 0...self.items.count-1{
-                                if(self.items[i].getID() == self.items[o].getID()){
-                                    self.carousel.removeItemAtIndex(i, animated: false) // Remove from carousel
-                                    
-                                    // Decrement when removed
-                                    if(self.items[i].getType() == "2"){
-                                        self.newsCount--
+        if(self.carousel.numberOfItems != 0){
+            if(!self.messageIsOpenend){
+                var itemsIndexArray = [Int]()
+                
+                // Getting the date
+                var dateFormatter = NSDateFormatter()
+                var date = NSDate()
+                dateFormatter.dateFormat = "yyyy-MM-dd"
+                
+                var currentdateString = dateFormatter.stringFromDate(date)
+                currentdateString.substringToIndex(advance(currentdateString.startIndex, 10)) // Getting only the year, month day
+                
+                if(!self.items.isEmpty){
+                    // Looping through all the dates of the corresponding items
+                    for i in 0...self.items.count-1{
+                        if(self.items[i].getType() == "2" || self.items[i].getType() == "3"){
+                            var publishedDateString = self.items[i].getPublishDate()
+                            
+                            if(currentdateString != publishedDateString){
+                                for o in 0...self.items.count-1{
+                                    if(self.items[i].getID() == self.items[o].getID()){
+                                        self.carousel.removeItemAtIndex(i, animated: false) // Remove from carousel
+                                        
+                                        // Decrement when removed
+                                        if(self.items[i].getType() == "2"){
+                                            self.newsCount--
+                                        }
+                                        else if(self.items[i].getType() == "3"){
+                                            self.clubNewsCount--
+                                        }
+                                        itemsIndexArray.append(i) // Append the index
                                     }
-                                    else if(self.items[i].getType() == "3"){
-                                        self.clubNewsCount--
-                                    }
-                                    itemsIndexArray.append(i) // Append the index
                                 }
                             }
                         }
+                        
                     }
-                    
                 }
-            }
-            
-            
-            // Loop through the index in reverse and delete the item and image
-            if(!itemsIndexArray.isEmpty){
-                for j in reverse(0...itemsIndexArray.count-1){
-                    self.items.removeAtIndex(itemsIndexArray[j])
-                    self.removeImage(itemsIndexArray[j])
+                
+                
+                // Loop through the index in reverse and delete the item and image
+                if(!itemsIndexArray.isEmpty){
+                    for j in reverse(0...itemsIndexArray.count-1){
+                        self.items.removeAtIndex(itemsIndexArray[j])
+                        self.removeImage(itemsIndexArray[j])
+                    }
                 }
-            }
-            
-            // When there are no more items it should be true
-            if(self.items.isEmpty){
-                self.firstItem = true
-            }
-            
-            self.carousel.reloadData() // Reload the carousel
-            
-            // Reload the item when empty for categoryview
-            if(self.items.isEmpty){
+                
+                // When there are no more items it should be true
+                if(self.items.isEmpty){
+                    self.firstItem = true
+                }
+                
+                self.carousel.reloadData() // Reload the carousel
+                
+                // Reload the item when empty for categoryview
+                if(self.items.isEmpty){
+                    self.carouselCurrentItemIndexDidChange(self.carousel)
+                }
+                
+                // Speech the new items and make it accessible
+                if(self.userSettings.isTotalNewMessageSoundEnabled()){
+                    self.carouselSpeechHelper.speechTotalItemsAvailable(self.messagesCount, clubNewsCount: self.clubNewsCount, newsCount: self.newsCount) // Speech total of items
+                }
+                UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification,
+                    self.categoryView); // Set the accessibillity view back to the categoryview so user can interact with carousel
                 self.carouselCurrentItemIndexDidChange(self.carousel)
+                
             }
-            
-            // Speech the new items and make it accessible
-            if(self.userSettings.isTotalNewMessageSoundEnabled()){
-                self.carouselSpeechHelper.speechTotalItemsAvailable(self.messagesCount, clubNewsCount: self.clubNewsCount, newsCount: self.newsCount) // Speech total of items
-            }
-            UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification,
-                self.categoryView); // Set the accessibillity view back to the categoryview so user can interact with carousel
-            self.carouselCurrentItemIndexDidChange(self.carousel)
-            
         }
     }
     
@@ -913,7 +908,7 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                 alert.addButtonWithTitle("Ja", type: SIAlertViewButtonType.Default, handler:{ (ACTION :SIAlertView!)in
                     
                     // Try it again
-                    self.getUserSettings(self.token.getRefreshToken(), updateSettings: false)
+                    self.getUserSettings(self.token.getToken(), updateSettings: false)
                 })
                 alert.addButtonWithTitle("Nee", type: SIAlertViewButtonType.Cancel, handler:{ (ACTION :SIAlertView!)in
                     
@@ -1191,18 +1186,19 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                                 self.showNotificationNewItems(newNews)
                             }
                         }
-                        
+
                         // If the index has changed (appended item), speech the total of new items
                         if(indexHasChanged){
                             var scrollToMessage = false
-                            println(self.userSettings.isNotificationSoundEnabled())
                             // tell the total of new items
                             if(self.userSettings.isNotificationSoundEnabled()){
                                 if(newMessages > 0){
-                                    scrollToMessage = true
-                                    self.isAppending = false // Set it to false to speech exception
                                     self.carouselSpeechHelper.newItemsToSpeech(newMessages, type: "1")
-                                    self.carousel.scrollToItemAtIndex(self.messagesCount-1, animated: true)
+                                    if(self.carousel.numberOfItems > 2){
+                                        scrollToMessage = true
+                                        self.isAppending = false // Set it to false to speech exception
+                                        self.carousel.scrollToItemAtIndex(self.messagesCount-1, animated: true)
+                                    }
                                 }
                                 if(newNews > 0){
                                     self.carouselSpeechHelper.newItemsToSpeech(newNews, type: "2")
@@ -1305,11 +1301,6 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
         var userInfoArray = Array<AnyObject>()
         var timerManager = TimerManager() // For time
         
-        var oldID = self.items[self.carousel.currentItemIndex].getID() // Old ID
-        userInfoArray.append(oldID)
-        self.isAppending = true // Some speech may not execute
-        
-        
         // Look for ID
         for i in 0...self.items.count-1{
             
@@ -1357,11 +1348,12 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
     
     // Selector for making message read and deleting it from carousel
     func deleteMessageInsideCarousel(timer: NSTimer){
+        self.isAppending = true // Some speech may not execute
         let userInfo = timer.userInfo as [AnyObject] // Convert timer to String
         
-        var oldID = userInfo[0] as String
-        var carouselItemIndex = userInfo[1] as Int
-        var messageID = userInfo[2] as String
+        var oldID =  self.items[self.carousel.currentItemIndex].getID() // Old ID
+        var carouselItemIndex = userInfo[0] as Int
+        var messageID = userInfo[1] as String
         
         // Checking what kind of message was deleted
         if(self.items[carouselItemIndex].getType() == "1"){
