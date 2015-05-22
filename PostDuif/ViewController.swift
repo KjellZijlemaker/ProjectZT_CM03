@@ -273,7 +273,6 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
     //------------Swipe method to the left--------------//
     func newMessageTapped(){
         if(!self.items.isEmpty){
-            println("hello")
             self.carousel.scrollToItemAtIndex(self.items.count-self.totalNewItems, animated: true)
         }
     }
@@ -516,9 +515,10 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
     func setImages(index: Int){
         
         switch(self.items[index].getType()){
+            
         case "1":
             pictures.append(UIImage(named:"message.jpg"))
-            
+
             if(self.items[index].getFromUserProfilePictureURL() != ""){
                 self.setupProfilePicture(index, urlString: self.items[index].getFromUserProfilePictureURL())
             }
@@ -558,17 +558,16 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
     
     // Appending the image per index inside the carousel
     func appendImage(index: Int){
+       
         switch(self.items[index].getType()){
-            
         case "1":
-            pictures.append(UIImage(named:"message.jpg"))
+            pictures.insert(UIImage(named:"message.jpg"), atIndex: index)
             if(self.items[index].getFromUserProfilePictureURL() != ""){
                 self.setupProfilePicture(index, urlString: self.items[index].getFromUserProfilePictureURL())
             }
-            
+        
         case "2":
             pictures.insert(UIImage(named:"news.jpg"), atIndex: index)
-            println(index)
         case "3":
             pictures.insert(UIImage(named:"corp.jpg"), atIndex: index)
         default:
@@ -590,8 +589,9 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
             switch(self.items[index].getType()){
                 
             case "1":
+                println(self.items[index].getFromUser())
                 self.categoryView.setCategoryTypeLabel("Persoonlijk bericht")
-                if(self.items[index].getFromUser() != ""){
+                if(self.items[index].getFromUser() != " " || self.items[index].getFromUser().isEmpty){
                     self.categoryView.setCategoryTypeCategoryViewLabel("Van: " + self.items[index].getFromUser())
                 }
                 else{
@@ -1112,13 +1112,12 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                                     
                                     // Check the type and append
                                     if(items[l].getType() == "1"){
-                                        println("ISONE")
                                         if(self.messagesCount < self.userSettings.getPrivateMessageLimit()){
                                             indexHasChanged = true // New item may append
                                             
                                             self.items.insert(items[l], atIndex: self.messagesCount)
                                             
-                                            self.appendImage(self.messagesCount)
+                                            self.appendImage(l)
                                             self.carousel.insertItemAtIndex(self.messagesCount, animated: true)
                                             
                                             //Add the amount of messages or news
@@ -1136,7 +1135,7 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                                             
                                             var indexNewsCount = self.messagesCount + self.clubNewsCount + self.newsCount
                                             self.items.insert(items[l], atIndex: indexNewsCount)
-                                            self.appendImage(indexNewsCount)
+                                            self.appendImage(l)
                                             self.carousel.insertItemAtIndex(indexNewsCount, animated: true)
                                             
                                             //Add the amount of messages or news
@@ -1154,7 +1153,7 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                                         
                                         var indexClubNewsCount = self.messagesCount + self.clubNewsCount
                                         self.items.insert(items[l], atIndex: indexClubNewsCount)
-                                        self.appendImage(indexClubNewsCount)
+                                        self.appendImage(l)
                                         self.carousel.insertItemAtIndex(indexClubNewsCount, animated: true)
                                         
                                         //Add the amount of messages or news
@@ -1194,11 +1193,6 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                             if(self.userSettings.isNotificationSoundEnabled()){
                                 if(newMessages > 0){
                                     self.carouselSpeechHelper.newItemsToSpeech(newMessages, type: "1")
-                                    if(self.carousel.numberOfItems > 2){
-                                        scrollToMessage = true
-                                        self.isAppending = false // Set it to false to speech exception
-                                        self.carousel.scrollToItemAtIndex(self.messagesCount-1, animated: true)
-                                    }
                                 }
                                 if(newNews > 0){
                                     self.carouselSpeechHelper.newItemsToSpeech(newNews, type: "2")

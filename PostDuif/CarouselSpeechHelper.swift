@@ -124,7 +124,7 @@ class CarouselSpeechHelper{
                     textToSend.append(numberOfItems + read + self.delegate.items[self.delegate.carousel.currentItemIndex].getClubType() + "-bericht " +  "van: " + self.delegate.items[self.delegate.carousel.currentItemIndex].getClubName())
                     textToSend.append("Titel: " + self.delegate.items[self.delegate.carousel.currentItemIndex].getSubject())
                     if(self.userSettings.isHintSupportSoundEnabled()){
-                        textToSend.append("Tik op het scherm om het " + self.delegate.items[self.delegate.carousel.currentItemIndex].getClubName() + " bericht te openen")
+                        textToSend.append("Tik op het scherm om het " + self.delegate.items[self.delegate.carousel.currentItemIndex].getClubType() + " bericht te openen")
                     }
                 }
                 

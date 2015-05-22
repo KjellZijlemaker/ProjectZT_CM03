@@ -68,6 +68,7 @@ class MessagesView: UIView, messagesContentTextViewDelegate{
     */
     func setContentBackground(color: String){
         self.messageContent.backgroundColor = ColorHelper.UIColorFromRGB(color, alpha: 1)
+        self.contentView.backgroundColor = ColorHelper.UIColorFromRGB(color, alpha: 1)
     }
     
     /**
@@ -145,7 +146,9 @@ class MessagesView: UIView, messagesContentTextViewDelegate{
                     
                     if(self.personalPicture != nil){
                         self.messageContent.sizeToFit() // Make the content size fit (is still minimalheight)
-                        self.personalPicture.frame = CGRectMake(self.contentView.frame.size.width/2/2, self.messageContent.frame.size.height + 60, self.personalPicture.frame.size.width, self.personalPicture.frame.size.height) // Making the new size of the picture frame
+                        self.personalPicture.frame = CGRectMake(self.contentView.frame.size.width/2, self.messageContent.frame.size.height + 60, self.personalPicture.frame.size.width, self.personalPicture.frame.size.height) // Making the new size of the picture frame
+                        var center = self.personalPicture.superview?.center
+                        self.personalPicture.center = center!
                         self.personalPicture.hidden = false // Show the picture
                         
                         self.setAttachmentDescription(attachmentDescription) // Setting the attachmentDescription

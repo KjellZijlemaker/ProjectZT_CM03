@@ -55,7 +55,10 @@ class DataManager{
                                 
                                 // Setting the name of the user that send the message
                                 var fromUser: String = messages["fromUser"].stringValue
-                                newMessage.setFromUser(fromUser)
+                                
+                                if(fromUser != "Null Null"){
+                                    newMessage.setFromUser(fromUser)
+                                }
                                 
                                 // Set name inside the object
                                 var messageName: String = messages["subject"].stringValue
