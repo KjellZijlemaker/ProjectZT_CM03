@@ -85,6 +85,13 @@ class DataManager{
                                 var fromUserProfilePictureURL: String = messages["fromUserProfilePictureURL"].stringValue
                                 newMessage.setFromUserProfilePictureURL(fromUserProfilePictureURL)
                                 
+                                var hasRead: String = messages["hasRead"].stringValue
+                                if(hasRead == "true"){
+                                    newMessage.hasRead(true)
+                                }
+                                else{
+                                    newMessage.hasRead(false)
+                                }
                                 
                                 // Append the app names
                                 messageArray.append(newMessage)
@@ -122,6 +129,14 @@ class DataManager{
                                 var publishDate: String = messages["addedDate"].stringValue
                                 newMessage.setPublishDate(publishDate)
                                 
+                                var hasRead: String = messages["hasRead"].stringValue
+                                if(hasRead == "true"){
+                                    newMessage.hasRead(true)
+                                }
+                                else{
+                                    newMessage.hasRead(false)
+                                }
+                                
                                 // Append the app names
                                 messageArray.append(newMessage)
                             }
@@ -157,6 +172,14 @@ class DataManager{
                                 
                                 var clubName: String = messages["clubName"].stringValue
                                 newMessage.setClubName(clubName)
+                                
+                                var hasRead: String = messages["hasRead"].stringValue
+                                if(hasRead == "true"){
+                                    newMessage.hasRead(true)
+                                }
+                                else{
+                                    newMessage.hasRead(false)
+                                }
                                 
                                 // Append the app names
                                 messageArray.append(newMessage)

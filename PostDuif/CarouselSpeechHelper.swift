@@ -178,8 +178,17 @@ class CarouselSpeechHelper{
             break
         }
         
+        self.speech.speechSynthesizer.pauseSpeakingAtBoundary(.Immediate) // Pause the old speech
+        
+        // Make new speech for speeching new items
+        var speech = SpeechManager()
         newMessageSpeechString = "U heeft: " + String(newItems) + typeItem // Making new speech string
-        self.getSpeech().speechString(newMessageSpeechString) // Say the speech
+        speech.speechString(newMessageSpeechString) // Say the speech
+        
+        // Check if speech is still speaking, if not continue speaking
+        if(!speech.isSpeaking()){
+            self.speech.speechSynthesizer.continueSpeaking()
+        }
         
     }
     
@@ -201,19 +210,19 @@ class CarouselSpeechHelper{
     */
     func speechTotalItemsAvailable(messagesCount: Int, clubNewsCount: Int, newsCount: Int){
         // default sentences
-        var vocabFixMessages = " nieuwe berichten"
-        var vocabFixClubNews = " nieuwe club, of organisatieberichten"
-        var vocabFixNews = " nieuwe nieuwsberichten"
+        var vocabFixMessages = " berichten"
+        var vocabFixClubNews = " club, of organisatieberichten"
+        var vocabFixNews = " nieuwsberichten"
         
         // Check if sentences should be corrected
         if(messagesCount == 1){
-            vocabFixMessages = " nieuw bericht"
+            vocabFixMessages = " bericht"
         }
         if(clubNewsCount == 1){
-            vocabFixClubNews = " nieuwe club, of organisatiebericht"
+            vocabFixClubNews = " club, of organisatiebericht"
         }
         if(newsCount == 1){
-            vocabFixNews = " nieuw nieuwsbericht"
+            vocabFixNews = " nieuwsbericht"
         }
         
         // Making new sentence

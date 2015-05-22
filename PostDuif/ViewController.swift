@@ -31,7 +31,8 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
     var indexBeginningNewMessages = 0 // Index when the new messages appended (for counting down the new items in notification)
     var indexBeginningNewNews = 0 // Index when the new news appended (for counting down the new items in notification)
     var indexBeginningNewClubNews = 0 // Index when the new clubNews appended
-    
+    var oldItemID = "0" // Old ID for preventing the Carousel moving from index
+
     //# MARK: - Arrays for the items and deleted items
     var items: [Item] = [] // Items inside the carousel
     var deleteditemIndexes:[String] = [] // Carousel indexes for deleting (user read)
@@ -380,7 +381,7 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
     // Selector for appending the data
     func appendDataTimerSelectorHelper(timer: NSTimer){
         var type = timer.userInfo as String
-        self.appendAppData(type, showLoadingScreen: false)
+        self.appendAppData(type, showLoadingScreen: false, shouldScrollToMessage: true)
     }
     
     // Deleting the timer
@@ -447,16 +448,16 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
             
             if (self.carousel.currentItemIndex == self.messagesCount-1){
                 if(self.messagesCount < self.userSettings.getPrivateMessageLimit()){
-                    self.appendAppData("1", showLoadingScreen: true)
+                    self.appendAppData("1", showLoadingScreen: true, shouldScrollToMessage: false)
                 }
             }
             else if (self.carousel.currentItemIndex == self.messagesCount + self.clubNewsCount + self.newsCount-1) {
                 if(self.newsCount < self.userSettings.getNewsMessageLimit()){
-                    self.appendAppData("2", showLoadingScreen: true)
+                    self.appendAppData("2", showLoadingScreen: true, shouldScrollToMessage: false)
                 }
             }
             else if(self.carousel.currentItemIndex == self.messagesCount + self.clubNewsCount-1){
-                self.appendAppData("3", showLoadingScreen: true)
+                self.appendAppData("3", showLoadingScreen: true, shouldScrollToMessage: false)
             }
         }
             
@@ -473,7 +474,9 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
     // Function for checking if the index from the carousel changed
     func carouselCurrentItemIndexDidChange(carousel: iCarousel!){
         self.carouselCheckForAppendingItems() // Check for appending items and decrement notification counter if needed
-        
+        if(!self.firstItem){
+            self.oldItemID = self.items[self.carousel.currentItemIndex].getID()
+        }
         if(!self.items.isEmpty){
             // Setting category per item inside the array
             self.setCategoryType(self.carousel.currentItemIndex, isEmpty: false) // Setting the category type
@@ -770,17 +773,14 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                 
                 self.carousel.reloadData() // Reload the carousel
                 
-                // Reload the item when empty for categoryview
-                if(self.items.isEmpty){
-                    self.carouselCurrentItemIndexDidChange(self.carousel)
-                }
-                
                 // Speech the new items and make it accessible
                 if(self.userSettings.isTotalNewMessageSoundEnabled()){
                     self.carouselSpeechHelper.speechTotalItemsAvailable(self.messagesCount, clubNewsCount: self.clubNewsCount, newsCount: self.newsCount) // Speech total of items
                 }
                 UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification,
                     self.categoryView); // Set the accessibillity view back to the categoryview so user can interact with carousel
+                
+                // Reload the item when empty for categoryview
                 self.carouselCurrentItemIndexDidChange(self.carousel)
                 
             }
@@ -1071,13 +1071,11 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
     
     
     // Function for appending app data, only and only if the number of items is greater then 1. This is for getting the new items only when at the end of the carousel
-    func appendAppData(type: String, showLoadingScreen: Bool){
+    func appendAppData(type: String, showLoadingScreen: Bool, shouldScrollToMessage: Bool){
         if(!self.messageIsOpenend){
-            var oldID = "0" // When there are no items in carousel, there is no old ID
+            
             var carouselDataHelper = CarouselDataHelper()
-            if(!self.firstItem){
-                oldID = self.items[self.carousel.currentItemIndex].getID()
-            }
+
             
             var url = "http://84.107.107.169:8080/VisioWebApp/API/chat/allMessages?tokenKey=" + self.token.getToken() // URL for JSON
             
@@ -1193,6 +1191,13 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                             if(self.userSettings.isNotificationSoundEnabled()){
                                 if(newMessages > 0){
                                     self.carouselSpeechHelper.newItemsToSpeech(newMessages, type: "1")
+                                    if(shouldScrollToMessage){
+                                        if(self.carousel.numberOfItems > 2){
+                                            scrollToMessage = true
+                                            self.isAppending = false // Set it to false to speech exception
+                                            self.carousel.scrollToItemAtIndex(self.messagesCount-1, animated: true)
+                                        }
+                                    }
                                 }
                                 if(newNews > 0){
                                     self.carouselSpeechHelper.newItemsToSpeech(newNews, type: "2")
@@ -1216,7 +1221,7 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                                 for p in 0...self.items.count-1{
                                     
                                     // Old ID found, get back to it
-                                    if(oldID == self.items[p].getID()){
+                                    if(self.oldItemID == self.items[p].getID()){
                                         println("FOUND")
                                         self.carousel.scrollToItemAtIndex(p, animated: false)
                                         self.carouselCurrentItemIndexDidChange(self.carousel) // Reload the view

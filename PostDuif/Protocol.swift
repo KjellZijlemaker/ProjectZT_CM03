@@ -80,7 +80,7 @@ protocol carouselDelegate{
         get set
     }
     func setCategoryType(index: Int, isEmpty: Bool)
-    func appendAppData(type: String, showLoadingScreen: Bool)
+    func appendAppData(type: String, showLoadingScreen: Bool, shouldScrollToMessage: Bool)
     var firstItem:Bool{
         get set
     }
