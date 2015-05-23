@@ -87,9 +87,6 @@ protocol carouselDelegate{
     var items:[Item]{
         get set
     }
-    var totalNewItems: Int{
-        get set
-    }
     var notificationDot:NotificationDot!{
         get set
     }

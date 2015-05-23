@@ -20,7 +20,6 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
     var messagesCount = 0 // For total of new messages
     var newsCount = 0 // For total of new news
     var clubNewsCount = 0 // For total of new clubnews
-    var totalNewItems = 0 // For total of new items (Non realtime appended)
     
     //# MARK: - Booleans (checks) for carousel
     var firstItem: Bool = true // To indicate if this is the first item of carousel
@@ -28,11 +27,8 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
     var messageIsOpenend: Bool = false // Checking if message has openend, so not the same item will be removed
     
     //# MARK: - Index counters for caorusel, for appending new items
-    var indexBeginningNewMessages = 0 // Index when the new messages appended (for counting down the new items in notification)
-    var indexBeginningNewNews = 0 // Index when the new news appended (for counting down the new items in notification)
-    var indexBeginningNewClubNews = 0 // Index when the new clubNews appended
     var oldItemID = "0" // Old ID for preventing the Carousel moving from index
-
+    
     //# MARK: - Arrays for the items and deleted items
     var items: [Item] = [] // Items inside the carousel
     var deleteditemIndexes:[String] = [] // Carousel indexes for deleting (user read)
@@ -131,17 +127,6 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
         let swipeLeft = UISwipeGestureRecognizer(target: self, action: Selector("leftSwiped"))
         swipeLeft.direction = UISwipeGestureRecognizerDirection.Left
         self.view.addGestureRecognizer(swipeLeft)
-        
-        //-----------up swipe gestures in view--------------//
-        let swipeUp = UISwipeGestureRecognizer(target: self, action: Selector("upSwiped"))
-        swipeUp.direction = UISwipeGestureRecognizerDirection.Up
-        self.view.addGestureRecognizer(swipeUp)
-        
-        
-        //-----------up swipe gestures in view--------------//
-        let swipeDown = UISwipeGestureRecognizer(target: self, action: Selector("swipeDown"))
-        swipeDown.direction = UISwipeGestureRecognizerDirection.Down
-        self.view.addGestureRecognizer(swipeDown)
         
         let singleTap = UITapGestureRecognizer(target: self, action:Selector("singleTapped"))
         singleTap.numberOfTapsRequired = 1
@@ -263,28 +248,6 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
         return true
     }
     
-    //------------Swipe method to the left--------------//
-    func upSwiped(){
-        if(!self.items.isEmpty){
-            // carousel.scrollByNumberOfItems(1, duration: 0.25)
-            //appendAppData()
-        }
-    }
-    
-    //------------Swipe method to the left--------------//
-    func newMessageTapped(){
-        if(!self.items.isEmpty){
-            self.carousel.scrollToItemAtIndex(self.items.count-self.totalNewItems, animated: true)
-        }
-    }
-    
-    func swipeDown(){
-        if(!self.items.isEmpty){
-            self.carousel.scrollToItemAtIndex(self.items.count-1, animated: true)
-            self.carousel.reloadItemAtIndex(self.items.count-1, animated: false)
-        }
-    }
-    
     
     //# MARK: - Setting up the backround and foreground notifications
     func setupBackgroundForegroundInit(){
@@ -314,14 +277,12 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
         if(self.messagesCount == 0 && self.clubNewsCount == 0 || self.newsCount == 0 ){
             
             if(!self.appendDataTimer.valid){
-                println("NO MESSAGES, CLUBS OR NEWS")
                 if(self.messagesCount < self.userSettings.getPrivateMessageLimit() || self.newsCount < self.userSettings.getNewsMessageLimit()){
                     self.setupAppendDataTimer("0")
                 }
                 
             }
             else{
-                println("NO MESSAGES, CLUBS OR NEWS")
                 self.deleteTimer(self.appendDataTimer)
                 if(self.messagesCount < self.userSettings.getPrivateMessageLimit() || self.newsCount < self.userSettings.getNewsMessageLimit()){
                     self.setupAppendDataTimer("0")
@@ -331,13 +292,11 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
             
         else if(self.messagesCount == 0){
             if(!self.appendDataTimer.valid){
-                println("NO MESSAGES")
                 if(self.messagesCount < self.userSettings.getPrivateMessageLimit()){
                     self.setupAppendDataTimer("1")
                 }
             }
             else{
-                println("NO MESSAGES")
                 self.deleteTimer(self.appendDataTimer)
                 if(self.messagesCount < self.userSettings.getPrivateMessageLimit()){
                     self.setupAppendDataTimer("1")
@@ -346,13 +305,11 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
         }
         else if(self.newsCount == 0){
             if(!self.appendDataTimer.valid){
-                println("NO NEWS")
                 if(self.newsCount < self.userSettings.getNewsMessageLimit()){
                     self.setupAppendDataTimer("2")
                 }
             }
             else{
-                println("NO NEWS")
                 self.deleteTimer(self.appendDataTimer)
                 if(self.newsCount < self.userSettings.getNewsMessageLimit()){
                     self.setupAppendDataTimer("2")
@@ -365,10 +322,23 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                 
             }
             else{
-                println("NO CLUBS")
                 self.deleteTimer(self.appendDataTimer)
                 self.setupAppendDataTimer("3")
             }
+        }
+        else if(self.messagesCount != 0){
+            if(!self.appendDataTimer.valid){
+                if(self.messagesCount < self.userSettings.getPrivateMessageLimit()){
+                    self.setupAppendDataTimer("1")
+                }
+            }
+            else{
+                self.deleteTimer(self.appendDataTimer)
+                if(self.messagesCount < self.userSettings.getPrivateMessageLimit()){
+                    self.setupAppendDataTimer("1")
+                }
+            }
+            
         }
         else{
             if(self.appendDataTimer.valid){
@@ -460,15 +430,6 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                 self.appendAppData("3", showLoadingScreen: true, shouldScrollToMessage: false)
             }
         }
-            
-        else{
-            if(self.carousel.currentItemIndex == self.carousel.numberOfItems - self.totalNewItems && self.totalNewItems > 0){
-                self.notificationDot.showDotView() // Show dot
-                self.notificationText.hideNotificationTextView() // New items, so unhide textView
-                
-                self.totalNewItems--
-            }
-        }
     }
     
     // Function for checking if the index from the carousel changed
@@ -491,7 +452,7 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
         
         if(!self.isAppending){
             // Speech the item
-            self.carouselSpeechHelper.carouselSpeechItem()
+            self.carouselSpeechHelper.carouselSpeechItem(self.carousel.currentItemIndex)
         }
         
     }
@@ -521,7 +482,7 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
             
         case "1":
             pictures.append(UIImage(named:"message.jpg"))
-
+            
             if(self.items[index].getFromUserProfilePictureURL() != ""){
                 self.setupProfilePicture(index, urlString: self.items[index].getFromUserProfilePictureURL())
             }
@@ -561,14 +522,14 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
     
     // Appending the image per index inside the carousel
     func appendImage(index: Int){
-       
+        
         switch(self.items[index].getType()){
         case "1":
             pictures.insert(UIImage(named:"message.jpg"), atIndex: index)
             if(self.items[index].getFromUserProfilePictureURL() != ""){
                 self.setupProfilePicture(index, urlString: self.items[index].getFromUserProfilePictureURL())
             }
-        
+            
         case "2":
             pictures.insert(UIImage(named:"news.jpg"), atIndex: index)
         case "3":
@@ -583,14 +544,12 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
     // Removing the image at index
     func removeImage(index:Int ){
         self.pictures.removeAtIndex(index)
-        
     }
     
     // Set the type of category and show it inside the categoryView
     func setCategoryType(index: Int, isEmpty: Bool){
         if(!isEmpty){
             switch(self.items[index].getType()){
-                
             case "1":
                 println(self.items[index].getFromUser())
                 self.categoryView.setCategoryTypeLabel("Persoonlijk bericht")
@@ -989,7 +948,7 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                     // Check if carousel has items, if not, there is no first item and method should not be executed
                     if(!self.items.isEmpty){
                         if(self.firstItem){
-                            self.carouselSpeechHelper.carouselSpeechItem() // Speeching the first item inside the carousel
+                            self.carouselSpeechHelper.carouselSpeechItem(self.carousel.currentItemIndex) // Speeching the first item inside the carousel
                         }
                     }
                     
@@ -1075,7 +1034,7 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
         if(!self.messageIsOpenend){
             
             var carouselDataHelper = CarouselDataHelper()
-
+            
             
             var url = "http://84.107.107.169:8080/VisioWebApp/API/chat/allMessages?tokenKey=" + self.token.getToken() // URL for JSON
             
@@ -1115,7 +1074,7 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                                             
                                             self.items.insert(items[l], atIndex: self.messagesCount)
                                             
-                                            self.appendImage(l)
+                                            self.appendImage(self.messagesCount)
                                             self.carousel.insertItemAtIndex(self.messagesCount, animated: true)
                                             
                                             //Add the amount of messages or news
@@ -1133,7 +1092,7 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                                             
                                             var indexNewsCount = self.messagesCount + self.clubNewsCount + self.newsCount
                                             self.items.insert(items[l], atIndex: indexNewsCount)
-                                            self.appendImage(l)
+                                            self.appendImage(indexNewsCount)
                                             self.carousel.insertItemAtIndex(indexNewsCount, animated: true)
                                             
                                             //Add the amount of messages or news
@@ -1151,7 +1110,7 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                                         
                                         var indexClubNewsCount = self.messagesCount + self.clubNewsCount
                                         self.items.insert(items[l], atIndex: indexClubNewsCount)
-                                        self.appendImage(l)
+                                        self.appendImage(indexClubNewsCount)
                                         self.carousel.insertItemAtIndex(indexClubNewsCount, animated: true)
                                         
                                         //Add the amount of messages or news
@@ -1183,7 +1142,7 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                                 self.showNotificationNewItems(newNews)
                             }
                         }
-
+                        
                         // If the index has changed (appended item), speech the total of new items
                         if(indexHasChanged){
                             var scrollToMessage = false
@@ -1210,7 +1169,7 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                                     self.notificationSound.playSound() // Play the ROEKOE sound
                                     
                                 }
-                                self.carouselCurrentItemIndexDidChange(self.carousel) // Refresh the item
+                                self.carouselSpeechHelper.speechCarouselScrollItem(self.messagesCount-1)
                                 self.isAppending = true // Set it to true again
                             }
                             
@@ -1244,7 +1203,7 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                             // Check if carousel has items
                             if(!self.items.isEmpty){
                                 if(self.firstItem){
-                                    self.carouselSpeechHelper.carouselSpeechItem() // Speeching the first item inside the carousel
+                                    self.carouselSpeechHelper.carouselSpeechItem(self.carousel.currentItemIndex) // Speeching the first item inside the carousel
                                 }
                             }
                             
@@ -1259,22 +1218,6 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                     
                 }
             }
-            
-            // Setting new indexes for appending new items
-            switch(type){
-            case "1":
-                self.indexBeginningNewMessages = self.messagesCount-1 // Index when new items will begin to append
-                break
-            case "2":
-                self.indexBeginningNewNews = self.messagesCount + self.newsCount-1 // Index when new items will begin to append
-                break
-            case "3":
-                self.indexBeginningNewClubNews = self.messagesCount + self.newsCount + self.clubNewsCount-1 // Index when new items will begin to append
-                
-            default:
-                break
-            }
-            
         }
         
     }
@@ -1287,7 +1230,6 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
             self.notificationDot.getDotView().addSubview(self.notificationText.getNotificationTextView())
         }
         
-        self.totalNewItems++ // Append the number of items
         self.notificationText.setNotificationTextView(String(totalNewItems)) // Update the text
         self.notificationText.showNotificationTextView()
         self.notificationDot.showDotView() // Show dot
