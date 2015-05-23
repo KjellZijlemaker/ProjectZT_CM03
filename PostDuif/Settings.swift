@@ -18,6 +18,7 @@ class Settings{
     private var privateMessageLimit: Int
     private var userSpeech: Bool
     private var newsMessageLimit: Int
+    private var clubNewsMessageLimit: Int
     private var primaryColorType: String
     private var secondaryColorType: String
     private var userAccessibility: Bool
@@ -34,6 +35,7 @@ class Settings{
         self.privateMessageLimit = 10
         self.userSpeech = true
         self.newsMessageLimit = 10
+        self.clubNewsMessageLimit = 10
         self.primaryColorType = "default"
         self.secondaryColorType = "default"
         self.userAccessibility = true
@@ -73,6 +75,14 @@ class Settings{
     
     func getNewsMessageLimit() -> Int{
         return self.newsMessageLimit
+    }
+    
+    func setClubNewsMessageLimit(limit: Int){
+        self.clubNewsMessageLimit = limit
+    }
+    
+    func getClubNewsMessageLimit() -> Int{
+        return self.clubNewsMessageLimit
     }
     
     func setPrimaryColorType(colorType: String){

@@ -149,6 +149,10 @@ class UserManager{
                             var newsMessageLimit: String = settings["ShowNewsMessageLimit"].stringValue
                             newSettings.setNewsMessageLimit(newsMessageLimit.toInt()!)
                             
+                            // Set clubNews limit
+                            var clubNewsMessageLimit: String = settings["ShowClubMessageLimit"].stringValue
+                            newSettings.setClubNewsMessageLimit(clubNewsMessageLimit.toInt()!)
+                            
                             // Set color
                             var colorType: String = settings["contrastType"].stringValue
                             

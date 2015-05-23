@@ -313,17 +313,20 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                 self.deleteTimer(self.appendDataTimer)
                 if(self.newsCount < self.userSettings.getNewsMessageLimit()){
                     self.setupAppendDataTimer("2")
-                }            }
+                }
+            }
         }
         else if(self.clubNewsCount == 0){
             if(!self.appendDataTimer.valid){
-                println("NO CLUBS")
-                self.setupAppendDataTimer("3")
-                
+                if(self.clubNewsCount < self.userSettings.getClubNewsMessageLimit()){
+                    self.setupAppendDataTimer("3")
+                }
             }
             else{
                 self.deleteTimer(self.appendDataTimer)
-                self.setupAppendDataTimer("3")
+                if(self.clubNewsCount < self.userSettings.getClubNewsMessageLimit()){
+                    self.setupAppendDataTimer("3")
+                }
             }
         }
         else if(self.messagesCount != 0){
@@ -935,7 +938,9 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                             self.setImages(i)
                             
                             self.carousel.insertItemAtIndex(i, animated: true) // Insert items at last index
-                            
+                            if(self.clubNewsCount == self.userSettings.getClubNewsMessageLimit()){
+                                break
+                            }
                         }
                     }
                     
@@ -1105,18 +1110,23 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                                         }
                                     }
                                     else if(items[l].getType() == "3"){
-                                        
-                                        indexHasChanged = true
-                                        
-                                        var indexClubNewsCount = self.messagesCount + self.clubNewsCount
-                                        self.items.insert(items[l], atIndex: indexClubNewsCount)
-                                        self.appendImage(indexClubNewsCount)
-                                        self.carousel.insertItemAtIndex(indexClubNewsCount, animated: true)
-                                        
-                                        //Add the amount of messages or news
-                                        newClubNews++
-                                        self.clubNewsCount++
-                                        
+                                        if(self.clubNewsCount < self.userSettings.getClubNewsMessageLimit()){
+                                            
+                                            
+                                            indexHasChanged = true
+                                            
+                                            var indexClubNewsCount = self.messagesCount + self.clubNewsCount
+                                            self.items.insert(items[l], atIndex: indexClubNewsCount)
+                                            self.appendImage(indexClubNewsCount)
+                                            self.carousel.insertItemAtIndex(indexClubNewsCount, animated: true)
+                                            
+                                            //Add the amount of messages or news
+                                            newClubNews++
+                                            self.clubNewsCount++
+                                        }
+                                        else{
+                                            break
+                                        }
                                     }
                                 }
                                 
