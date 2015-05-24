@@ -5,6 +5,7 @@
 //  Created by Kjell Zijlemaker on 25-03-15.
 //  Copyright (c) 2015 Kjell Zijlemaker. All rights reserved.
 //
+//  Manager for speeching the desired Strings
 
 import Foundation
 import AVFoundation
@@ -14,6 +15,9 @@ class SpeechManager{
     // Setup new synthesizer for speech
     let speechSynthesizer: AVSpeechSynthesizer! = AVSpeechSynthesizer()
     
+    /**
+    Function for speeching the desired String
+    */
     func speechString(speech: String){
         
         //Setting empty String for bug ios 8
@@ -39,7 +43,9 @@ class SpeechManager{
         speechSynthesizer .speakUtterance(mySpeechUtterance)
     }
     
-    
+    /**
+    Function for speeching an array of strings
+    */
     func speechArray(speech: [String]){
         
         for pieceText in speech{
@@ -68,12 +74,12 @@ class SpeechManager{
             // Say the sentence
             speechSynthesizer .speakUtterance(mySpeechUtterance)
             
-            
         }
-        
-        
     }
     
+    /**
+    Function for stopping the speech when needed, with bugfix
+    */
     func stopSpeech(){
         if(self.speechSynthesizer.speaking){
             self.speechSynthesizer.stopSpeakingAtBoundary(AVSpeechBoundary.Immediate)
@@ -81,9 +87,11 @@ class SpeechManager{
             self.speechSynthesizer.speakUtterance(mySpeechUtterance)
             self.speechSynthesizer.stopSpeakingAtBoundary(AVSpeechBoundary.Immediate)
         }
-        
     }
-
+    
+    /**
+    Function for checking if the speech is active
+    */
     func isSpeaking() -> Bool{
         return self.speechSynthesizer.speaking
     }

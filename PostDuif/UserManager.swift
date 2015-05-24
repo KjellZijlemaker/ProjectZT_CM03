@@ -5,17 +5,21 @@
 //  Created by Kjell Zijlemaker on 26-03-15.
 //  Copyright (c) 2015 Kjell Zijlemaker. All rights reserved.
 //
+//  Manager for getting the desired settings for user, from the server
 
 import Foundation
 
 class UserManager{
-   
+    
+    /**
+    Function for logging into the application
+    */
     class func loginUser(apiEndPoint: String, completionHandler: (response: Token) -> ()) {
+        
+        // Making new configuration for some extra settings
         let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
         configuration.timeoutIntervalForResource = 10 // seconds
-        
         var alamofireManager = Manager(configuration: configuration)
-        
         
         // Making GET request to the URL
         alamofireManager.request(.GET, apiEndPoint).responseJSON { (request, response, json, error) in
@@ -29,41 +33,44 @@ class UserManager{
                 if let code = jsonObj["code"].string{
                     token.setReturnCode(code)
                     
+                    // Set the status code
                     if let status = jsonObj["status"].string{
                         token.setStatus(status)
                     }
                     
+                    // Set the message from getting the token
                     if let message = jsonObj["message"].string{
                         token.setMessage(message)
                     }
                     
-                    // Make new JSON array
+                    // Getting the token for getting new data and settings
                     if let tokenFromArray = jsonObj["data"]["token"].string{
                         token.setToken(tokenFromArray)
-                        
                     }
+                    
+                    // Getting the refreshtoken when the original token doesn't work
                     if let refreshTokenFromArray = jsonObj["data"]["refreshToken"].string{
                         token.setRefreshToken(refreshTokenFromArray)
-                        
                     }
+                    
+                    // Set the expire date
                     if let expireTokenDateFromArray = jsonObj["data"]["expireTokenDate"].string{
                         token.setExpireTokenDate(expireTokenDateFromArray)
-                        
                     }
                     
                     
                     
                 }
                 
-                println(token.getToken())
-                println(token.getRefreshToken())
-                println(json)
-                
+                // Send the object back to the main thread
                 completionHandler(response: token)
             }
         }
     }
     
+    /**
+    Function for getting all the settings for the user
+    */
     class func getUserSettings(apiEndPoint: String, completionHandler: (response: Settings) -> ()) {
         let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
         configuration.timeoutIntervalForResource = 10 // seconds
@@ -78,13 +85,9 @@ class UserManager{
                 
                 // Making the JSON object from the JSON
                 var jsonObj = JSON(json!)
-                println(json)
                 var settingsArray = [Settings]()
                 
-                
-                
                 if jsonObj["code"].string == "200"{
-                    
                     
                     // Making new array
                     if let dataArray = jsonObj["data"]["entry"].array{
@@ -113,7 +116,7 @@ class UserManager{
                             else{
                                 newSettings.hasEndOfMessageSoundEffectEnabled(false)
                             }
-
+                            
                             
                             // Set totalNewMessageSoundEnabled
                             var totalNewMessageSoundEnabled: String = settings["isTotalNewMessageSoundEnabled"].stringValue
@@ -132,6 +135,7 @@ class UserManager{
                             else{
                                 newSettings.hasHintSupportSoundEnabled(false)
                             }
+                            
                             // Set message limit
                             var privateMessageLimit: String = settings["ShowPrivateMessageLimit"].stringValue
                             newSettings.setPrivateMessageLimit(privateMessageLimit.toInt()!)
@@ -176,34 +180,22 @@ class UserManager{
                             // Store seconds message
                             var messagesStoreMaxSeconds: String = settings["privateMessageStoreTimeSeconds"].stringValue
                             newSettings.setMessagesStoreMaxSeconds(messagesStoreMaxSeconds)
-                           
+                            
                             // Store seconds clubnews seconds
                             var clubNewsStoreMaxSeconds: String = settings["clubMessageStoreTimeSeconds"].stringValue
                             newSettings.setClubNewsStoreMaxSeconds(clubNewsStoreMaxSeconds)
-                           
+                            
                             // Store seconds news seconds
                             var newsStoreMaxSeconds: String = settings["newsFeedMessageStoreTimeSeconds"].stringValue
                             newSettings.setNewsStoreMaxSeconds(newsStoreMaxSeconds)
                             
-                            /* Code snippet for getting single item out of JSON array
-                            if let appName = jsonObj["feed"]["entry"][1]["im:name"]["label"].string{
-                            let test1 = Test(age: 9, name: appName)
-                            //self.tableView.reloadData()
-                            completion(response: test1)
-                            }
-                            */
-                            
-                            println(newSettings.isEndOfMessageSoundEffectEnabled())
-                            println(newSettings.isTotalNewMessageSoundEnabled())
-                            println(newSettings.isHintSupportSoundEnabled())
-                            
-
-                            
+                            // Send it back to the main thread
                             settingsArray.append(newSettings)
                             
                         }
                     }
                 }
+                    // When gone wrong, set the returncode
                 else{
                     if let returnCode = jsonObj["code"].string{
                         var newSetting = Settings()
@@ -217,7 +209,7 @@ class UserManager{
             }
                 
                 
-                // If there is an error.....
+                // If there is an error, set the returncode
             else if (error != nil){
                 // Making new Message object
                 var newSetting = Settings()

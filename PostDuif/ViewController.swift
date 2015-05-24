@@ -82,6 +82,7 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
     override func viewDidLoad()
     {
         super.viewDidLoad()
+        UIApplication.sharedApplication().idleTimerDisabled = true // Disable the timer to lock screen
         
         // Setting inital settings for swipe gestures
         self.carousel.userInteractionEnabled = true
@@ -145,6 +146,7 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
         }
     }
     
+    // Statusbar style
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return UIStatusBarStyle.LightContent
     }
@@ -161,7 +163,9 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
     //# MARK: - Gesture control methods
     //=================================================================================================
     
-    //------------Dubble tap method for opening new view--------------//
+    /**
+    Selector for opening new view when tapped on the item
+    */
     func singleTapped(){
         
         if(!self.items.isEmpty){
@@ -185,7 +189,9 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
         }
     }
     
-    //------------Swipe method to the right--------------//
+    /**
+    Selector for opening new view when swiped to the right
+    */
     func rightSwiped(){
         if(!self.items.isEmpty){
             self.carouselSpeechHelper.getSpeech().stopSpeech()
@@ -210,7 +216,9 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
         
     }
     
-    //------------Swipe method to the left--------------//
+    /**
+    Selector for opening new view when swiped to the left
+    */
     func leftSwiped(){
         if(!self.items.isEmpty){
             self.carouselSpeechHelper.getSpeech().stopSpeech()
@@ -234,6 +242,7 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
         }
     }
     
+    // When scrolling with Voice Over on, three vinger swipes will be available
     override func accessibilityScroll(direction: UIAccessibilityScrollDirection) -> Bool {
         if(!self.messageIsOpenend){
             if (direction == UIAccessibilityScrollDirection.Right) {
@@ -249,7 +258,10 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
     }
     
     
-    //# MARK: - Setting up the backround and foreground notifications
+    //# MARK: - Setting up the observers
+    /**
+    Function for setting up the observers for coming from the background or going to the foreground
+    */
     func setupBackgroundForegroundInit(){
         NSNotificationCenter.defaultCenter().addObserver(self, selector:"deleteAndSpeechItemsToForeground", name:
             UIApplicationWillEnterForegroundNotification, object: nil)
@@ -259,11 +271,16 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
     
     
     //# MARK: - Setting up the timer(s)
-    
+    /**
+    Function for setting up the timer for checking if items should be appended
+    */
     func setupAppendingTimer(){
         self.checkAppendingTimer = NSTimer.scheduledTimerWithTimeInterval(13.0, target:self, selector: Selector("checkAppendingTimerSelectorHelper"), userInfo: nil, repeats: true)
     }
     
+    /**
+    Function for setting up the timer to append the items in a timely manner
+    */
     func setupAppendDataTimer(type: String){
         self.appendDataTimer = NSTimer.scheduledTimerWithTimeInterval(8.0, target:self, selector: Selector("appendDataTimerSelectorHelper:"), userInfo: type, repeats: true)
     }
@@ -271,7 +288,9 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
     
     //# MARK: - Selectors for the timers
     
-    // For checking if checking for appending should execute
+    /**
+    Selector for checking if the items should be appended
+    */
     func checkAppendingTimerSelectorHelper(){
         // If there are no items of one of the categories, setup timer and append in sequences
         if(self.messagesCount == 0 && self.clubNewsCount == 0 || self.newsCount == 0 ){
@@ -351,13 +370,20 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
         }
     }
     
-    // Selector for appending the data
+    /**
+    Selector for appending the item
+    :param: The timer where the needed information is in
+    */
     func appendDataTimerSelectorHelper(timer: NSTimer){
         var type = timer.userInfo as String
         self.appendAppData(type, showLoadingScreen: false, shouldScrollToMessage: true)
     }
     
-    // Deleting the timer
+    /**
+    Function for deleting the timer when not needed anymore
+    
+    :param: timer The timer to be deleted
+    */
     func deleteTimer(timer: NSTimer){
         timer.invalidate()
     }
@@ -411,13 +437,13 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
     }
     
     
-    // Checking for new items to append
+    /**
+    Function for checking if the item should be appended when the index is on that item
+    */
     func carouselCheckForAppendingItems(){
         
         // If the number is lower then two there will no appending in the carousel, but items will be decremented for array
         if(self.carousel.numberOfItems >= 2){
-            
-            // self.deleteTimer(self.appendDataTimer) // Delete old timer before making new one
             
             if (self.carousel.currentItemIndex == self.messagesCount-1){
                 if(self.messagesCount < self.userSettings.getPrivateMessageLimit()){
@@ -435,12 +461,15 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
         }
     }
     
-    // Function for checking if the index from the carousel changed
+    /**
+    Function for checking if the index has been changed. This will be called every time the Carousel will go to the next item
+    */
     func carouselCurrentItemIndexDidChange(carousel: iCarousel!){
         self.carouselCheckForAppendingItems() // Check for appending items and decrement notification counter if needed
         if(!self.firstItem){
             self.oldItemID = self.items[self.carousel.currentItemIndex].getID()
         }
+        
         if(!self.items.isEmpty){
             // Setting category per item inside the array
             self.setCategoryType(self.carousel.currentItemIndex, isEmpty: false) // Setting the category type
@@ -450,8 +479,6 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
             self.setCategoryType(self.carousel.currentItemIndex, isEmpty: true) // Setting the category type
             self.carouselSpeechHelper.speechNoItemsAvailable()
         }
-        
-        
         
         if(!self.isAppending){
             // Speech the item
@@ -478,14 +505,17 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
     //# MARK: - Methods for setting images and category
     //=================================================================================================
     
-    // Function for setting the images per category
+    /**
+    Function for setting up the images the first time the Carousel loads
+    :param: index The index from the item to be loaded
+    */
     func setImages(index: Int){
         
         switch(self.items[index].getType()){
-            
         case "1":
             pictures.append(UIImage(named:"message.jpg"))
             
+            // Check if the user has a profile picture
             if(self.items[index].getFromUserProfilePictureURL() != ""){
                 self.setupProfilePicture(index, urlString: self.items[index].getFromUserProfilePictureURL())
             }
@@ -503,7 +533,12 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
     }
     
     
-    // Setting up new picture and description
+    /**
+    Function for setting up the new profile picture onto the item
+    
+    :param: index The index to setup the profile picture from
+    :param: urlString The URL where the picture is located
+    */
     func setupProfilePicture(index: Int, urlString: String){
         var newUrlString = "http://84.107.107.169:8080/VisioWebApp/profile/image?fileNameKey=" + urlString
         var imgURL: NSURL = NSURL(string: newUrlString)!
@@ -515,20 +550,25 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
             completionHandler: {(response: NSURLResponse!,data: NSData!,error: NSError!) -> Void in
                 
                 if error == nil {
-                    self.removeImage(index)
-                    self.pictures.insert(UIImage(data: data), atIndex: index)
-                    self.carousel.reloadItemAtIndex(index, animated: false)
+                    self.removeImage(index) // Remove the picture that already has been loaded
+                    self.pictures.insert(UIImage(data: data), atIndex: index) // Insert the new one in his place
+                    self.carousel.reloadItemAtIndex(index, animated: false) // Reload the index Item for showing new picture
                 }
         })
         
     }
     
-    // Appending the image per index inside the carousel
+    /**
+    Function for appending a new image to the Carousel
+    :param: index The index from which item it has to be loaded in
+    */
     func appendImage(index: Int){
         
         switch(self.items[index].getType()){
         case "1":
             pictures.insert(UIImage(named:"message.jpg"), atIndex: index)
+            
+            // Check if the user has a profile picture or not
             if(self.items[index].getFromUserProfilePictureURL() != ""){
                 self.setupProfilePicture(index, urlString: self.items[index].getFromUserProfilePictureURL())
             }
@@ -544,12 +584,20 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
         
     }
     
-    // Removing the image at index
+    /**
+    Function for removing the image when item is deleted
+    :param: index The index from which the item has been deleted
+    */
     func removeImage(index:Int ){
         self.pictures.removeAtIndex(index)
     }
     
-    // Set the type of category and show it inside the categoryView
+    /**
+    Function for setting the categoryTypeView (underneath the Carousel)
+    
+    :param: index For checking which item it has to check it's type on
+    :param: isEmpty For checking if the Carousel is empty and should behave differently
+    */
     func setCategoryType(index: Int, isEmpty: Bool){
         if(!isEmpty){
             switch(self.items[index].getType()){
@@ -608,7 +656,9 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
     
     //# MARK: - Buttons
     //=================================================================================================
-    
+    /**
+    Function for making the gesture for the logout button
+    */
     func logoutButtonAction(sender: UILongPressGestureRecognizer) {
         self.carouselSpeechHelper.getSpeech().stopSpeech()
         if sender.state == UIGestureRecognizerState.Began
@@ -622,7 +672,9 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
         }
     }
     
-    // Function for going to the login phase
+    /**
+    Function for going to the loginpage when credentials are incorrect. Will also remove all instances inside this viewController
+    */
     func goToLogin(){
         // Dismiss the controller
         self.presentingViewController?.dismissViewControllerAnimated(true, completion: {
@@ -654,7 +706,11 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
     //# MARK: - Alerts
     //=================================================================================================
     
-    // For loading screen
+    /**
+    Function for setting the loading bar
+    
+    :param: title The title to be shown inside the loadingView
+    */
     func setLoadingView(title: String){
         // Notification for getting items
         let loadingNotification = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
@@ -665,7 +721,13 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
     }
     
     
-    // Setting alertView for notification user
+    /**
+    Function for setting the alertView (yes and no selection) with user interaction
+    
+    :param: title The title to be shown inside the alertView
+    :param: message The message to be shown inside the alertView
+    :returns: SIAlertView The alertView so button actions can be added
+    */
     func setAlertView(title: String, message: String) -> SIAlertView{
         var alert:SIAlertView  = SIAlertView(title: title, andMessage: message)
         alert.isAccessibilityElement = false
@@ -679,6 +741,9 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
     
     //# MARK: - UIBackground / Foreground methods
     //=================================================================================================
+    /**
+    Function for delete the old items inside the Carousel and speeching the total items inside the Carousel at the moment of returning into the foreground of the application
+    */
     func deleteAndSpeechItemsToForeground(){
         if(self.carousel.numberOfItems != 0){
             if(!self.messageIsOpenend){
@@ -689,15 +754,18 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                 var date = NSDate()
                 dateFormatter.dateFormat = "yyyy-MM-dd"
                 
+                // Make new date
                 var currentdateString = dateFormatter.stringFromDate(date)
                 currentdateString.substringToIndex(advance(currentdateString.startIndex, 10)) // Getting only the year, month day
                 
                 if(!self.items.isEmpty){
+                    
                     // Looping through all the dates of the corresponding items
                     for i in 0...self.items.count-1{
                         if(self.items[i].getType() == "2" || self.items[i].getType() == "3"){
                             var publishedDateString = self.items[i].getPublishDate()
                             
+                            // If the current date is not the same as the published date, remove from carousel and append the index to a new array
                             if(currentdateString != publishedDateString){
                                 for o in 0...self.items.count-1{
                                     if(self.items[i].getID() == self.items[o].getID()){
@@ -728,7 +796,7 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                     }
                 }
                 
-                // When there are no more items it should be true
+                // When there are no more items inside the carousel, the Carousel should behave differently
                 if(self.items.isEmpty){
                     self.firstItem = true
                 }
@@ -742,13 +810,18 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                 UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification,
                     self.categoryView); // Set the accessibillity view back to the categoryview so user can interact with carousel
                 
-                // Reload the item when empty for categoryview
+                // Reload the carousel item to speech it again
                 self.carouselCurrentItemIndexDidChange(self.carousel)
                 
             }
         }
     }
     
+    /**
+    Function for stopping the speech when going to the background
+    
+    :param: notification The notification to be received by the selector
+    */
     func stopSpeechItemsToBackground(notification : NSNotification) {
         
         // Stop the current speech
@@ -760,7 +833,9 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
     // //# MARK: - Seque methods
     //=================================================================================================
     
-    // Preparing the seque and send data with MessageContentViewController
+    /**
+    Function for going to another controller. This is when the user tapped on a new item
+    */
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
         if segue.identifier == "showMessageContent"{
             let vc = segue.destinationViewController as MessageContentViewController
@@ -805,7 +880,12 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
     //# MARK: - User data methods
     //=================================================================================================
     
-    // Function for getting the main app data and filling it into the array
+    /**
+    Function for getting the user settings and store them inside the viewController for proper settings, from the back-end
+    
+    :param: tokenKey The token from which the access to the back-end is gained
+    :param: updateSettings Indicator if the userSettings are being updated. If so, the getAppData should not be executed as other executions within this method
+    */
     func getUserSettings(tokenKey: String, updateSettings: Bool){
         var url = "http://84.107.107.169:8080/VisioWebApp/API/clientSettings?tokenKey=" + tokenKey
         
@@ -836,8 +916,6 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                     self.carousel.backgroundColor = ColorHelper.UIColorFromRGB(self.userSettings.getSecondaryColorType())
                 }
                 
-                
-                
                 // Execute only when getting settings for the first time
                 if(!updateSettings){
                     self.setupBackgroundForegroundInit() // Setting the background foreground methods
@@ -866,6 +944,8 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                 if(!updateSettings){
                     MBProgressHUD.hideAllHUDsForView(self.view, animated: true) // Close notification
                 }
+                
+                // Make alert with buttons and show it to the user
                 var alert = self.setAlertView("Probleem", message: "Kon instellingen niet ophalen. Wil je het opnieuw proberen?")
                 alert.addButtonWithTitle("Ja", type: SIAlertViewButtonType.Default, handler:{ (ACTION :SIAlertView!)in
                     
@@ -885,12 +965,12 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
     //# MARK: - items and news data methods
     //=================================================================================================
     
-    // Function for getting the main app data and filling it into the array
+    /**
+    Function for getting all the data for the first time, from the back-end
+    :param: tokenKey The token from which the access to the back-end is gained
+    */
     func getAppData(tokenKey: String){
-        
-        var viewMayLoad: Bool = false
         var url = "http://84.107.107.169:8080/VisioWebApp/API/chat/allMessages?tokenKey=" + tokenKey
-        
         self.setLoadingView("Berichten en nieuws ophalen")
         
         DataManager.getItems(url){(items) in
@@ -898,10 +978,8 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
             // If not empty, enable getting initial data
             if(!items.isEmpty){
                 
-                
                 // If first message has returncode of 200, the token is correct and items are fetched
                 if(items[0].getReturnCode() == "200"){
-                    
                     
                     // Transfering array to global array
                     for i in 0...items.count-1{
@@ -914,6 +992,7 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                             
                             self.carousel.insertItemAtIndex(i, animated: true) // Insert items at last index
                             
+                            // If the limit has been reached, break the loop
                             if(self.messagesCount == self.userSettings.getPrivateMessageLimit()){
                                 break
                             }
@@ -926,6 +1005,8 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                             self.setImages(i)
                             
                             self.carousel.insertItemAtIndex(i, animated: true) // Insert items at last index
+                            
+                            // If the limit has been reached, break the loop
                             if(self.newsCount == self.userSettings.getNewsMessageLimit()){
                                 break
                             }
@@ -938,6 +1019,8 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                             self.setImages(i)
                             
                             self.carousel.insertItemAtIndex(i, animated: true) // Insert items at last index
+                            
+                            // If the limit has been reached, break the loop
                             if(self.clubNewsCount == self.userSettings.getClubNewsMessageLimit()){
                                 break
                             }
@@ -961,8 +1044,6 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                     
                     UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification,
                         self.categoryView); // Set the accessibillity view back to the categoryview so user can interact with carousel
-                    
-                    viewMayLoad = true
                 }
                     
                     // If the code is something else, the token is incorrect. Login again
@@ -970,6 +1051,7 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                     if(items[0].getReturnCode() == "400"){
                         if(self.token.isRefreshToken()){
                             
+                            // Set the refreshToken to false and insert the refreshToken
                             self.token.hasRefreshToken(false)
                             self.getAppData("http://84.107.107.169:8080/VisioWebApp/API/chat/allMessages?tokenKey=" + self.token.getRefreshToken())
                         }
@@ -985,7 +1067,11 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                         }
                         
                     }
+                        
+                        // Else, something went wrong and the user will be prompted to try again
                     else{
+                        
+                        // Make new alertView for user to interact with
                         var alert = self.setAlertView("Probleem", message: "Kon berichten niet ophalen. Wil je het nog een keer proberen?")
                         alert.addButtonWithTitle("Ja", type: SIAlertViewButtonType.Default, handler:{ (ACTION :SIAlertView!)in
                             
@@ -1010,21 +1096,12 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                 if(self.userSettings.isSpeechEnabled()){
                     self.carouselSpeechHelper.speechNoItemsAvailable()
                 }
-                else{
-                    var alert = self.setAlertView("Melding", message: "Er zijn geen berichten op dit moment")
-                    alert.addButtonWithTitle("OK", type: SIAlertViewButtonType.Default, handler:{ (ACTION :SIAlertView!)in
-                        
-                        // Send user back to login phase
-                        self.goToLogin()
-                    })
-                    alert.show()
-                }
                 
-                // If there are less then two items, call the timer
+                // If there are less then 2 items available, the categoryTypeView should state the Carousel is empty
                 if(self.carousel.numberOfItems < 2){
                     
                     self.categoryView.hidden = false // Unhide view
-                    self.setCategoryType(0, isEmpty: true) // Show the category
+                    self.setCategoryType(0, isEmpty: true) // 0 is when Carousel is empty
                 }
                 
                 MBProgressHUD.hideAllHUDsForView(self.view, animated: true) // Close notification
@@ -1034,19 +1111,31 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
     
     
     
-    // Function for appending app data, only and only if the number of items is greater then 1. This is for getting the new items only when at the end of the carousel
+    /**
+    Function for appending new items into the existing Carousel. A part of the function is inside the datahelper because of the reusability of that code
+    
+    :param: type The type of message the Carousel should append.
+    0 = all items
+    1 = messages
+    2 = news items
+    3 = clubNews items
+    
+    :param: showLoadingScreen Indicator for showing the loading screen or do a silent appending (timers)
+    :param: shouldScrollToMessage Indicator for skipping scrolling to the last item known, but going to the item to be scrolled to
+    */
     func appendAppData(type: String, showLoadingScreen: Bool, shouldScrollToMessage: Bool){
+        
+        // Execute only when no item is opened
         if(!self.messageIsOpenend){
-            
-            var carouselDataHelper = CarouselDataHelper()
-            
-            
+            var carouselDataHelper = CarouselDataHelper() // Make the datahelper
             var url = "http://84.107.107.169:8080/VisioWebApp/API/chat/allMessages?tokenKey=" + self.token.getToken() // URL for JSON
             
             // Show loading screen if set to true
             if(showLoadingScreen){
                 self.setLoadingView("Nieuwe berichten laden")
             }
+            
+            // Get the data
             DataManager.getItems(url){(items) in
                 
                 // Processing the data
@@ -1074,11 +1163,14 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                                     
                                     // Check the type and append
                                     if(items[l].getType() == "1"){
+                                        
+                                        // May only append if the limit has not been reached
                                         if(self.messagesCount < self.userSettings.getPrivateMessageLimit()){
-                                            indexHasChanged = true // New item may append
+                                            indexHasChanged = true // New items may be speeched
                                             
                                             self.items.insert(items[l], atIndex: self.messagesCount)
                                             
+                                            // Append the image and insert the item
                                             self.appendImage(self.messagesCount)
                                             self.carousel.insertItemAtIndex(self.messagesCount, animated: true)
                                             
@@ -1091,11 +1183,15 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                                         }
                                     }
                                     else if(items[l].getType() == "2"){
+                                        
+                                        // May only append if the limit has not been reached
                                         if(self.newsCount < self.userSettings.getNewsMessageLimit()){
                                             
-                                            indexHasChanged = true
+                                            indexHasChanged = true // New items may be speeched
                                             
-                                            var indexNewsCount = self.messagesCount + self.clubNewsCount + self.newsCount
+                                            var indexNewsCount = self.messagesCount + self.clubNewsCount + self.newsCount // The last item that was inserted
+                                            
+                                            // Append the image and insert the item
                                             self.items.insert(items[l], atIndex: indexNewsCount)
                                             self.appendImage(indexNewsCount)
                                             self.carousel.insertItemAtIndex(indexNewsCount, animated: true)
@@ -1110,12 +1206,15 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                                         }
                                     }
                                     else if(items[l].getType() == "3"){
+                                        
+                                        // May only append if the limit has not been reached
                                         if(self.clubNewsCount < self.userSettings.getClubNewsMessageLimit()){
                                             
+                                            indexHasChanged = true // New items may be speeched
                                             
-                                            indexHasChanged = true
+                                            var indexClubNewsCount = self.messagesCount + self.clubNewsCount // The last item that was inserted
                                             
-                                            var indexClubNewsCount = self.messagesCount + self.clubNewsCount
+                                            // Append the image and insert the item
                                             self.items.insert(items[l], atIndex: indexClubNewsCount)
                                             self.appendImage(indexClubNewsCount)
                                             self.carousel.insertItemAtIndex(indexClubNewsCount, animated: true)
@@ -1132,7 +1231,6 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                                 
                             }
                         }
-                        
                         
                         if(newMessages != 0){
                             // Show notification if loading screen is set to true
@@ -1156,15 +1254,16 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                         // If the index has changed (appended item), speech the total of new items
                         if(indexHasChanged){
                             var scrollToMessage = false
-                            // tell the total of new items
+                            
+                            // Speech the total of new items
                             if(self.userSettings.isNotificationSoundEnabled()){
                                 if(newMessages > 0){
                                     self.carouselSpeechHelper.newItemsToSpeech(newMessages, type: "1")
                                     if(shouldScrollToMessage){
                                         if(self.carousel.numberOfItems > 2){
-                                            scrollToMessage = true
-                                            self.isAppending = false // Set it to false to speech exception
-                                            self.carousel.scrollToItemAtIndex(self.messagesCount-1, animated: true)
+                                            scrollToMessage = true // Already scrolling, so set to false
+                                            self.isAppending = false // Set it to false for speeching
+                                            self.carousel.scrollToItemAtIndex(self.messagesCount-1, animated: true) // Scroll to the item
                                         }
                                     }
                                 }
@@ -1183,7 +1282,7 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                                 self.isAppending = true // Set it to true again
                             }
                             
-                            // If the item was a message, it should not search for the old ID
+                            // If there was no scroll, it should scroll to the last known item
                             if(!scrollToMessage){
                                 
                                 //Get back to the item carousel where the user was focussed on
@@ -1191,14 +1290,12 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                                     
                                     // Old ID found, get back to it
                                     if(self.oldItemID == self.items[p].getID()){
-                                        println("FOUND")
                                         self.carousel.scrollToItemAtIndex(p, animated: false)
                                         self.carouselCurrentItemIndexDidChange(self.carousel) // Reload the view
                                         break
                                     }
                                     else{
                                         // Not found, at the ending change the index and set appending to false for speech
-                                        println("NOT FOUND")
                                         if(p == self.items.count-1){
                                             self.isAppending = false
                                             if(!self.firstItem){
@@ -1232,7 +1329,10 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
         
     }
     
-    // Function for show the notification in case of Message or news
+    /**
+    Function for showing the notificationDot when there are new items
+    :param: totalNewItems The total of new items that should be inside the dot
+    */
     func showNotificationNewItems(totalNewItems: Int){
         // If the animation is not already active, start it
         if(!self.notificationDot.getDotView().isAnimating()){
@@ -1248,28 +1348,33 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
     //# MARK: - Data deletion methods
     //=================================================================================================
     
+    /**
+    Function for deleting the message when closing the item inside another controller
+    
+    :param: carouselMessageNumber The ID from the item, from within the Carousel, to be deleted
+    :param: type The type of item to be deleted, as in the AppendData method
+    */
     func deleteMessage(carouselMessageNumber: String, _ type: String){
-        var userInfoArray = Array<AnyObject>()
-        var timerManager = TimerManager() // For time
+        var timerManager = TimerManager() // Manager for keeping the time
         
         // Look for ID
         for i in 0...self.items.count-1{
             
+            // If the ID is the same as the carouselMessageNumber, it should append to the array for futher deletion
             if(self.items[i].getID() == carouselMessageNumber){
                 deleteditemIndexes.append(String(i)) // Appending the carouselMessageNumber to the deleteditemIndex
-                
                 break
             }
         }
         
         var carouselItemIndex = self.deleteditemIndexes.first?.toInt() // Getting first item from the array
-        userInfoArray.append(carouselItemIndex!)
+        self.deleteditemIndexes.removeAtIndex(0) // Delete it from the array because we have copied it
         
-        self.deleteditemIndexes.removeAtIndex(0) // Delete it
-        var messageID = self.items[carouselItemIndex!].getID() // Get the messageID for JSON array
-        userInfoArray.append(messageID)
+        var messageID = self.items[carouselItemIndex!].getID() // Get the message ID for putting into the URL for deleting it within the back-end
         
         var url = "http://84.107.107.169:8080/VisioWebApp/API/chat/confirm?messageId=" + String(messageID) + "&type=" + type
+        
+        // Delete it from the back-end
         DataManager.checkMessageRead(url){(codeFromJSON) in
             
             if(codeFromJSON == "200"){
@@ -1277,7 +1382,7 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
             }
         }
         
-        // Getting the max seconds upon checking the type
+        // Getting the max seconds upon checking the type and execute the timer
         var interval:NSTimeInterval!
         if(type == "1"){
             interval = NSTimeInterval(self.userSettings.getMessagesStoreMaxSeconds().toInt()!)
@@ -1289,22 +1394,22 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
             interval = NSTimeInterval(self.userSettings.getClubNewsStoreMaxSeconds().toInt()!)
         }
         
-        var newTimer = timerManager.startTimer(self, selector: Selector("deleteMessageInsideCarousel:"), userInfo: userInfoArray, interval: interval) // Start timer
-        
+        var newTimer = timerManager.startTimer(self, selector: Selector("deleteMessageInsideCarousel:"), userInfo: carouselItemIndex!, interval: interval) // Start timer
         
         UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification,
-            self.categoryView);
+            self.categoryView); // Make the categoryTypeView the new element to focus on when having voice over on, so user can scroll with three fingers again
         
     }
     
-    // Selector for making message read and deleting it from carousel
+    /**
+    Selector for making message read and deleting it from carousel
+    
+    :param: timer The timer from which the data came
+    */
     func deleteMessageInsideCarousel(timer: NSTimer){
-        self.isAppending = true // Some speech may not execute
-        let userInfo = timer.userInfo as [AnyObject] // Convert timer to String
-        
-        var oldID =  self.items[self.carousel.currentItemIndex].getID() // Old ID
-        var carouselItemIndex = userInfo[0] as Int
-        var messageID = userInfo[1] as String
+        self.isAppending = true // Speech may not execute
+        let carouselItemIndex = timer.userInfo as Int // Convert timer info to String
+        var oldID =  self.items[self.carousel.currentItemIndex].getID() // Old ID whe deletion executed
         
         // Checking what kind of message was deleted
         if(self.items[carouselItemIndex].getType() == "1"){
@@ -1316,10 +1421,11 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
         else if(self.items[carouselItemIndex].getType() == "3"){
             self.clubNewsCount--
         }
+        
         println("Deleting..." + String(carouselItemIndex))
-        self.items.removeAtIndex(carouselItemIndex) // Remove it
-        self.carousel.removeItemAtIndex(carouselItemIndex, animated: true) // From carousel
-        self.removeImage(carouselItemIndex) // Remove the image
+        self.items.removeAtIndex(carouselItemIndex) // Remove it from the items array
+        self.carousel.removeItemAtIndex(carouselItemIndex, animated: true) // Remove it from Carousel
+        self.removeImage(carouselItemIndex) // Lastely, remove the image
         
         // Speech if empty
         if(self.items.isEmpty){

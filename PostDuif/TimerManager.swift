@@ -6,6 +6,7 @@
 //  Copyright (c) 2015 Kjell Zijlemaker. All rights reserved.
 //  Code reference: Stack Overflow
 //
+//  Manager for setting the desired times for making timers
 
 import Foundation
 
