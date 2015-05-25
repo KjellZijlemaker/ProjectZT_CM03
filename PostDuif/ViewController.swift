@@ -27,7 +27,6 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
     var messageIsOpenend: Bool = false // Checking if message has openend, so not the same item will be removed
     
     //# MARK: - Index counters for caorusel, for appending new items
-    var oldItemID = "0" // Old ID for preventing the Carousel moving from index
     
     //# MARK: - Arrays for the items and deleted items
     var items: [Item] = [] // Items inside the carousel
@@ -466,10 +465,6 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
     */
     func carouselCurrentItemIndexDidChange(carousel: iCarousel!){
         self.carouselCheckForAppendingItems() // Check for appending items and decrement notification counter if needed
-        if(!self.firstItem){
-            self.oldItemID = self.items[self.carousel.currentItemIndex].getID()
-        }
-        
         if(!self.items.isEmpty){
             // Setting category per item inside the array
             self.setCategoryType(self.carousel.currentItemIndex, isEmpty: false) // Setting the category type
@@ -1127,6 +1122,10 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
         
         // Execute only when no item is opened
         if(!self.messageIsOpenend){
+            var oldID = "0" // When there are no items in carousel, there is no old ID
+            if(!self.firstItem){
+                oldID = self.items[self.carousel.currentItemIndex].getID()
+            }
             var carouselDataHelper = CarouselDataHelper() // Make the datahelper
             var url = "http://84.107.107.169:8080/VisioWebApp/API/chat/allMessages?tokenKey=" + self.token.getToken() // URL for JSON
             
@@ -1278,7 +1277,11 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                                     self.notificationSound.playSound() // Play the ROEKOE sound
                                     
                                 }
-                                self.carouselSpeechHelper.speechCarouselScrollItem(self.messagesCount-1)
+                                if(shouldScrollToMessage){
+                                     if(self.carousel.numberOfItems > 2){
+                                        self.carouselSpeechHelper.speechCarouselScrollItem(self.messagesCount-1)
+                                    }
+                                }
                                 self.isAppending = true // Set it to true again
                             }
                             
@@ -1289,7 +1292,7 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                                 for p in 0...self.items.count-1{
                                     
                                     // Old ID found, get back to it
-                                    if(self.oldItemID == self.items[p].getID()){
+                                    if(oldID == self.items[p].getID()){
                                         self.carousel.scrollToItemAtIndex(p, animated: false)
                                         self.carouselCurrentItemIndexDidChange(self.carousel) // Reload the view
                                         break
@@ -1297,6 +1300,7 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                                     else{
                                         // Not found, at the ending change the index and set appending to false for speech
                                         if(p == self.items.count-1){
+                                            println("NOT FOUND")
                                             self.isAppending = false
                                             if(!self.firstItem){
                                                 self.carouselCurrentItemIndexDidChange(self.carousel) // Reload the view
