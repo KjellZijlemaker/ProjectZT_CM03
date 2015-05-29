@@ -27,7 +27,6 @@
 		212AE9491AA9CF44000255E8 /* iCarousel.m in Sources */ = {isa = PBXBuildFile; fileRef = 212AE9481AA9CF44000255E8 /* iCarousel.m */; };
 		21317D991AC0403F00101992 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21317D981AC0403F00101992 /* LoginViewController.swift */; };
 		2131ECA51AB9801B005F844A /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2131ECA41AB9801B005F844A /* Settings.swift */; };
-		2135A7351AFE3F82009EE2E4 /* CarouselAccessibilityHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2135A7341AFE3F82009EE2E4 /* CarouselAccessibilityHelper.swift */; };
 		21370BCD1AC494DA0063777D /* Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21370BCC1AC494DA0063777D /* Token.swift */; };
 		213CD1421AC815E200B27EA1 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213CD13F1AC815E200B27EA1 /* Keychain.swift */; };
 		214C55DA1AA9E71200555A56 /* MessageContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214C55D91AA9E71200555A56 /* MessageContentViewController.swift */; };
@@ -93,7 +92,6 @@
 		212AE94A1AA9CF63000255E8 /* PostDuif-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PostDuif-Bridging-Header.h"; sourceTree = "<group>"; };
 		21317D981AC0403F00101992 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		2131ECA41AB9801B005F844A /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
-		2135A7341AFE3F82009EE2E4 /* CarouselAccessibilityHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarouselAccessibilityHelper.swift; sourceTree = "<group>"; };
 		21370BCC1AC494DA0063777D /* Token.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Token.swift; sourceTree = "<group>"; };
 		213CD13F1AC815E200B27EA1 /* Keychain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
 		213CD1401AC815E200B27EA1 /* KeychainAccess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeychainAccess.h; sourceTree = "<group>"; };
@@ -298,7 +296,6 @@
 				218E073A1AEBA96E00FA8B51 /* CarouselSpeechHelper.swift */,
 				218E07381AEBA8D900FA8B51 /* ColorHelper.swift */,
 				217BF9FE1AF4D0A500206C2D /* CarouselDataHelper.swift */,
-				2135A7341AFE3F82009EE2E4 /* CarouselAccessibilityHelper.swift */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -458,7 +455,6 @@
 				218E07391AEBA8D900FA8B51 /* ColorHelper.swift in Sources */,
 				212936381AAD99370061BE6A /* Item.swift in Sources */,
 				21CF744F1AADB8260047ABC3 /* DataManager.swift in Sources */,
-				2135A7351AFE3F82009EE2E4 /* CarouselAccessibilityHelper.swift in Sources */,
 				211E24591AC4325E00ADF518 /* UserManager.swift in Sources */,
 				21370BCD1AC494DA0063777D /* Token.swift in Sources */,
 				212AE9491AA9CF44000255E8 /* iCarousel.m in Sources */,

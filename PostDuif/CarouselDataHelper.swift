@@ -51,7 +51,7 @@ class CarouselDataHelper{
                 if(type != "0"){
                     
                     // Check if the type is the same (for appending at the according index)
-                    if(items[i].getType() == type){
+                    if(items[i].getType() == type || items[i].getType() == "1"){
                         idArrayOld.append(items[i].getID().toInt()!)
                     }
                 }

@@ -12,6 +12,7 @@ import UIKit
 class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, iCarouselDelegate, deleteMessageItem, messageOpenend, userManagerDelegate, dataManagerDelegate
 {
     //var keychain = Keychain(service: "com.visio.postduif")
+    let backEndServerAddress = "84.107.107.169" // This is the address of the server. Must be changed if needed
     
     //# MARK: - Array for all the items / settings to be loaded inside the carousel
     var pictures: [UIImage!] = []
@@ -25,8 +26,6 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
     var firstItem: Bool = true // To indicate if this is the first item of carousel
     var isAppending = false // For checking if data is appending or not. Important for playing the speech or not inside the view, when reloading the carousel!
     var messageIsOpenend: Bool = false // Checking if message has openend, so not the same item will be removed
-    
-    //# MARK: - Index counters for caorusel, for appending new items
     
     //# MARK: - Arrays for the items and deleted items
     var items: [Item] = [] // Items inside the carousel
@@ -46,7 +45,6 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
     
     //# MARK: Helpers for Carousel
     var carouselSpeechHelper: CarouselSpeechHelper!
-    var carouselAccessibilityHelper = CarouselAccessibilityHelper()
     
     //# MARK: Sounds for inside the Carousel
     var notificationSound = SoundManager(resourcePath: "Roekoe", fileType: "m4a") // For the sounds
@@ -90,10 +88,12 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
         self.carousel.scrollEnabled = false
         self.carousel.isAccessibilityElement = false
         
+        // Setting up the logout button
         let logoutButton = LogoutButton().showLogoutButton()
         logoutButton.isAccessibilityElement = false
         self.view.addSubview(logoutButton)
         
+        // Setting the button long press
         let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: "logoutButtonAction:")
         logoutButton.addGestureRecognizer(longPressRecognizer)
         
@@ -118,16 +118,17 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
         //# MARK: - Gesture methods
         //=============================================================================================
         
-        //------------right  swipe gestures in view--------------//
+        //------------right  swipe gesture in view--------------//
         let swipeRight = UISwipeGestureRecognizer(target: self, action: Selector("rightSwiped"))
         swipeRight.direction = UISwipeGestureRecognizerDirection.Right
         self.view.addGestureRecognizer(swipeRight)
         
-        //-----------left swipe gestures in view--------------//
+        //-----------left swipe gesture in view--------------//
         let swipeLeft = UISwipeGestureRecognizer(target: self, action: Selector("leftSwiped"))
         swipeLeft.direction = UISwipeGestureRecognizerDirection.Left
         self.view.addGestureRecognizer(swipeLeft)
         
+        //-----------single tap gesture in view--------------//
         let singleTap = UITapGestureRecognizer(target: self, action:Selector("singleTapped"))
         singleTap.numberOfTapsRequired = 1
         self.view.addGestureRecognizer(singleTap)
@@ -138,6 +139,7 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(false)
         
+        // If the keys were empty
         if(passToLogin){
             
             // Sending user back to login phase
@@ -535,7 +537,7 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
     :param: urlString The URL where the picture is located
     */
     func setupProfilePicture(index: Int, urlString: String){
-        var newUrlString = "http://84.107.107.169:8080/VisioWebApp/profile/image?fileNameKey=" + urlString
+        var newUrlString = "http://" + self.backEndServerAddress + ":8080/VisioWebApp/profile/image?fileNameKey=" + urlString
         var imgURL: NSURL = NSURL(string: newUrlString)!
         let request: NSURLRequest = NSURLRequest(URL: imgURL)
         
@@ -882,7 +884,7 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
     :param: updateSettings Indicator if the userSettings are being updated. If so, the getAppData should not be executed as other executions within this method
     */
     func getUserSettings(tokenKey: String, updateSettings: Bool){
-        var url = "http://84.107.107.169:8080/VisioWebApp/API/clientSettings?tokenKey=" + tokenKey
+        var url = "http://" + self.backEndServerAddress + ":8080/VisioWebApp/API/clientSettings?tokenKey=" + tokenKey
         
         if(!updateSettings){
             self.setLoadingView("Gebruikers-instellingen laden...")
@@ -928,7 +930,7 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                 }
                 if(self.token.isRefreshToken()){
                     self.token.hasRefreshToken(false)
-                    self.getUserSettings("http://84.107.107.169:8080/VisioWebApp/API/clientSettings?tokenKey=" + self.token.getRefreshToken(), updateSettings: false)
+                    self.getUserSettings("http://" + self.backEndServerAddress + ":8080/VisioWebApp/API/clientSettings?tokenKey=" + self.token.getRefreshToken(), updateSettings: false)
                 }
                 else{
                     // Send user back to login phase
@@ -965,7 +967,7 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
     :param: tokenKey The token from which the access to the back-end is gained
     */
     func getAppData(tokenKey: String){
-        var url = "http://84.107.107.169:8080/VisioWebApp/API/chat/allMessages?tokenKey=" + tokenKey
+        var url = "http://" + self.backEndServerAddress + ":8080/VisioWebApp/API/chat/allMessages?tokenKey=" + tokenKey
         self.setLoadingView("Berichten en nieuws ophalen")
         
         DataManager.getItems(url){(items) in
@@ -1048,7 +1050,7 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                             
                             // Set the refreshToken to false and insert the refreshToken
                             self.token.hasRefreshToken(false)
-                            self.getAppData("http://84.107.107.169:8080/VisioWebApp/API/chat/allMessages?tokenKey=" + self.token.getRefreshToken())
+                            self.getAppData("http://" + self.backEndServerAddress + ":8080/VisioWebApp/API/chat/allMessages?tokenKey=" + self.token.getRefreshToken())
                         }
                             
                             // Close the view and go to login
@@ -1071,7 +1073,7 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                         alert.addButtonWithTitle("Ja", type: SIAlertViewButtonType.Default, handler:{ (ACTION :SIAlertView!)in
                             
                             // Try again
-                            self.getAppData(self.token.getRefreshToken())
+                            self.getAppData(self.token.getToken())
                         })
                         alert.addButtonWithTitle("Nee", type: SIAlertViewButtonType.Cancel, handler:{ (ACTION :SIAlertView!)in
                             
@@ -1127,7 +1129,7 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                 oldID = self.items[self.carousel.currentItemIndex].getID()
             }
             var carouselDataHelper = CarouselDataHelper() // Make the datahelper
-            var url = "http://84.107.107.169:8080/VisioWebApp/API/chat/allMessages?tokenKey=" + self.token.getToken() // URL for JSON
+            var url = "http://" + self.backEndServerAddress + ":8080/VisioWebApp/API/chat/allMessages?tokenKey=" + self.token.getToken() // URL for JSON
             
             // Show loading screen if set to true
             if(showLoadingScreen){
@@ -1277,7 +1279,7 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
                                     self.notificationSound.playSound() // Play the ROEKOE sound
                                     
                                 }
-                                if(shouldScrollToMessage){
+                                if(shouldScrollToMessage && indexHasChanged){
                                      if(self.carousel.numberOfItems > 2){
                                         self.carouselSpeechHelper.speechCarouselScrollItem(self.messagesCount-1)
                                     }
@@ -1376,7 +1378,7 @@ class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, i
         
         var messageID = self.items[carouselItemIndex!].getID() // Get the message ID for putting into the URL for deleting it within the back-end
         
-        var url = "http://84.107.107.169:8080/VisioWebApp/API/chat/confirm?messageId=" + String(messageID) + "&type=" + type
+        var url = "http://" + self.backEndServerAddress + ":8080/VisioWebApp/API/chat/confirm?messageId=" + String(messageID) + "&type=" + type
         
         // Delete it from the back-end
         DataManager.checkMessageRead(url){(codeFromJSON) in

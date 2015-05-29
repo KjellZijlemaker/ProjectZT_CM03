@@ -146,9 +146,9 @@ class MessagesView: UIView, messagesContentTextViewDelegate{
                     
                     if(self.personalPicture != nil){
                         self.messageContent.sizeToFit() // Make the content size fit (is still minimalheight)
-                        self.personalPicture.frame = CGRectMake(self.contentView.frame.size.width/2, self.messageContent.frame.size.height + 60, self.personalPicture.frame.size.width, self.personalPicture.frame.size.height) // Making the new size of the picture frame
-                        var center = self.personalPicture.superview?.center
-                        self.personalPicture.center = center!
+                        var centerWidth = self.messageContent.center.y - self.messageContent.center.y/2
+                        
+                        self.personalPicture.frame = CGRectMake(centerWidth, self.messageContent.frame.size.height + 60, self.personalPicture.frame.size.width, self.personalPicture.frame.size.height) // Making the new size of the picture frame
                         self.personalPicture.hidden = false // Show the picture
                         
                         self.setAttachmentDescription(attachmentDescription) // Setting the attachmentDescription
@@ -191,8 +191,8 @@ class MessagesView: UIView, messagesContentTextViewDelegate{
     :param: attachmentDescription The description that needs to be present underneath the picture
     */
     private func setAttachmentDescription(attachmentDescription: String){
-        
-        self.attachmentDescription = UILabel(frame: CGRectMake(self.frame.size.width/2/2, self.messageContent.frame.size.height + self.personalPicture.frame.height + 60, self.personalPicture.frame.size.width, 50)) // Making the frame
+        var centerWidth = self.messageContent.center.y - self.messageContent.center.y/2
+        self.attachmentDescription = UILabel(frame: CGRectMake(centerWidth, self.messageContent.frame.size.height + self.personalPicture.frame.height + 60, self.personalPicture.frame.size.width, 50)) // Making the frame
         
         // Label options
         self.attachmentDescription.textAlignment = NSTextAlignment.Center
