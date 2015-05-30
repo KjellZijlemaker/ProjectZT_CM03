@@ -34,6 +34,7 @@ class NewsMessageViewController: UIViewController, newsMessagesDelegate {
         
         // Setting the color and backround
         self.newsMessagesView.setFontColor(self.userSettings.getPrimaryColorType())
+        self.newsMessagesView.setFontSize(self.userSettings.getFontSize())
         self.newsMessagesView.setViewBackground("000000")
         self.newsMessagesView.setTitleBackground(self.userSettings.getSecondaryColorType())
         self.newsMessagesView.setContentBackground(self.userSettings.getSecondaryColorType())
@@ -50,15 +51,12 @@ class NewsMessageViewController: UIViewController, newsMessagesDelegate {
     Function for dismissing the controller (called from the NewsMessagesView)
     */
     func dismissController(){
+        self.speech.speechString("U heeft het nieuwsbericht gelezen") //Little speech for user
+        self.openendMessage.messageIsOpenend = false // NewsMessage is not openend anymore
+        self.deletingMessage.deleteMessage(self.news.getID(), "2")
         
         // Dismiss the controller
-        self.presentingViewController?.dismissViewControllerAnimated(true, completion: {
-            let secondPresentingVC = self.presentingViewController?.presentingViewController;
-            secondPresentingVC?.dismissViewControllerAnimated(true, completion: {});
-            self.speech.speechString("U heeft het nieuwsbericht gelezen") //Little speech for user
-            self.openendMessage.messageIsOpenend = false // NewsMessage is not openend anymore
-            self.deletingMessage.deleteMessage(self.news.getID(), "2")
-        });
+        self.parentViewController?.dismissViewControllerAnimated(true, completion: {})
         
     }
     
@@ -66,6 +64,10 @@ class NewsMessageViewController: UIViewController, newsMessagesDelegate {
         return UIStatusBarStyle.BlackOpaque
     }
     
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
     
     /**
     Function for sensing if the user has shaken the device. It will then check for new settings silently

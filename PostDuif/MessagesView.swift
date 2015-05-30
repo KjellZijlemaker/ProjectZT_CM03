@@ -192,7 +192,7 @@ class MessagesView: UIView, messagesContentTextViewDelegate{
     */
     private func setAttachmentDescription(attachmentDescription: String){
         var centerWidth = self.messageContent.center.y - self.messageContent.center.y/2
-        self.attachmentDescription = UILabel(frame: CGRectMake(centerWidth, self.messageContent.frame.size.height + self.personalPicture.frame.height + 60, self.personalPicture.frame.size.width, 50)) // Making the frame
+        self.attachmentDescription = UILabel(frame: CGRectMake(centerWidth, self.messageContent.frame.size.height + 60 + self.personalPicture.frame.height, self.personalPicture.frame.size.width, 50)) // Making the frame
         
         // Label options
         self.attachmentDescription.textAlignment = NSTextAlignment.Center

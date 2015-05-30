@@ -79,7 +79,7 @@ class UserManager{
         
         // Making GET request to the URL
         alamofireManager.request(.GET, apiEndPoint).responseJSON { (request, response, json, error) in
-            
+            println(json)
             // Making sure if the JSON is not empty
             if (json != nil) {
                 
@@ -188,6 +188,10 @@ class UserManager{
                             // Store seconds news seconds
                             var newsStoreMaxSeconds: String = settings["newsFeedMessageStoreTimeSeconds"].stringValue
                             newSettings.setNewsStoreMaxSeconds(newsStoreMaxSeconds)
+                            
+                            var fontSize: String = settings["fontSize"].stringValue
+                            var newFontSize: CGFloat = CGFloat(fontSize.toInt()!)
+                            newSettings.setFontSize(newFontSize)
                             
                             // Send it back to the main thread
                             settingsArray.append(newSettings)

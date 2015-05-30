@@ -16,6 +16,9 @@ protocol messageOpenend{
     var messageIsOpenend: Bool{
         get set
     }
+    var firstItem: Bool{
+        get set
+    }
 }
 
 protocol userManagerDelegate{

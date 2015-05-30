@@ -26,6 +26,7 @@ class Settings{
     private var messagesStoreMaxSeconds: String
     private var clubMessagesStoreMaxSeconds: String
     private var newsMessagesStoreMaxSeconds: String
+    private var fontSize: CGFloat
     
     init(){
         self.notificationSoundEnabled = true
@@ -43,6 +44,7 @@ class Settings{
         self.messagesStoreMaxSeconds = ""
         self.clubMessagesStoreMaxSeconds = ""
         self.newsMessagesStoreMaxSeconds = ""
+        self.fontSize = 41
     }
     
     func hasNotificationSoundEnabled(notificationSound: Bool){
@@ -160,6 +162,14 @@ class Settings{
     
     func isHintSupportSoundEnabled() -> Bool{
         return self.hintSupportSoundEnabled
+    }
+    
+    func setFontSize(fontSize: CGFloat){
+        self.fontSize = fontSize
+    }
+    
+    func getFontSize() -> CGFloat{
+        return self.fontSize
     }
     
     

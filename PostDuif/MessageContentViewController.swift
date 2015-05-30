@@ -35,7 +35,7 @@ class MessageContentViewController: UIViewController, messagesDelegate {
         
         // Setting the color and backround
         self.messagesView.setFontColor(self.userSettings.getPrimaryColorType())
-        self.messagesView.setFontSize(41.0)
+        self.messagesView.setFontSize(self.userSettings.getFontSize())
         self.messagesView.setViewBackground("000000")
         self.messagesView.setTitleBackground(self.userSettings.getSecondaryColorType())
         self.messagesView.setContentBackground(self.userSettings.getSecondaryColorType())
@@ -50,20 +50,18 @@ class MessageContentViewController: UIViewController, messagesDelegate {
             carouselSpeechHelper.speechMessageItem(self.message)
         }
     }
-    
+
     /**
     Function for dismissing the controller (called from the MessagesView)
     */
     func dismissController(){
         
+        self.speech.speechString("U heeft het bericht gelezen") //Little speech for user
+        self.openendMessage.messageIsOpenend = false // Message is not openend anymore
+        self.deletingMessage.deleteMessage(self.message.getID(), "1") // Delete the message
+               
         // Dismiss the controller
-        self.presentingViewController?.dismissViewControllerAnimated(true, completion: {
-            let secondPresentingVC = self.presentingViewController?.presentingViewController;
-            secondPresentingVC?.dismissViewControllerAnimated(true, completion: {});
-            self.speech.speechString("U heeft het bericht gelezen") //Little speech for user
-            self.openendMessage.messageIsOpenend = false // Message is not openend anymore
-            self.deletingMessage.deleteMessage(self.message.getID(), "1") // Delete the message
-        });
+        self.presentingViewController?.dismissViewControllerAnimated(true, completion: {})
     }
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
@@ -91,5 +89,4 @@ class MessageContentViewController: UIViewController, messagesDelegate {
             
         }
     }
-    
 }

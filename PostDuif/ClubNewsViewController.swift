@@ -34,6 +34,7 @@ class ClubNewsViewController: UIViewController, clubNewsDelegate {
         
         // Setting the color and backround
         self.clubNewsView.setFontColor(self.userSettings.getPrimaryColorType())
+        self.clubNewsView.setFontSize(self.userSettings.getFontSize())
         self.clubNewsView.setViewBackground("000000")
         self.clubNewsView.setTitleBackground(self.userSettings.getSecondaryColorType())
         self.clubNewsView.setContentBackground(self.userSettings.getSecondaryColorType())
@@ -51,14 +52,12 @@ class ClubNewsViewController: UIViewController, clubNewsDelegate {
     Function for dismissing the controller (called from the ClubNewsView)
     */
     func dismissController(){
+        self.speech.speechString("U heeft het " + self.clubNews.getClubType() + "-bericht gelezen") //Little speech for user
+        self.openendMessage.messageIsOpenend = false // ClubNews is not openend anymore
+        self.deletingMessage.deleteMessage(self.clubNews.getID(), "3") // Delete the message
+        
         // Dismiss the controller
-        self.presentingViewController?.dismissViewControllerAnimated(true, completion: {
-            let secondPresentingVC = self.presentingViewController?.presentingViewController;
-            secondPresentingVC?.dismissViewControllerAnimated(true, completion: {});
-            self.speech.speechString("U heeft het " + self.clubNews.getClubType() + "-bericht gelezen") //Little speech for user
-            self.openendMessage.messageIsOpenend = false // ClubNews is not openend anymore
-            self.deletingMessage.deleteMessage(self.clubNews.getID(), "3") // Delete the message
-        });
+        self.dismissViewControllerAnimated(true, completion: {})
     }
     
     

@@ -73,7 +73,7 @@ class NewsMessagesContentTextView: UITextView{
     Selector for calling when swiped left
     */
     func leftSwiped(){
-        self.contentDelegate.delegate.speech.stopSpeech() //Stop speech
+        //self.contentDelegate.delegate.speech.stopSpeech() //Stop speech
         self.contentDelegate.delegate.dismissController() // Dismiss the controller
     }
     
