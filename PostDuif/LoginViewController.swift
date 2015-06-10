@@ -50,7 +50,7 @@ class LoginViewController: UIViewController, loginDelegate {
     */
     func sendLoginRequest(pincode: String){
         // Making URL
-        var url = "http://84.107.107.169:8080/VisioWebApp/API/authentication?username=" + self.loginView.loginEmail.text + "&pincode=" + pincode
+        var url = "http://84.107.106.128:8080/VisioWebApp/API/authentication?username=" + self.loginView.loginEmail.text + "&pincode=" + pincode
         
         // Miking new notification
         let loadingNotification = MBProgressHUD.showHUDAddedTo(self.view, animated: true)

@@ -126,7 +126,7 @@ class MessagesView: UIView, messagesContentTextViewDelegate{
     */
     func setupPicture(urlString: String, attachmentDescription: String){
         if(urlString != ""){
-            var newUrlString = "http://84.107.107.169:8080/VisioWebApp/file/attachment?fileNameKey=" + urlString
+            var newUrlString = "http://84.107.106.128:8080/VisioWebApp/file/attachment?fileNameKey=" + urlString
             var imgURL: NSURL = NSURL(string: newUrlString)!
             let request: NSURLRequest = NSURLRequest(URL: imgURL)
             
