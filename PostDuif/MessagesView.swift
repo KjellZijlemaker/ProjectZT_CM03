@@ -17,10 +17,12 @@ class MessagesView: UIView, messagesContentTextViewDelegate{
     private var attachmentDescriptionFontSize: CGFloat!
     var delegate: messagesDelegate!
     
+    let backEndServerAddress = "84.107.106.128" // This is the address of the server. Must be changed if needed
+    
     @IBOutlet weak private var messageTitle: UITextView!
-    @IBOutlet weak var messageContent: UITextView!
     @IBOutlet weak var scroller: UIScrollView!
     @IBOutlet weak var contentView: UIView!
+    @IBOutlet weak var messageContent: UITextView!
     @IBOutlet weak var personalPicture: UIImageView!
     
     
@@ -90,7 +92,6 @@ class MessagesView: UIView, messagesContentTextViewDelegate{
     func setMessageText(text: String){
         self.messageContent.text = text
         self.messageContent.sizeToFit() // Making the content size for fitting
-        
         // If the content size is smaller then the minimal, resize to the minimal height
         if(messageContent.frame.size.height < self.minimalHeight){
             self.messageContent.frame.size.height = self.minimalHeight
@@ -126,7 +127,7 @@ class MessagesView: UIView, messagesContentTextViewDelegate{
     */
     func setupPicture(urlString: String, attachmentDescription: String){
         if(urlString != ""){
-            var newUrlString = "http://84.107.107.169:8080/VisioWebApp/file/attachment?fileNameKey=" + urlString
+            var newUrlString = "http://" + self.backEndServerAddress + ":8080/VisioWebApp/file/attachment?fileNameKey=" + urlString
             var imgURL: NSURL = NSURL(string: newUrlString)!
             let request: NSURLRequest = NSURLRequest(URL: imgURL)
             

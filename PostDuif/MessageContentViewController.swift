@@ -61,7 +61,7 @@ class MessageContentViewController: UIViewController, messagesDelegate {
         self.deletingMessage.deleteMessage(self.message.getID(), "1") // Delete the message
                
         // Dismiss the controller
-        self.presentingViewController?.dismissViewControllerAnimated(true, completion: {})
+        self.dismissViewControllerAnimated(true, completion: {})
     }
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {

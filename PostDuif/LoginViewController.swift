@@ -18,6 +18,7 @@ class LoginViewController: UIViewController, loginDelegate {
     var settings:Settings!
     var keychain = Keychain(service: "com.visio.postduif")
     let defaults = NSUserDefaults.standardUserDefaults()
+    let backEndServerAddress = "84.107.106.128" // This is the address of the server. Must be changed if needed
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,7 +51,7 @@ class LoginViewController: UIViewController, loginDelegate {
     */
     func sendLoginRequest(pincode: String){
         // Making URL
-        var url = "http://84.107.107.169:8080/VisioWebApp/API/authentication?username=" + self.loginView.loginEmail.text + "&pincode=" + pincode
+        var url = "http://" + self.backEndServerAddress + ":8080/VisioWebApp/API/authentication?username=" + self.loginView.loginEmail.text + "&pincode=" + pincode
         
         // Miking new notification
         let loadingNotification = MBProgressHUD.showHUDAddedTo(self.view, animated: true)

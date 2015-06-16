@@ -56,7 +56,7 @@ class NewsMessageViewController: UIViewController, newsMessagesDelegate {
         self.deletingMessage.deleteMessage(self.news.getID(), "2")
         
         // Dismiss the controller
-        self.parentViewController?.dismissViewControllerAnimated(true, completion: {})
+        self.dismissViewControllerAnimated(true, completion: nil)
         
     }
     

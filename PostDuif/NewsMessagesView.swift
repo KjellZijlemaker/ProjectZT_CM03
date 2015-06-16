@@ -16,17 +16,6 @@ class NewsMessageView: UIView, newsMessagesContentTextViewDelegate{
     
     var delegate: newsMessagesDelegate!
     
-    //    @IBAction func normalText(sender: AnyObject) {
-    //        self.newsMessageContent.font = UIFont(name: "Verdana", size: 42)
-    //    }
-    //    @IBAction func bigText(sender: AnyObject) {
-    //        self.newsMessageContent.font = UIFont(name: "Verdana", size: 49)
-    //    }
-    //
-    //    @IBAction func biggerText(sender: AnyObject) {
-    //        self.newsMessageContent.font = UIFont(name: "Verdana", size: 54)
-    //    }
-    
     /**
     Function for setting title text
     
@@ -132,7 +121,6 @@ class NewsMessageView: UIView, newsMessagesContentTextViewDelegate{
     Selector when swiped left to close the message
     */
     func leftSwiped(){
-        self.newsMessageContent.removeFromSuperview()
         self.delegate.speech.stopSpeech() //Stop speech
         self.delegate.dismissController() // Dismiss the controller
     }

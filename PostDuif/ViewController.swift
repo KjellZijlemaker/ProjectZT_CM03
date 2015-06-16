@@ -12,7 +12,7 @@ import UIKit
 class ViewController: UIViewController, carouselDelegate, iCarouselDataSource, iCarouselDelegate, deleteMessageItem, messageOpenend, userManagerDelegate, dataManagerDelegate
 {
     //var keychain = Keychain(service: "com.visio.postduif")
-    let backEndServerAddress = "84.107.107.169" // This is the address of the server. Must be changed if needed
+    let backEndServerAddress = "84.107.106.128" // This is the address of the server. Must be changed if needed
     
     //# MARK: - Array for all the items / settings to be loaded inside the carousel
     var pictures: [UIImage!] = []
